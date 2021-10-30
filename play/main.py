@@ -285,7 +285,7 @@ class Surf(Text):
             r = requests.get("https://chenmy1903.github.io/wang250/gift.html")
             gift = r.text
         except:
-            pass
+            return
         if "version" in self.setting.read():
             if self.setting.read("version") != eval(str(gift))["version"]:
                 for key, value in eval(str(gift)).items():
