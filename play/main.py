@@ -87,6 +87,8 @@ def download_files():
                     download_path = os.path.join(IMAGE_PATH, file_name)
                 else:
                     download_path = os.path.join(BASE_DIR, file_name)
+                if not os.path.isdir(IMAGE_PATH):
+                    os.mkdir(IMAGE_PATH)
                 with open(download_path, 'wb') as f:
                     f.write(r.content)
                 
