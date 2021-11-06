@@ -448,7 +448,7 @@ class Surf(Text):
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         self.kill_precess()
-            if pygame.mouse.get_pressed():
+            if not pygame.mouse.get_pressed():
                 if choice == 1:
                     self.run_game()
                 elif choice == 2:
