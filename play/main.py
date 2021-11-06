@@ -100,6 +100,8 @@ def download_files():
 
 
 class Text:
+    lp = pygame.image.load(paths['lp'])
+    
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
 
@@ -224,7 +226,7 @@ class Shop(Text):
         add_functions = {}
         num = 1
         while True:
-
+            mouse_pos = pygame.mouse.get_pos()
             self.surface.fill((0, 0, 0))
             self.blit_text("游戏商城", (580, 100), 75)
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
@@ -266,7 +268,7 @@ class Shop(Text):
 
             if "coins" not in add_functions:
                 add_functions["coins"] = self.buy_coins
-            
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
 
     def buy_level(self):
@@ -328,7 +330,7 @@ class Surf(Text):
         if not "level" in self.setting.read():
             self.setting.add("level", 1)
 
-        self.lp = pygame.image.load(paths['lp'])
+        
         self.add_settings()
         self.get_gift()
 
@@ -450,7 +452,8 @@ class Surf(Text):
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         self.kill_precess()
-            if not pygame.mouse.get_pressed():
+            print(pygame.mouse.get_pressed())
+            if pygame.mouse.get_pressed()[0]:
                 if choice == 1:
                     self.run_game()
                 elif choice == 2:
@@ -471,7 +474,7 @@ class Surf(Text):
         if not display:
             display = self.DISPLAYSURF
         display.blit(text, pos)
-        return pygame.Rect(pos[0], pos[1], pos[0] + size, pos[1] + size)
+        return pygame.Rect(pos[0], pos[1], size * len(text_w), size)
 
     def get_player_display(self, image, game_name, name, size):
         surface = pygame.Surface((size[0] + 30, size[1] + 50))
@@ -488,6 +491,7 @@ class Surf(Text):
         wangjianguo_image = pygame.image.load(paths['wangjianguo'])
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
+            mouse_pos = pygame.mouse.get_pos()
             fengxiaoyi = self.get_player_display(fengxiaoyi_image, "风小逸", 'fengxiaoyi', (130, 140))
             wangjianguo = self.get_player_display(wangjianguo_image, "王建国", 'wangjianguo', (130, 140))
             if self.setting.read("fengxiaoyi") == true:
@@ -508,6 +512,7 @@ class Surf(Text):
                     if self.setting.read("wangjianguo") == true:
                         if not wangjianguo.get_rect().collidepoint(pos[0], pos[1]):
                             self.setting.add('player', "wangjianguo")
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
 
     def kill_precess(self, *, no_title=False):
