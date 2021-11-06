@@ -139,7 +139,8 @@ def play(surface):
     BASICFONT = pygame.font.SysFont('SimHei', 30)
 
     # load the image files
-    L_SQUIR_IMG = pygame.image.load(paths[setting.read("player")])
+    # setting.read("player")
+    L_SQUIR_IMG = pygame.image.load(paths["wangjianguo"])
     R_SQUIR_IMG = pygame.transform.flip(L_SQUIR_IMG, True, False)
     L_JIANGUO = pygame.image.load(paths["wangjianguo"])
     R_JIANGUO = pygame.transform.flip(L_JIANGUO, True, False)
