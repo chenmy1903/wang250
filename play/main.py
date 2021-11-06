@@ -63,11 +63,6 @@ version_text = """
 3.王建国趋势（去世）模拟器
 """
 
-def proc_exist(process_name):
-    pl = psutil.pids()
-    for pid in pl:
-        if psutil.Process(pid).name() == process_name:
-            return True
 
 
 def cmd_text(text: str, end_function=None):
@@ -524,8 +519,6 @@ class Surf(Text):
 def main():
     pygame.init()
     cmd_text(version_text)
-    if not proc_exist("server.exe"):
-        os.system(f"start {os.path.join(BASE_DIR, 'server.exe')}") # 启动服务器
     window_info = pygame.display.Info()
     DISPLAYSURF = pygame.display.set_mode(
         (window_info.current_w, window_info.current_h))
