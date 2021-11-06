@@ -1,3 +1,12 @@
+# 原创鸭皇游戏
+# 官网：https://chenmy1903.github.io/wang250
+# --------------------------------------
+# 王丑菊伞兵，叫你一天天禁我官网
+# 伽卡他卡破解器现在被你搞得都用不了了
+# 这东西我做了多久你知道吗
+# -----------------------------------------
+# 请勿盗用代码！
+# 底部为代码部分，请勿盗用！！！
 import pygame
 import sys
 import os
@@ -11,7 +20,7 @@ import psutil
 
 from pygame.locals import *
 from pickleshare import PickleShareDB
-from game import play as play_game
+from game import play as play_game, paths as game_paths
 
 
 UP = "up"
@@ -27,19 +36,56 @@ speed = 1000
 CONFIG_PATH = "~/.duck_game/wang250"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMAGE_PATH = os.path.join(BASE_DIR, "images")
-paths = {"fengxiaoyi1": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
-         "fengxiaoyi2": os.path.join(IMAGE_PATH, "fengxiaoyi_2.png"),
-         "wangjianguo1": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
-         "wangjianguo2": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
+paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
+         "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
          "bgm": os.path.join(BASE_DIR, 'bgm.mp3'),
-         "peach": os.path.join(IMAGE_PATH, "peach.png")
          }
+
+paths.update(game_paths)
+
+version_text = """
+游戏公告
+
+谨防盗版逃离王建国，最近有个叫老八游戏的给盗走了，而且大量修改游戏玩法
+11/6版本更新（上线自动领取更新补偿300钻石）
+1. 可恶的王丑菊把我网站给禁了，所以在南大附小无法游玩本游戏（指网络nkdxfsxx）
+2. 鸭皇X苏诗朗 ，准备制作模组王建国趋势（去世）模拟器
+3. 金古之匙模组预告：
+使用金古之匙可以开启王建国的**（自行脑补）游戏会直接获得胜利
+4.在爱发电捐款者可以获得一个1000钻石兑换码，并有机会登上官网的感谢榜
+5.修复等级可以突破120的bug，并且修复一些情况会误判为外挂的情况
+6.在0.4版本入坑的小伙伴请重新下载游戏，因为启动器变更了，旧版本启动器无法启动新版本
+7.启动器更完善（不需要重新下载游戏）
+0.6还未完成的内容
+1.金古之匙模组
+2.王八哥角色祈愿活动
+3.王建国趋势（去世）模拟器
+"""
 
 def proc_exist(process_name):
     pl = psutil.pids()
     for pid in pl:
         if psutil.Process(pid).name() == process_name:
             return True
+
+
+def cmd_text(text: str, end_function=None):
+    text_r = text.replace('\n', '-')
+    os.system(f"start {sys.executable} -c \"text = '''{text_r}'''; print(text.replace('-', '\\n')); input('Enter关闭本窗口')\"")
+    if end_function:
+        end_function()
+
+def download_files():
+    if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
+        os.mkdir(os.path.join(BASE_DIR, 'mods'))
+    for key, value in paths.items():
+        if not os.path.isfile(value):
+            try:
+                file_name = value.replace('\\', '/').split('/')[-1]
+                r = requests.get(f"https://chenmy1903.github.io/wang250/files/{file_name}") # 可恶的王丑菊把我的网站dns禁了，在网站名称为nkdxfsxx的网络下无法正常加载，可恢复到正常网络环境下下载
+            except:
+                cmd_text("下载资源失败，强制退出游戏中...")
+                sys.exit()
 
 
 class Text:
@@ -337,6 +383,7 @@ class Surf(Text):
     def start(self):
         choice = 1    
         self.duck_game()
+        cmd_text(version_text)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
@@ -412,8 +459,8 @@ class Surf(Text):
         return surface
 
     def choice_player(self):
-        fengxiaoyi_image = pygame.image.load(paths['fengxiaoyi1'])
-        wangjianguo_image = pygame.image.load(paths['wangjianguo1'])
+        fengxiaoyi_image = pygame.image.load(paths['fengxiaoyi'])
+        wangjianguo_image = pygame.image.load(paths['wangjianguo'])
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             fengxiaoyi = self.get_player_display(fengxiaoyi_image, "风小逸", 'fengxiaoyi', (130, 140))

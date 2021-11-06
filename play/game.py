@@ -65,7 +65,7 @@ Grass data structure keys:
 BASE_DIR = os.path.dirname(__file__)
 IMAGE_PATH = os.path.join(BASE_DIR, "images")
 
-paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
+paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
          "peach": os.path.join(IMAGE_PATH, "peach.png"),
          "grass1": os.path.join(IMAGE_PATH, "grass1.png"),
