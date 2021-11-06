@@ -392,7 +392,6 @@ class Surf(Text):
     def start(self):
         choice = 1    
         self.duck_game()
-        cmd_text(version_text)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
@@ -502,6 +501,7 @@ class Surf(Text):
 
 def main():
     pygame.init()
+    cmd_text(version_text)
     if not proc_exist("server.exe"):
         os.system(f"start {os.path.join(BASE_DIR, 'server.exe')}") # 启动服务器
     window_info = pygame.display.Info()
