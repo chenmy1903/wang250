@@ -71,7 +71,8 @@ def proc_exist(process_name):
 
 def cmd_text(text: str, end_function=None):
     text_r = text.replace('\n', '-')
-    os.system(f"start {sys.executable} -c \"text = '''{text_r}'''; print(text.replace('-', '\\n')); input('Enter关闭本窗口')\"")
+    run_path = os.path.join(sys.exec_prefix, "python.exe")
+    os.system(f"start {run_path} -c \"text = '''{text_r}'''; print(text.replace('-', '\\n')); input('Enter关闭本窗口')\"")
     if end_function:
         end_function()
 
