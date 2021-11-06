@@ -402,8 +402,6 @@ class Surf(Text):
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
             self.blit_text("逃离王建国", (580, 100), 75)
             mouse_pos = pygame.mouse.get_pos()
-            self.DISPLAYSURF.blit(self.lp, mouse_pos)
-            print(mouse_pos)
             if choice == 1:
                 self.blit_text("开始游戏", (600, 300), 75,
                                (0, 0, 0), (255, 255, 255))
@@ -454,7 +452,7 @@ class Surf(Text):
                             self.choice_player()
                         elif choice == 5:
                             os.system(f"start {os.path.join(BASE_DIR, 'pray.exe')}")
-                    
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
 
