@@ -39,6 +39,7 @@ IMAGE_PATH = os.path.join(BASE_DIR, "images")
 paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
          "bgm": os.path.join(BASE_DIR, 'bgm.mp3'),
+         'lp': os.path.join(IMAGE_PATH, "lp.png"),
          }
 
 paths.update(game_paths)
@@ -326,6 +327,8 @@ class Surf(Text):
             self.setting.add("diamond", 1000)
         if not "level" in self.setting.read():
             self.setting.add("level", 1)
+
+        self.lp = pygame.image.load(paths['lp'])
         self.add_settings()
         self.get_gift()
 
@@ -393,10 +396,14 @@ class Surf(Text):
     def start(self):
         choice = 1    
         self.duck_game()
+        pygame.mouse.set_visible(False)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
             self.blit_text("逃离王建国", (580, 100), 75)
+            mouse_pos = pygame.mouse.get_pos()
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+            print(mouse_pos)
             if choice == 1:
                 self.blit_text("开始游戏", (600, 300), 75,
                                (0, 0, 0), (255, 255, 255))
@@ -447,6 +454,7 @@ class Surf(Text):
                             self.choice_player()
                         elif choice == 5:
                             os.system(f"start {os.path.join(BASE_DIR, 'pray.exe')}")
+                    
             pygame.display.update()
             self.clock.tick(FPS)
 
