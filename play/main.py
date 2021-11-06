@@ -434,7 +434,7 @@ class Surf(Text):
 
             if start_game.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 1
-            elif start_game.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif gift.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 2
             if shop.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 3
