@@ -403,55 +403,62 @@ class Surf(Text):
             self.blit_text("逃离王建国", (580, 100), 75)
             mouse_pos = pygame.mouse.get_pos()
             if choice == 1:
-                self.blit_text("开始游戏", (600, 300), 75,
+                start_game = self.blit_text("开始游戏", (600, 300), 75,
                                (0, 0, 0), (255, 255, 255))
             else:
-                self.blit_text("开始游戏", (600, 300), 75,
+                start_game = self.blit_text("开始游戏", (600, 300), 75,
                                (255, 255, 255), (0, 0, 0))
             if choice == 2:
-                self.blit_text("礼包兑换", (650, 400), 75,
+                gift = self.blit_text("礼包兑换", (650, 400), 75,
                                (0, 0, 0), (255, 255, 255))
             else:
-                self.blit_text("礼包兑换", (650, 400), 75,
+                gift = self.blit_text("礼包兑换", (650, 400), 75,
                                (255, 255, 255), (0, 0, 0))
             if choice == 3:
-                self.blit_text("商城", (650, 500), 75,
+                shop = self.blit_text("商城", (650, 500), 75,
                                (0, 0, 0), (255, 255, 255))
             else:
-                self.blit_text("商城", (650, 500), 75,
+                shop = self.blit_text("商城", (650, 500), 75,
                                (255, 255, 255), (0, 0, 0))
             if choice == 4:
-                self.blit_text("角色配置", (650, 600), 75,
+                player = self.blit_text("角色配置", (650, 600), 75,
                                (0, 0, 0), (255, 255, 255))
             else:
-                self.blit_text("角色配置", (650, 600), 75,
+                player = self.blit_text("角色配置", (650, 600), 75,
                                (255, 255, 255), (0, 0, 0))
             if choice == 5:
-                self.blit_text("祈愿", (650, 700), 75,
+                pray = self.blit_text("祈愿", (650, 700), 75,
                                (0, 0, 0), (255, 255, 255))
             else:
-                self.blit_text("祈愿", (650, 700), 75,(255, 255, 255), (0, 0, 0))
+                pray = self.blit_text("祈愿", (650, 700), 75,(255, 255, 255), (0, 0, 0))
+
+            if start_game.collidepoint(mouse_pos[0], mouse_pos[1]):
+                choice = 1
+            elif start_game.collidepoint(mouse_pos[0], mouse_pos[1]):
+                choice = 2
+            if shop.collidepoint(mouse_pos[0], mouse_pos[1]):
+                choice = 3
+            if player.collidepoint(mouse_pos[0], mouse_pos[1]):
+                choice = 4
+            if pray.collidepoint(mouse_pos[0], mouse_pos[1]):
+                choice = 5
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.kill_precess()
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         self.kill_precess()
-                    elif event.key == K_UP and choice > 1:
-                        choice -= 1
-                    elif event.key == K_DOWN and choice < 5:
-                        choice += 1
-                    elif event.key == K_RETURN:
-                        if choice == 1:
-                            self.run_game()
-                        elif choice == 2:
-                            os.system(f"start {os.path.join(BASE_DIR, 'gift.exe')}")
-                        elif choice == 3:
-                            self.shop()
-                        elif choice == 4:
-                            self.choice_player()
-                        elif choice == 5:
-                            os.system(f"start {os.path.join(BASE_DIR, 'pray.exe')}")
+            if pygame.mouse.get_pressed():
+                if choice == 1:
+                    self.run_game()
+                elif choice == 2:
+                    os.system(f"start {os.path.join(BASE_DIR, 'gift.exe')}")
+                elif choice == 3:
+                    self.shop()
+                elif choice == 4:
+                    self.choice_player()
+                elif choice == 5:
+                    os.system(f"start {os.path.join(BASE_DIR, 'pray.exe')}")
             self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
@@ -462,6 +469,7 @@ class Surf(Text):
         if not display:
             display = self.DISPLAYSURF
         display.blit(text, pos)
+        return pygame.Rect(pos[0], pos[1], pos[0] + size, pos[1] + size)
 
     def get_player_display(self, image, game_name, name, size):
         surface = pygame.Surface((size[0] + 30, size[1] + 50))
