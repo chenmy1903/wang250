@@ -436,12 +436,14 @@ class Surf(Text):
                 choice = 1
             elif gift.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 2
-            if shop.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif shop.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 3
-            if player.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif player.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 4
-            if pray.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif pray.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 5
+            else:
+                choice = 0
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.kill_precess()
