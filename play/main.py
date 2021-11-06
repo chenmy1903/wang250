@@ -83,7 +83,7 @@ def download_files():
         if not os.path.isfile(value):
             try:
                 file_name = value.replace('\\', '/').split('/')[-1]
-                r = requests.get(f"https://chenmy1903.github.io/wang250/files/{file_name}") # 可恶的王丑菊把我的网站dns禁了，在网站名称为nkdxfsxx的网络下无法正常加载，可恢复到正常网络环境下下载
+                r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}") # 可恶的王丑菊把我的网站dns禁了，在网站名称为nkdxfsxx的网络下无法正常加载，可恢复到正常网络环境下下载
                 if file_name.endswith('.png'):
                     download_path = os.path.join(IMAGE_PATH, file_name)
                 else:
