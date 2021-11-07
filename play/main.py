@@ -16,7 +16,6 @@ import importlib
 import asyncio
 import requests
 import time
-import psutil
 
 from pygame.locals import *
 from pickleshare import PickleShareDB
@@ -40,6 +39,8 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
          "bgm": os.path.join(BASE_DIR, 'bgm.mp3'),
          'lp': os.path.join(IMAGE_PATH, "lp.png"),
+         'write_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
+         'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
          }
 
 paths.update(game_paths)
@@ -96,6 +97,8 @@ def download_files():
 
 class Text:
     lp = pygame.image.load(paths['lp'])
+    write_exit = pygame.image.load(paths['write_exit_button'])
+    black_exit = pygame.image.load(paths['black_exit_button'])
     
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
@@ -324,8 +327,6 @@ class Surf(Text):
             self.setting.add("diamond", 1000)
         if not "level" in self.setting.read():
             self.setting.add("level", 1)
-
-        
         self.add_settings()
         self.get_gift()
 
@@ -428,6 +429,13 @@ class Surf(Text):
                                (0, 0, 0), (255, 255, 255))
             else:
                 pray = self.blit_text("祈愿", (650, 700), 75,(255, 255, 255), (0, 0, 0))
+            
+            if choice == 6:
+                exit_game = self.black_exit
+            else:
+                exit_game = self.write_exit
+
+            self.DISPLAYSURF.blit(exit_game, (10, 40))
 
             if start_game.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 1
@@ -447,7 +455,6 @@ class Surf(Text):
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         self.kill_precess()
-            print(pygame.mouse.get_pressed())
             if pygame.mouse.get_pressed()[0]:
                 if choice == 1:
                     self.run_game()
