@@ -468,6 +468,8 @@ class Surf(Text):
                     self.choice_player()
                 elif choice == 5:
                     os.system(f"start {os.path.join(BASE_DIR, 'pray.exe')}")
+                elif choice == 6:
+                    self.kill_precess()
             self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
