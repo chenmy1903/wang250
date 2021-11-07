@@ -435,7 +435,7 @@ class Surf(Text):
             else:
                 exit_game = self.write_exit
 
-            self.DISPLAYSURF.blit(exit_game, (10, 40))
+            self.DISPLAYSURF.blit(exit_game, (10, 60))
 
             if start_game.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 1
@@ -447,6 +447,8 @@ class Surf(Text):
                 choice = 4
             elif pray.collidepoint(mouse_pos[0], mouse_pos[1]):
                 choice = 5
+            elif pygame.Rect(10, 60, 80, 86).collidepoint(mouse_pos[0], mouse_pos[1]):
+                choice = 6
             else:
                 choice = 0
             for event in pygame.event.get():
