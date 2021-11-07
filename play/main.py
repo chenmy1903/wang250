@@ -96,9 +96,10 @@ def download_files():
 
 
 class Text:
-    lp = pygame.image.load(paths['lp'])
-    write_exit = pygame.image.load(paths['write_exit_button'])
-    black_exit = pygame.image.load(paths['black_exit_button'])
+    def init_val(self):
+        self.lp = pygame.image.load(paths['lp'])
+        self.write_exit = pygame.image.load(paths['write_exit_button'])
+        self.black_exit = pygame.image.load(paths['black_exit_button'])
     
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
@@ -223,6 +224,7 @@ class Shop(Text):
     def start(self):
         add_functions = {}
         num = 1
+        self.init_val()
         while True:
             mouse_pos = pygame.mouse.get_pos()
             self.surface.fill((0, 0, 0))
@@ -394,6 +396,7 @@ class Surf(Text):
     def start(self):
         choice = 1    
         self.duck_game()
+        self.init_val()
         pygame.mouse.set_visible(False)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
