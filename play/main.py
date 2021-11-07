@@ -457,9 +457,6 @@ class Surf(Text):
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.kill_precess()
-                elif event.type == KEYUP:
-                    if event.key == K_ESCAPE:
-                        self.kill_precess()
             if pygame.mouse.get_pressed()[0]:
                 if choice == 1:
                     self.run_game()
@@ -524,9 +521,75 @@ class Surf(Text):
             self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
 
+    def message(self, text: str):
+        win_info = pygame.display.Info()
+        cio = 0
+        while True:
+            mouse_pos = pygame.mouse.get_pos()
+            self.DISPLAYSURF.fill((0, 0, 0))
+            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 72)
+            if cio == 0:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            else:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            pygame.draw.rect(self.DISPLAYSURF, (255, 255, 255),
+                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    return
+                elif event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        return
+            if yes.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 1
+            else:
+                cio = 0
+            if pygame.mouse.get_pressed()[0] and cio == 1:
+                return True
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+            pygame.display.update()
+    
+    def ask_yes_no(self, text: str):
+        win_info = pygame.display.Info()
+        cio = 0
+        while True:
+            mouse_pos = pygame.mouse.get_pos()
+            self.DISPLAYSURF.fill((0, 0, 0))
+            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 72)
+            if cio != 1:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            elif cio == 1:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            if cio != 2:
+                no = self.blit_text("取消", (win_info.current_w / 6 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            elif cio == 2:
+                no = self.blit_text("取消", (win_info.current_w / 6 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            pygame.draw.rect(self.DISPLAYSURF, (255, 255, 255),
+                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    return
+                elif event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        return
+            if yes.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 1
+            elif no.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 2
+            else:
+                cio = 0
+            if pygame.mouse.get_pressed()[0]:
+                if cio == 1:
+                    return True
+                elif cio == 2:
+                    return False
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+            pygame.display.update()
+
     def kill_precess(self, *, no_title=False):
         if not no_title:
-            pass
+            if not self.ask_yes_no("退出游戏？"):
+                return
         pygame.quit()
         sys.exit()
 

@@ -72,6 +72,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          "grass2": os.path.join(IMAGE_PATH, "grass2.png"),
          "grass3": os.path.join(IMAGE_PATH, "grass3.png"),
          "grass4": os.path.join(IMAGE_PATH, "grass4.png"),
+         'lp': os.path.join(IMAGE_PATH, "lp.png")
          }
 CONFIG_PATH = "~/.duck_game/wang250"
 
@@ -115,6 +116,7 @@ def blit_text(display, text_w: str, pos: tuple, size: int = 18, color: tuple = (
 
 def message(text: str, surface):
     win_info = pygame.display.Info()
+    pygame.mouse.set_visible(True)
     while True:
         blit_text(surface, text, (win_info.current_w / 4, win_info.current_h / 2), 72)
         blit_text(surface, "ESC返回", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40)
@@ -122,17 +124,20 @@ def message(text: str, surface):
                     (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
         for event in pygame.event.get():
              if event.type == QUIT:
-                  pygame.quit()
-                  sys.exit()
+                  pygame.mouse.set_visible(False)
+                  return
              elif event.type == KEYUP:
                   if event.key == K_ESCAPE:
+                    pygame.mouse.set_visible(False)
                     return
         pygame.display.update()
+
 
 def play(surface):
     global FPSCLOCK, DISPLAYSURF, BASICFONT, L_SQUIR_IMG, R_SQUIR_IMG, GRASSIMAGES, L_JIANGUO, R_JIANGUO
 
     pygame.init()
+    lp = pygame.image.load(paths["lp"])
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = surface
     pygame.display.set_caption('逃离王建国')
@@ -148,11 +153,11 @@ def play(surface):
         GRASSIMAGES.append(pygame.image.load(paths['grass%s' % i]))
 
     while True:
-        if runGame():
+        if runGame(lp):
             break
 
 
-def runGame():
+def runGame(lp):
     invulnerableMode = False
     invulnerableStartTime = 0
     gameOverMode = False
@@ -199,6 +204,7 @@ def runGame():
 
     while True: # main game loop
         # Check if we should turn off invulnerability
+        mouse_pos = pygame.mouse.get_pos()
         if invulnerableMode and time.time() - invulnerableStartTime > INVULNTIME:
             invulnerableMode = False
 
@@ -377,7 +383,7 @@ def runGame():
         if winMode:
             message("你成功的逃离了王建国", DISPLAYSURF)
             return True
-
+        DISPLAYSURF.blit(lp, mouse_pos)
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
