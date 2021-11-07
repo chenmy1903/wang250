@@ -431,9 +431,9 @@ class Surf(Text):
                 pray = self.blit_text("祈愿", (650, 700), 75,(255, 255, 255), (0, 0, 0))
             
             if choice == 6:
-                exit_game = self.black_exit
-            else:
                 exit_game = self.write_exit
+            else:
+                exit_game = self.black_exit
 
             self.DISPLAYSURF.blit(exit_game, (10, 60))
 
