@@ -133,7 +133,9 @@ def load_mod():
         load = importlib.import_module(f"mods.{package.replace('.py','')}")
         if load.run_on_load:
             load.run_mod()
+        print(load)
         package_list.append(load)
+    print(package_list)
     
     return package_list
 
@@ -327,12 +329,19 @@ class JianguoBarbecue:
     def __init__(self):
         self.surface = pygame.Surface()
 
+class GameRect(pygame.Rect):
+    title = ""
+    pos = ()
+    size = 0
+
 
 class Surf(Text):
     def __init__(self, surface):
         super().__init__()
         self.DISPLAYSURF = surface
         self.mods = load_mod()
+
+        self.mouse_pos = (0, 0)
         self.shop_gui = Shop(self.DISPLAYSURF)
         pygame.mixer.music.load(paths["bgm"])
         self.clock = pygame.time.Clock()
@@ -404,8 +413,60 @@ class Surf(Text):
         window_info = pygame.display.Info()
         for i in range(255):
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    self.kill_precess()
             pygame.display.update()
             self.clock.tick(60)
+
+    def run_mods(self):
+        count = 1
+        coi = -1
+        mod_rects = []
+        exit_game = None
+        y = 50
+        while True:
+            y = 50
+            self.DISPLAYSURF.fill((0, 0, 0))
+            self.mouse_pos = pygame.mouse.get_pos()
+            if not self.mods:
+                self.message("没有安装模组")
+                return
+            if coi == -2:
+                exit_game = self.write_exit
+            else:
+                exit_game = self.black_exit
+            for i in range(4) if len(self.mods) > 4 else range(len(self.mods)):
+                mod = self.mods[i]
+                text = self.blit_text(mod.TITLE, (200, y)) if coi != i else self.blit_text(mod.TITLE, (200, y), 18, (0, 0, 0), (255, 255, 255))
+                if text.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                    coi = i
+                elif pygame.Rect(10, 60, 80, 86).collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                    coi = -2
+                else:
+                    coi = -1
+                mod_rects.append(text)
+                y += 28
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    return
+                elif event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        return
+            if pygame.mouse.get_pressed()[0]:
+                time.sleep(0.3)
+                if abs(coi) == coi:
+                    if not self.mods[coi].run_on_load:
+                        self.mods[coi].run_mod()
+                    else:
+                        self.message("本模组不支持游戏内启动，因为为加载项")
+                elif coi == -2:
+                    return
+            self.DISPLAYSURF.blit(exit_game, (10, 60))
+            self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
+            pygame.display.update()
+            self.clock.tick(FPS)
+
 
     def start(self):
         choice = 1    
@@ -416,7 +477,7 @@ class Surf(Text):
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
             self.blit_text("逃离王建国", (580, 100), 75)
-            mouse_pos = pygame.mouse.get_pos()
+            self.mouse_pos = pygame.mouse.get_pos()
             if choice == 1:
                 start_game = self.blit_text("开始游戏", (600, 300), 75,
                                (0, 0, 0), (255, 255, 255))
@@ -451,21 +512,29 @@ class Surf(Text):
                 exit_game = self.write_exit
             else:
                 exit_game = self.black_exit
+            
+            if choice == 7:
+                mods = self.blit_text("模组", (140, 10), 20,
+                               (0, 0, 0), (255, 255, 255))
+            else:
+                mods = self.blit_text("模组", (140, 10), 20,(255, 255, 255), (0, 0, 0))
 
             self.DISPLAYSURF.blit(exit_game, (10, 60))
 
-            if start_game.collidepoint(mouse_pos[0], mouse_pos[1]):
+            if start_game.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 1
-            elif gift.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif gift.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 2
-            elif shop.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif shop.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 3
-            elif player.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif player.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 4
-            elif pray.collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif pray.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 5
-            elif pygame.Rect(10, 60, 80, 86).collidepoint(mouse_pos[0], mouse_pos[1]):
+            elif pygame.Rect(10, 60, 80, 86).collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 6
+            elif mods.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                choice = 7
             else:
                 choice = 0
             for event in pygame.event.get():
@@ -476,15 +545,20 @@ class Surf(Text):
                     self.run_game()
                 elif choice == 2:
                     os.system(f"start {os.path.join(BASE_DIR, 'gift.exe')}")
+                    time.sleep(0.2)
                 elif choice == 3:
                     self.shop()
                 elif choice == 4:
                     self.choice_player()
                 elif choice == 5:
                     os.system(f"start {os.path.join(BASE_DIR, 'pray.exe')}")
+                    time.sleep(0.2)
                 elif choice == 6:
                     self.kill_precess()
-            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+                elif choice == 7:
+                    time.sleep(0.3)
+                    self.run_mods()
+            self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
 
@@ -494,7 +568,10 @@ class Surf(Text):
         if not display:
             display = self.DISPLAYSURF
         display.blit(text, pos)
-        return pygame.Rect(pos[0], pos[1], size * len(text_w), size)
+        rect = GameRect(pos[0], pos[1], size * len(text_w), size)
+        rect.title = text_w
+        rect.pos = pos
+        return rect
 
     def get_player_display(self, image, game_name, name, size):
         surface = pygame.Surface((size[0] + 30, size[1] + 50))
@@ -541,13 +618,13 @@ class Surf(Text):
         while True:
             mouse_pos = pygame.mouse.get_pos()
             self.DISPLAYSURF.fill((0, 0, 0))
-            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 72)
+            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 50)
             if cio == 0:
                 yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
             else:
                 yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
             pygame.draw.rect(self.DISPLAYSURF, (255, 255, 255),
-                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
+                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 50 + 30, 200), 5)
             for event in pygame.event.get():
                 if event.type == QUIT:
                     return
@@ -559,6 +636,7 @@ class Surf(Text):
             else:
                 cio = 0
             if pygame.mouse.get_pressed()[0] and cio == 1:
+                time.sleep(0.5)
                 return True
             self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
