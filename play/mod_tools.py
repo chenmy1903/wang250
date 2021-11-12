@@ -4,6 +4,9 @@ import requests
 
 from pickleshare import PickleShareDB
 
+TITLE = "mod_tools"
+run_on_load = True
+
 def cmd_text(text: str, end_function=None):
     text_r = text.replace('\n', '-')
     run_path = os.path.join(sys.exec_prefix, "python.exe")
