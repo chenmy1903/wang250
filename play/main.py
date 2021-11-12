@@ -42,7 +42,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          'lp': os.path.join(IMAGE_PATH, "lp.png"),
          'write_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
-         'icon': os.path.join(BASE_DIR, "icon.ico"),
+         'icon': os.path.join(BASE_DIR, "icon.png"),
          }
 
 paths.update(game_paths)
@@ -56,6 +56,8 @@ version_text = """
 2. 修复对话框点击时会异常跳转的问题
 3. 部分界面增加退出按钮，短按返回，长按退出游戏
 4. 增加mod_tools.py文件（模组依赖），不需要每次敲入工具代码
+5. 修复游戏闪退的bug
+6. 修复启动游戏时无法正常加载模组的问题
 
 模组教程：https://chenmy1903.github.io/wang250/mods/make_mod/
 11/9更新
