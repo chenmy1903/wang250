@@ -343,25 +343,29 @@ class GameRect(pygame.Rect):
     size = 0
 
 
+
 class Surf(Text):
     def __init__(self, surface):
         super().__init__()
         self.DISPLAYSURF = surface
         self.init_val() # 修复无法启动的问题
         pygame.mouse.set_visible(False)
-        try: # 11/12更新：设定为强制更新
+        try:
             mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
-            with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encode="UTF-8") as f:
+            with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encodeing="UTF-8") as f:
                 f.write(mod_file)
         except:
             if not os.path.isfile(os.path.join(BASE_DIR, 'mods', 'mod_tools.py')): # 脱机模式检测依赖
                 self.message("资源下载失败")
-                self.kill_precess()
-        try:
-            self.mods = load_mod() # 加载模组
-        except:
-            self.message("模组加载失败")
-            self.mods = [] # 设置为空，游戏内显示未加载模组
+                if not self.ask_yes_no("是否尝试继续进入游戏"):
+                    self.kill_precess(no_title=True)
+                self.mods = []
+        else:
+            try:
+                self.mods = load_mod() # 加载模组
+            except:
+                self.message("模组加载失败")
+                self.mods = [] # 设置为空，游戏内显示未加载模组
         self.mouse_pos = (0, 0)
         self.shop_gui = Shop(self.DISPLAYSURF)
         pygame.mixer.music.load(paths["bgm"])
@@ -376,7 +380,6 @@ class Surf(Text):
         self.add_settings()
         self.get_gift() # 10/29更新：礼包领取
         pygame.display.set_caption("鸭皇游戏·逃离王建国")
-        pygame.display.set_icon(pygame.image.load(paths["icon"]))
 
     def add_settings(self):
         if not "fengxiaoyi" in self.setting.read():
