@@ -344,8 +344,8 @@ class Surf(Text):
     def __init__(self, surface):
         super().__init__()
         self.DISPLAYSURF = surface
-        # 11/12更新：设定为强制更新    
-        try:
+        self.init_val() # 修复无法启动的问题
+        try: # 11/12更新：设定为强制更新
             mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
             with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encode="UTF-8") as f:
                 f.write(mod_file)
@@ -490,7 +490,6 @@ class Surf(Text):
     def start(self):
         choice = 1    
         self.duck_game()
-        self.init_val()
         pygame.mouse.set_visible(False)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
