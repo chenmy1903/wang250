@@ -344,32 +344,33 @@ class Surf(Text):
     def __init__(self, surface):
         super().__init__()
         self.DISPLAYSURF = surface
+        # 11/12更新：设定为强制更新    
         try:
-            if not os.path.isfile(os.path.join(BASE_DIR, 'mods', 'mod_tools.py')):
-                self.message("资源缺失，点击确认开始下载资源")
-                mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
-                with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encode="UTF-8") as f:
-                    f.write(mod_file)
+            mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
+            with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encode="UTF-8") as f:
+                f.write(mod_file)
+        except:
+            if not os.path.isfile(os.path.join(BASE_DIR, 'mods', 'mod_tools.py')): # 脱机模式检测依赖
+                self.message("资源下载失败")
+                self.kill_precess()
+        try:
             self.mods = load_mod() # 加载模组
-        except requests.ReadTimeout:
-            self.message("资源下载失败，点击按钮退出游戏")
-            self.kill_precess(no_title=True)
         except:
             self.message("模组加载失败")
-            self.mods = []
+            self.mods = [] # 设置为空，游戏内显示未加载模组
         self.mouse_pos = (0, 0)
         self.shop_gui = Shop(self.DISPLAYSURF)
         pygame.mixer.music.load(paths["bgm"])
         self.clock = pygame.time.Clock()
         self.setting = Setting()
         if not "coins" in self.setting.read():
-            self.setting.add("coins", 300)
+            self.setting.add("coins", 300) # 开服礼包 (10/1更新)
         if not "diamond" in self.setting.read():
-            self.setting.add("diamond", 1000)
+            self.setting.add("diamond", 1000) # 开服礼包 (10/1更新)
         if not "level" in self.setting.read():
-            self.setting.add("level", 1)
+            self.setting.add("level", 1) # 初始化"level"防止调用时出KeyError (10/24更新)
         self.add_settings()
-        self.get_gift()
+        self.get_gift() # 10/29更新：礼包领取
 
     def add_settings(self):
         if not "fengxiaoyi" in self.setting.read():
@@ -387,8 +388,8 @@ class Surf(Text):
         if "version" in self.setting.read():
             if self.setting.read("version") != eval(str(gift))["version"]:
                 for key, value in eval(str(gift)).items():
-                    if key != "version":
-                        self.setting.add(key, self.setting.read(key) + value)
+                    if isinstance(value, int): # 11/12更新：可以领取角色了
+                        self.setting.add(key, self.setting.read(key) + value) # 10/30更新：修复添加数据错误的bug
                     else:
                         self.setting.add(key, value)
         else:
@@ -397,6 +398,7 @@ class Surf(Text):
     def run_game(self):
         try:
             assert self.setting.read(self.setting.read('player'))
+            assert self.setting.read(self.setting.read('player')) == true # 11/12更新：修复为false不会判定为外挂
         except (KeyError, AssertionError):
             self.use_wg()
         if self.setting.read("level") > 120:
@@ -412,8 +414,9 @@ class Surf(Text):
             for event in pygame.event.get():
                 if event.type == KEYUP:
                     if event.key == K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
+                        self.kill_precess()
+                elif event.type == QUIT:
+                    self.kill_precess()
             pygame.display.update()
 
     def buy(self, coin: int):
