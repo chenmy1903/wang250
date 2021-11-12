@@ -352,7 +352,7 @@ class Surf(Text):
         pygame.mouse.set_visible(False)
         try:
             mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
-            with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encodeing="UTF-8") as f:
+            with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encoding="UTF-8") as f:
                 f.write(mod_file)
         except:
             if not os.path.isfile(os.path.join(BASE_DIR, 'mods', 'mod_tools.py')): # 脱机模式检测依赖
