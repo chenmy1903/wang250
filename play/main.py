@@ -42,6 +42,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          'lp': os.path.join(IMAGE_PATH, "lp.png"),
          'write_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
+         'icon': os.path.join(BASE_DIR, "icon.png")
          }
 
 paths.update(game_paths)
@@ -372,6 +373,8 @@ class Surf(Text):
             self.setting.add("level", 1) # 初始化"level"防止调用时出KeyError (10/24更新)
         self.add_settings()
         self.get_gift() # 10/29更新：礼包领取
+        pygame.display.set_caption("鸭皇游戏·逃离王建国")
+        pygame.display.set_icon(path["icon"])
 
     def add_settings(self):
         if not "fengxiaoyi" in self.setting.read():
