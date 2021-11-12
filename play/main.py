@@ -345,6 +345,7 @@ class Surf(Text):
         super().__init__()
         self.DISPLAYSURF = surface
         self.init_val() # 修复无法启动的问题
+        pygame.mouse.set_visible(False)
         try: # 11/12更新：设定为强制更新
             mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
             with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encode="UTF-8") as f:
@@ -430,6 +431,8 @@ class Surf(Text):
 
     def duck_game(self):
         window_info = pygame.display.Info()
+        pygame.mouse.set_visible(True)
+        self.DISPLAYSURF.fill((0, 0, 0))
         for i in range(255):
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             for event in pygame.event.get():
@@ -437,6 +440,7 @@ class Surf(Text):
                     self.kill_precess()
             pygame.display.update()
             self.clock.tick(60)
+        pygame.mouse.set_visible(False)
 
     def run_mods(self):
         count = 1
@@ -490,7 +494,6 @@ class Surf(Text):
     def start(self):
         choice = 1    
         self.duck_game()
-        pygame.mouse.set_visible(False)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
