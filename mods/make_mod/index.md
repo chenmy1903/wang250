@@ -1,6 +1,6 @@
 # 逃离王建国·mods
 
-## Setting类/钻石、金币修改教程
+## Setting类\钻石、金币修改教程
 
 下面代码为Setting类的代码
 
@@ -78,3 +78,17 @@ setting.add("wangjianguo", "chenwenli")
 print(setting.read()) # 返回{"wangjianguo", "chenwenli"}
 print(setting.read("wangjianguo")) # 返回 'chenwenli'
 ```
+
+## 终端文本输出（用于制作公告）
+
+先来看源代码
+```python
+def cmd_text(text: str, end_function=None):
+    text_r = text.replace('\n', '-')
+    run_path = os.path.join(sys.exec_prefix, "python.exe")
+    os.system(f"start {run_path} -c \"text = '''{text_r}'''; print(text.replace('-', '\\n')); input('Enter关闭本窗口')\"")
+    if end_function:
+        end_function()
+```
+
+运行会弹出一个cmd窗口，并显示 {text}，

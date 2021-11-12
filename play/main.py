@@ -50,6 +50,13 @@ version_text = """
 游戏公告
 
 谨防盗版逃离王建国，最近有个叫老八游戏的给盗走了，而且大量修改游戏玩法
+11/12更新
+1. 模组功能更新
+2. 修复对话框点击时会异常跳转的问题
+3. 部分界面增加退出按钮，短按返回，长按退出游戏
+4. 增加mod_tools.py文件（模组依赖），不需要每次敲入工具代码
+
+模组教程：https://chenmy1903.github.io/wang250/mods/make_mod/
 11/9更新
 1. 修复游戏功能更新（需另下载）
 2. 坚果云dat文件解除工具更新（需另下载）
@@ -133,9 +140,7 @@ def load_mod():
         load = importlib.import_module(f"mods.{package.replace('.py','')}")
         if load.run_on_load:
             load.run_mod()
-        print(load)
         package_list.append(load)
-    print(package_list)
     
     return package_list
 
@@ -339,8 +344,19 @@ class Surf(Text):
     def __init__(self, surface):
         super().__init__()
         self.DISPLAYSURF = surface
-        self.mods = load_mod()
-
+        try:
+            if not os.path.isfile(os.path.join(BASE_DIR, 'mods', 'mod_tools.py')):
+                self.message("资源缺失，点击确认开始下载资源")
+                mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
+                with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encode="UTF-8") as f:
+                    f.write(mod_file)
+            self.mods = load_mod() # 加载模组
+        except requests.ReadTimeout:
+            self.message("资源下载失败，点击按钮退出游戏")
+            self.kill_precess(no_title=True)
+        except:
+            self.message("模组加载失败")
+            self.mods = []
         self.mouse_pos = (0, 0)
         self.shop_gui = Shop(self.DISPLAYSURF)
         pygame.mixer.music.load(paths["bgm"])
