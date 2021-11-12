@@ -34,3 +34,5 @@ class Setting:
         if config:
             return self.db[self.file_name][config]
         return self.db[self.file_name]
+
+lambda run_mod: print("加载成功")
