@@ -42,7 +42,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          'lp': os.path.join(IMAGE_PATH, "lp.png"),
          'write_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
-         'icon': os.path.join(BASE_DIR, "icon.png")
+         'icon': os.path.join(BASE_DIR, "icon.ico"),
          }
 
 paths.update(game_paths)
