@@ -374,7 +374,7 @@ class Surf(Text):
         self.add_settings()
         self.get_gift() # 10/29更新：礼包领取
         pygame.display.set_caption("鸭皇游戏·逃离王建国")
-        pygame.display.set_icon(paths["icon"])
+        pygame.display.set_icon(pygame.image.load(paths["icon"]))
 
     def add_settings(self):
         if not "fengxiaoyi" in self.setting.read():
