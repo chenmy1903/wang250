@@ -474,6 +474,7 @@ class Surf(Text):
                 mod = self.mods[i]
                 text = self.blit_text(mod.TITLE, (200, y)) if coi != i else self.blit_text(mod.TITLE, (200, y), 18, (0, 0, 0), (255, 255, 255))
                 if text.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                    print(coi)
                     coi = i
                 elif pygame.Rect(10, 60, 80, 86).collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                     coi = -2
@@ -489,6 +490,7 @@ class Surf(Text):
                         return
             if pygame.mouse.get_pressed()[0]:
                 time.sleep(0.3)
+                print(coi)
                 if abs(coi) == coi:
                     if not self.mods[coi].run_on_load:
                         self.mods[coi].run_mod()
