@@ -51,6 +51,9 @@ version_text = """
 游戏公告
 
 谨防盗版逃离王建国，最近有个叫老八游戏的给盗走了，而且大量修改游戏玩法
+11/13更新
+1. 模组只会加载4个bug修复
+2. mod_tools.py加载错误bug修复
 11/12更新
 1. 模组功能更新
 2. 修复对话框点击时会异常跳转的问题
@@ -467,7 +470,7 @@ class Surf(Text):
                 exit_game = self.write_exit
             else:
                 exit_game = self.black_exit
-            for i in range(4) if len(self.mods) > 4 else range(len(self.mods)):
+            for i in range(len(self.mods)):
                 mod = self.mods[i]
                 text = self.blit_text(mod.TITLE, (200, y)) if coi != i else self.blit_text(mod.TITLE, (200, y), 18, (0, 0, 0), (255, 255, 255))
                 if text.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
