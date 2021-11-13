@@ -369,6 +369,7 @@ class Surf(Text):
             except:
                 self.message("模组加载失败")
                 self.mods = [] # 设置为空，游戏内显示未加载模组
+        self.mods.sort()
         self.mouse_pos = (0, 0)
         self.shop_gui = Shop(self.DISPLAYSURF)
         pygame.mixer.music.load(paths["bgm"])
