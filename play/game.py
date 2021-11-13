@@ -67,6 +67,11 @@ IMAGE_PATH = os.path.join(BASE_DIR, "images")
 
 paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
+         "chenwenli": os.path.join(IMAGE_PATH, "chenwenli.png"), # 11/12更新：陈文丽『庇护之子』贴图
+         "wangbage": os.path.join(IMAGE_PATH, "wangba.png"), # 王八哥贴图
+         "wangyichen": os.path.join(IMAGE_PATH, "wangyichen.png"), # 王轶臣『伞兵之子』贴图
+         "jinlaotou": os.path.join(IMAGE_PATH, "jinlaotou.png"), # 金老头『无名之人』贴图
+         "maxiaofang": os.path.join(IMAGE_PATH, 'maxiaofang.png'), # 是谁就不说了，这个可能不会更新
          "peach": os.path.join(IMAGE_PATH, "peach.png"),
          "grass1": os.path.join(IMAGE_PATH, "grass1.png"),
          "grass2": os.path.join(IMAGE_PATH, "grass2.png"),
