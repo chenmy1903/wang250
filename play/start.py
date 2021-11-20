@@ -244,7 +244,7 @@ class Wang250DevConsole(code.InteractiveConsole):
     pass
 
 def start_shell():
-    shell = Wang250DevConsole({"Setting": Setting})
+    shell = Wang250DevConsole({"Setting": Setting, "exit": sys.exit, "quit": sys.exit, "createShortCut": createShortCut})
     shell.interact()
 
 def title(title: str):
