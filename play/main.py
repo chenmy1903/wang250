@@ -49,8 +49,13 @@ paths.update(game_paths)
 
 version_text = """
 游戏公告
-
+重要通知
+1. 因为游戏维护，兑换、祈愿等GUI功能暂时关闭，恢复时间另行通知
+2. 旧版本请重新从官网下载安装包，进行安装
 谨防盗版逃离王建国，最近有个叫老八游戏的给盗走了，而且大量修改游戏玩法
+11/20更新
+1. 增加启动器自动更新功能
+2. 0.5版本之前入坑游戏无法进行更新bug修复
 11/19更新
 因为逃离王建国安装文件精化，导致祈愿等gui功能无法启动，预计9/20更新
 11/13更新
@@ -246,7 +251,12 @@ def update_runner():
     config = Setting("repair")
     read = config.read()
     temp = os.environ["TEMP"]
-    if "runner_version" not in read or read["runner_version"] != "0.2":
+    if "runner_version" not in read:
+        # 11/20更新：0.5版本之前入坑游戏无法进行更新bug修复
+        cmd_text("请重新从官网下载游戏，检测到启动器版本为0.1旧版，请更新")
+        webbrowser.open("https://chenmy1903.github.io/wang250/play/setup.exe")
+        sys.exit()
+    if "runner_version" in read and read["runner_version"] != "0.2":
         cmd_text("检测到启动器版本更新，准备启动自动更新")
         setup_file = requests.get("https://chenmy1903.github.io/wang250/play/update.exe").content
         with open(os.path.join(temp, "wang_setup.exe"), "wb") as f:
@@ -595,14 +605,14 @@ class Surf(Text):
                 if choice == 1:
                     self.run_game()
                 elif choice == 2:
-                    os.system(f"start {os.path.join(BASE_DIR, 'gift.exe')}")
+                    self.message("功能维护中")
                     time.sleep(0.2)
                 elif choice == 3:
                     self.shop()
                 elif choice == 4:
                     self.choice_player()
                 elif choice == 5:
-                    os.system(f"start {os.path.join(BASE_DIR, 'pray.exe')}")
+                    self.message("功能维护中")
                     time.sleep(0.2)
                 elif choice == 6:
                     self.kill_precess()
@@ -738,13 +748,13 @@ class Surf(Text):
 
 def main():
     pygame.init()
-    update_runner() # 更新启动器
     Setting("repair").add("game_path", BASE_DIR) # 更新运行目录，为了修复程序更快的找到游戏目录
     cmd_text(version_text)
+    update_runner() # 更新启动器
+    download_files()
     window_info = pygame.display.Info()
     DISPLAYSURF = pygame.display.set_mode(
         (window_info.current_w, window_info.current_h))
-    download_files()
     window = Surf(DISPLAYSURF)
     window.start()
 
