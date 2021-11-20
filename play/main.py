@@ -248,7 +248,7 @@ def update_runner():
     temp = os.environ["TEMP"]
     if "runner_version" not in read or read["runner_version"] != "0.2":
         cmd_text("检测到启动器版本更新，准备启动自动更新")
-        setup_file = requests.get("https://chenmy1903.github.io/wang250/play/setup.exe").content
+        setup_file = requests.get("https://chenmy1903.github.io/wang250/play/update.exe").content
         with open(os.path.join(temp, "wang_setup.exe"), "wb") as f:
             f.write(setup_file)
         os.system(f"start {os.path.join(temp, 'wang_setup.exe')}")
