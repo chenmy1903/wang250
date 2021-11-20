@@ -258,11 +258,14 @@ def update_runner():
         sys.exit()
     if "runner_version" in read and read["runner_version"] != "0.2":
         cmd_text("检测到启动器版本更新，准备启动自动更新")
-        setup_file = requests.get("https://chenmy1903.github.io/wang250/play/update.exe").content
-        with open(os.path.join(temp, "wang_setup.exe"), "wb") as f:
-            f.write(setup_file)
-        os.system(f"start {os.path.join(temp, 'wang_setup.exe')}")
-        sys.exit()
+        try:
+            setup_file = requests.get("https://chenmy1903.github.io/wang250/play/update.exe").content
+            with open(os.path.join(temp, "wang_setup.exe"), "wb") as f:
+                f.write(setup_file)
+            os.system(f"start {os.path.join(temp, 'wang_setup.exe')}")
+            sys.exit()
+        except:
+            cmd_text("下载失败，尝试进入游戏")
     if os.path.isfile(os.path.join(temp, "wang_setup.exe")):
         os.remove(os.path.join(temp, "wang_setup.exe"))
 
