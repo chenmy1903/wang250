@@ -55,6 +55,7 @@ version_text = """
 谨防盗版逃离王建国，最近有个叫老八游戏的给盗走了，而且大量修改游戏玩法
 11/21更新
 1. 管理员模式更新（游戏目录启动cmd，执行 start.exe --admin [password] 进行调用）
+2. 管理员模式可以不受外挂监测的控制
 管理员密码获取方式：不知道（以后才有，但是朋友免费送）
 11/20更新
 1. 增加启动器自动更新功能
@@ -407,6 +408,7 @@ class Surf(Text):
         pygame.mixer.music.load(paths["bgm"])
         self.clock = pygame.time.Clock()
         self.setting = Setting()
+        self.admin_mode = Setting('repair').read("admin_mode")
         if not "coins" in self.setting.read():
             self.setting.add("coins", 300) # 开服礼包 (10/1更新)
         if not "diamond" in self.setting.read():
@@ -453,6 +455,8 @@ class Surf(Text):
         pygame.mixer.music.stop()
 
     def use_wg(self):
+        if self.admin_mode:
+            return
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text("检测到你非法修改游戏内数据，奖励你封号1亿年大礼包", (100, 300), 72)
