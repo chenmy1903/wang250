@@ -275,6 +275,9 @@ def main():
             print("通过验证")
             config.add("admin_mode", "True")
             input("Enter退出")
+        else:
+            print("认证失败")
+            input("Enter退出")
     elif admin_mode and argv.unadmin:
         print("已成功移除管理员权限")
         config.add("admin_mode", "False")
