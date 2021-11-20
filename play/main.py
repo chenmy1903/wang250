@@ -242,9 +242,24 @@ class Setting:
             return self.db[self.file_name][config]
         return self.db[self.file_name]
 
+def update_runner():
+    config = Setting("repair")
+    read = config.read()
+    if "runner_version" not in read or read["runner_version"] != "0.2":
+        cmd_text("检测到启动器版本更新，准备启动自动更新")
+        setup_file = requests.get("https://chenmy1903.github.io/wang250/play/setup.exe").content
+        temp = os.environ["TEMP"] # 缓存下载文件夹
+        with open(os.path.join(temp, "wang_setup.exe"), "wb") as f:
+            f.write(setup_file)
+        os.system(f"start {os.path.join(temp, 'wang_setup.exe')}")
+        sys.exit()
+    if os.path.isfile(os.path.join(temp, "wang_setup.exe")):
+        os.remove(os.path.join(temp, "wang_setup.exe"))
+
+
 
 class Shop(Text):
-    def __init__(self, surface, ):
+    def __init__(self, surface):
         self.setting = Setting()
         self.names = {}
         self.surface = surface
@@ -723,6 +738,7 @@ class Surf(Text):
 
 def main():
     pygame.init()
+    update_runner() # 更新启动器
     Setting("repair").add("game_path", BASE_DIR) # 更新运行目录，为了修复程序更快的找到游戏目录
     cmd_text(version_text)
     window_info = pygame.display.Info()
