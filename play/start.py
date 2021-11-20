@@ -233,11 +233,16 @@ def install():
     os.system(f"start {os.path.join(BASE_DIR, 'game_runner/Scripts/activate.bat')}")
 
 def cmd_argument():
+    config = Setting("repair")
     parser = argparse.ArgumentParser(__file__.replace('\\', '/').split("/")[-1])
     parser.add_argument("--repair", help="进行游戏修复", action='store_true')
     parser.add_argument("--auto_repair", help="自动检测游戏问题并进行修复", action='store_true')
-    parser.add_argument("--shell", "--console", help="启动调试终端", action='store_true')
-    parser.add_argument("--exec", "-c", help="执行命令")
+    if config.read("admin_mode") == "True":
+        parser.add_argument("--shell", "--console", help="启动调试终端", action='store_true')
+        parser.add_argument("--exec", "-c", help="执行命令")
+        parser.add_argument("--unadmin", help="取消登录管理员账号")
+    else:
+        parser.add_argument("--admin", help="登录管理员账号")
     return parser.parse_args()
 
 class Wang250DevConsole(code.InteractiveConsole):
@@ -252,14 +257,35 @@ def title(title: str):
 
 def main():
     title("鸭皇游戏")
+    config = Setting("repair")
+    if "admin_mode" not in config.read():
+        config.add("admin_mode", "False")
     argv = cmd_argument()
-    if argv.repair:
+    admin_mode = config.read("admin_mode") == "True"
+    if argv.admin:
+        password = argv.admin
+        print("联机认证中，请稍等")
+        try:
+            web_password = requests.get("https://chenmy1903.github.io/wang250/admin").text
+            print(web_password)
+        except:
+            print("无网络连接")
+            input("Enter退出")
+            sys.exit()
+        if web_password == password:
+            print("通过验证")
+            config.add("admin_mode", "True")
+            input("Enter退出")
+    elif admin_mode and argv.unadmin:
+        print("已成功移除管理员权限")
+        config.add("admin_mode", "False")
+    elif argv.repair:
         title("逃离王建国修复工具")
         repair()
-    elif argv.shell:
+    elif admin_mode and argv.shell:
         title("逃离王建国调试终端")
         start_shell()
-    elif argv.exec:
+    elif admin_mode and argv.exec:
         eval(argv.exec, {"Setting": Setting})
         print("指令执行成功")
         input("Enter退出")
