@@ -17,10 +17,13 @@ import importlib
 import asyncio
 import requests
 import time
+import argparse
 
 from pygame.locals import *
 from pickleshare import PickleShareDB
 from game import play as play_game, paths as game_paths
+
+from PyQt5.QtWidgets import QInputDialog, QWidget, QMessageBox, QApplication
 
 
 UP = "up"
@@ -369,6 +372,13 @@ class Shop(Text):
                         return
             pygame.display.update()
 
+def join(command_list: list):
+    out_str = ""
+    for command in command_list:
+        out_str += command
+        out_str += " "
+    return out_str
+
 
 class JianguoBarbecue:
     def __init__(self):
@@ -408,7 +418,7 @@ class Surf(Text):
         pygame.mixer.music.load(paths["bgm"])
         self.clock = pygame.time.Clock()
         self.setting = Setting()
-        self.admin_mode = Setting('repair').read("admin_mode")
+        self.admin_mode = Setting('repair').read("admin_mode") == true
         if not "coins" in self.setting.read():
             self.setting.add("coins", 300) # 开服礼包 (10/1更新)
         if not "diamond" in self.setting.read():
@@ -511,7 +521,6 @@ class Surf(Text):
                 mod = self.mods[i]
                 text = self.blit_text(mod.TITLE, (200, y)) if coi != i else self.blit_text(mod.TITLE, (200, y), 18, (0, 0, 0), (255, 255, 255))
                 if text.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
-                    print(coi)
                     coi = i
                 elif pygame.Rect(10, 60, 80, 86).collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                     coi = -2
@@ -527,7 +536,6 @@ class Surf(Text):
                         return
             if pygame.mouse.get_pressed()[0]:
                 time.sleep(0.3)
-                print(coi)
                 if abs(coi) == coi:
                     if not self.mods[coi].run_on_load:
                         self.mods[coi].run_mod()
@@ -544,6 +552,7 @@ class Surf(Text):
     def start(self):
         choice = 1    
         self.duck_game()
+        window_info = pygame.display.Info()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
@@ -589,6 +598,14 @@ class Surf(Text):
                                (0, 0, 0), (255, 255, 255))
             else:
                 mods = self.blit_text("模组", (140, 10), 20,(255, 255, 255), (0, 0, 0))
+            
+            if choice == 8 and not self.admin_mode:
+                admin = self.blit_text("登录管理员", (0, 5), 20,
+                               (0, 0, 0), (255, 255, 255))
+            elif not self.admin_mode:
+                admin = self.blit_text("登录管理员", (0, 5), 20,(255, 255, 255), (0, 0, 0))
+            else:
+                admin = None
 
             self.DISPLAYSURF.blit(exit_game, (10, 60))
 
@@ -606,6 +623,8 @@ class Surf(Text):
                 choice = 6
             elif mods.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 7
+            elif admin and admin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                choice = 8
             else:
                 choice = 0
             for event in pygame.event.get():
@@ -629,9 +648,30 @@ class Surf(Text):
                 elif choice == 7:
                     time.sleep(0.3)
                     self.run_mods()
+                elif choice == 8:
+                    time.sleep(0.3)
+                    self.lognin_admin()
             self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
+
+    def lognin_admin(self):
+        pygame.quit()
+        app = QApplication(sys.argv)
+        text, ok = QInputDialog.getText(None, "管理员登录", "请输入管理员密码")
+        if not ok:
+            return
+        try:
+            web_password = requests.get("https://chenmy1903.github.io/wang250/admin").text
+        except:
+            QMessageBox.critical(None, "错误", "无网络连接")
+        if text == web_password:
+            QMessageBox.information(None, "提示", "认证成功，点击确定以重启游戏")
+            Setting("repair").add("admin_mode", true)
+        else:
+            QMessageBox.information(None, "提示", "密码错误，点击确定启动游戏")
+        os.system("start " + sys.executable + " " + __file__)
+        sys.exit()
 
     def blit_text(self, text_w: str, pos: tuple, size: int = 18, color: tuple = (255, 255, 255), bg: tuple = None, display=None):
         font = pygame.font.SysFont('SimHei', size)
@@ -756,11 +796,23 @@ class Surf(Text):
         pygame.quit()
         sys.exit()
 
+def cmd_argument():
+    config = Setting("repair")
+    parser = argparse.ArgumentParser(__file__.replace('\\', '/').split("/")[-1])
+    parser.add_argument("--no_start_text", help="游戏启动时不显示公告", action='store_true')
+    if config.read("admin_mode") == true:
+        parser.add_argument("--no_update", help="游戏启动时不检测更新", action='store_true')
+    return parser.parse_args()
+
 def main():
     pygame.init()
     Setting("repair").add("game_path", BASE_DIR) # 更新运行目录，为了修复程序更快的找到游戏目录
-    cmd_text(version_text)
-    update_runner() # 更新启动器
+    argv = cmd_argument()
+    config = Setting("repair")
+    if not argv.no_start_text:
+        cmd_text(version_text)
+    if config.read("admin_mode") == true and not argv.no_update:
+        update_runner() # 更新启动器
     download_files()
     window_info = pygame.display.Info()
     DISPLAYSURF = pygame.display.set_mode(
