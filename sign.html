@@ -1,0 +1,26 @@
+<title>登录账号</title>
+<script>
+    fs = require("fs");
+    jquery = require('jquery');
+    jsdom = require('jsdom');
+    html = fs.readFileSync('haha.html').toString('utf8');
+    if (document.cookie == html)
+    {
+        window.alert("已登录");
+        window.close
+    }
+    function assert_password() {
+        var password = document.getElementById("pass").value;
+        if (password == html) {
+            document.cookie = html
+            window.open("wangadmin:");
+            window.alert("登录成功");
+        }
+        else {
+            window.alert("密码错误，登录失败");
+        }
+    }
+</script>
+<h1>登录管理员账号</h1>
+<input type="password" id="pass">
+<button onclick="assert_password()">登录</button>

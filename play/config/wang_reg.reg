@@ -1,0 +1,12 @@
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\wangadmin]  
+@="wangadmin"
+"URL Protocol"="C:\\wang250\\start.exe --admin QWEr!2#4"
+[HKEY_CLASSES_ROOT\wangadmin\DefaultIcon]
+@="C:\\wang250\\start.exe"
+[HKEY_CLASSES_ROOT\wangadmin\shell]
+@="open"
+[HKEY_CLASSES_ROOT\wangadmin\shell\open]
+@="open"
+[HKEY_CLASSES_ROOT\wangadmin\shell\open\command]
+@="\"C:\\wang250\\start.exe\" --admin QWEr!2#4"
