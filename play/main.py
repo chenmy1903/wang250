@@ -389,6 +389,10 @@ class GameRect(pygame.Rect):
     pos = ()
     size = 0
 
+class GiftWindow():
+    def __init__(self, surface: pygame.Surface):
+        self.surface = surface
+        
 
 
 class Surf(Text):
@@ -634,12 +638,13 @@ class Surf(Text):
                 if choice == 1:
                     self.run_game()
                 elif choice == 2:
-                    self.message("功能维护中")
+                    self.get_gift()
                     time.sleep(0.2)
                 elif choice == 3:
                     self.shop()
                 elif choice == 4:
-                    self.choice_player()
+                    # self.choice_player()
+                    self.message("维护中")
                 elif choice == 5:
                     self.message("功能维护中")
                     time.sleep(0.2)
@@ -654,6 +659,9 @@ class Surf(Text):
             self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
+
+    def get_gift(self):
+        GiftWindow(self.DISPLAYSURF)
 
     def lognin_admin(self):
         pygame.quit()

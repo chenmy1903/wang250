@@ -1,3 +1,6 @@
+# 逃离王建国 （鸭皇游戏）
+# 此部分代码为外国大佬创作
+
 import random
 import sys
 import time
@@ -71,13 +74,15 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          "wangbage": os.path.join(IMAGE_PATH, "wangba.png"), # 王八哥贴图
          "wangyichen": os.path.join(IMAGE_PATH, "wangyichen.png"), # 王轶臣『伞兵之子』贴图
          "jinlaotou": os.path.join(IMAGE_PATH, "jinlaotou.png"), # 金老头『无名之人』贴图
-         "maxiaofang": os.path.join(IMAGE_PATH, 'maxiaofang.png'), # 是谁就不说了，这个可能不会更新
+         # "maxiaofang": os.path.join(IMAGE_PATH, 'maxiaofang.png'), # 是谁就不说了，这个可能不会更新
+         "wangchouju": os.path.join(IMAGE_PATH, "wangchouju.jpg"), # 王丑菊「万恶之源」贴图
+         "sunbin": os.path.join(IMAGE_PATH, "sunbin.jpg"), # 孙斌「孙结冰」贴图 
          "peach": os.path.join(IMAGE_PATH, "peach.png"),
          "grass1": os.path.join(IMAGE_PATH, "grass1.png"),
          "grass2": os.path.join(IMAGE_PATH, "grass2.png"),
          "grass3": os.path.join(IMAGE_PATH, "grass3.png"),
          "grass4": os.path.join(IMAGE_PATH, "grass4.png"),
-         'lp': os.path.join(IMAGE_PATH, "lp.png")
+         'lp': os.path.join(IMAGE_PATH, "lp.png"),
          }
 CONFIG_PATH = "~/.duck_game/wang250"
 
