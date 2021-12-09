@@ -56,6 +56,10 @@ version_text = """
 1. 因为游戏维护，兑换、祈愿等GUI功能暂时关闭，恢复时间另行通知
 2. 旧版本请重新从官网下载安装包，进行安装
 谨防盗版逃离王建国，最近有个叫老八游戏的给盗走了，而且大量修改游戏玩法
+12/9 更新
+1. 大战王丑菊开始测试（需安装Python及库，不建议普通玩家尝试）
+2. 今天作者生日（阴历），全服发放648000钻石
+3. 修复王丑菊资源下载失败导致游戏启动失败的bug
 11/21更新
 1. 管理员模式更新（游戏目录启动cmd，执行 start.exe --admin [password] 进行调用）
 2. 管理员模式可以不受外挂监测的控制
@@ -127,7 +131,7 @@ def download_files():
             try:
                 file_name = value.replace('\\', '/').split('/')[-1]
                 r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}") # 可恶的王丑菊把我的网站dns禁了，在网站名称为nkdxfsxx的网络下无法正常加载，可恢复到正常网络环境下下载
-                if file_name.endswith('.png'):
+                if file_name.endswith('.png') or file_name.endswith('.jpg'):
                     download_path = os.path.join(IMAGE_PATH, file_name)
                 else:
                     download_path = os.path.join(BASE_DIR, file_name)

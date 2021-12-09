@@ -21,7 +21,7 @@ from pygame.locals import *
 from pickleshare import PickleShareDB
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-IMAGE_PATH = os.path.join(BASE_DIR, "images"
+IMAGE_PATH = os.path.join(BASE_DIR, "images")
 
 true = 'True'
 false = 'false'
