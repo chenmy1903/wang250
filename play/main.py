@@ -43,7 +43,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
          "bgm": os.path.join(BASE_DIR, 'bgm.mp3'),
          'lp': os.path.join(IMAGE_PATH, "lp.png"),
-         'write_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
+         'white_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
          'icon': os.path.join(BASE_DIR, "icon.png"),
          }
@@ -98,11 +98,16 @@ version_text = """
 3.王建国趋势（去世）模拟器
 
 0.7预告（2022/2/1更新）
-1. 『万恶之源』王丑菊更新
+1. 『万恶之源』王丑菊更新 （大概率白嫖）
 2.春节礼包
 3.剧情更新
-4.不知道
+4.联机更新
+5.孙斌大战王建国活动 
 tip: 所有更新内容以实际更新为准。
+
+其他预告：
+1. 12/21 作者的生日活动
+2. 12/7 击败王丑菊活动
 """
 
 
@@ -139,7 +144,7 @@ def download_files():
 class Text:
     def init_val(self):
         self.lp = pygame.image.load(paths['lp'])
-        self.write_exit = pygame.image.load(paths['write_exit_button'])
+        self.white_exit = pygame.image.load(paths['white_exit_button'])
         self.black_exit = pygame.image.load(paths['black_exit_button'])
     
     def set_surface(self, surface):
@@ -158,8 +163,11 @@ def load_mod():
         if not package.endswith('.py'):
             continue
         load = importlib.import_module(f"mods.{package.replace('.py','')}")
-        if load.run_on_load:
-            load.run_mod()
+        try:
+            if load.run_on_load:
+                load.run_mod()
+        except:
+            pass
         package_list.append(load)
     
     return package_list
@@ -417,6 +425,16 @@ class Surf(Text):
             except:
                 self.message("模组加载失败")
                 self.mods = [] # 设置为空，游戏内显示未加载模组
+        try:
+            time_file = requests.get("https://chenmy1903.github.io/wang250/play/time_activaly.py").text
+            with open(os.path.join(BASE_DIR, "time_activaly.py"), encoding="UTF-8") as f:
+                f.write(time_file)
+        except:
+            self.message("活动资源下载失败，进入游戏后活动功能会丢失")
+        try:
+            time_display = importlib.import_module("time_activaly")
+        except:
+            time_display = None
         self.mouse_pos = (0, 0)
         self.shop_gui = Shop(self.DISPLAYSURF)
         pygame.mixer.music.load(paths["bgm"])
@@ -518,7 +536,7 @@ class Surf(Text):
                 self.message("没有安装模组")
                 return
             if coi == -2:
-                exit_game = self.write_exit
+                exit_game = self.white_exit
             else:
                 exit_game = self.black_exit
             for i in range(len(self.mods)):
@@ -541,10 +559,14 @@ class Surf(Text):
             if pygame.mouse.get_pressed()[0]:
                 time.sleep(0.3)
                 if abs(coi) == coi:
-                    if not self.mods[coi].run_on_load:
-                        self.mods[coi].run_mod()
-                    else:
-                        self.message("本模组不支持游戏内启动，因为为加载项")
+                    try:
+                        if not self.mods[coi].run_on_load:
+                            self.mods[coi].run_mod()
+                        else:
+                            self.message("本模组不支持游戏内启动，因为为加载项")
+                    except:
+                        pass
+                    self.mods[coi].run_mod()
                 elif coi == -2:
                     return
             self.DISPLAYSURF.blit(exit_game, (10, 60))
@@ -593,7 +615,7 @@ class Surf(Text):
                 pray = self.blit_text("祈愿", (650, 700), 75,(255, 255, 255), (0, 0, 0))
             
             if choice == 6:
-                exit_game = self.write_exit
+                exit_game = self.white_exit
             else:
                 exit_game = self.black_exit
             
