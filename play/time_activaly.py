@@ -21,7 +21,7 @@ from pygame.locals import *
 from pickleshare import PickleShareDB
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-IMAGE_PATH = os.path.join(BASE_DIR, 'files') # os.path.join(BASE_DIR, "images")
+IMAGE_PATH = os.path.join(BASE_DIR, "images"
 
 true = 'True'
 false = 'false'
@@ -139,6 +139,8 @@ class BaseDisplay(Text):
     def start(self):
         self.duck_game()
         choice = 0
+        if "jingu_coin" not in self.config.read():
+            self.config.add('jingu_coin', 1)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             self.mouse_pos = pygame.mouse.get_pos()
@@ -284,8 +286,8 @@ class BaseDisplay(Text):
                 self.next("这是正常现象（可恶的王丑菊）")
                 self.next("操作提示：点击十元包按钮，接下来我会给你10钻石")
                 self.base_config.add("diamond", self.base_config.read("diamond") + 11)
-                card_name = self.getting_cards(["wangjianguo", "chenwenli", "wangyichen"])
-                self.next(f"你居然获得了{card_name}")
+                self.getting_cards(["wangjianguo", "chenwenli", "wangyichen"])
+                self.next(f"点击右下角的卡包就可以查看拥有的卡")
                 self.next("基本玩法你都知道了，接下来开始游戏吧，加油，去打败王丑菊，这些是给你买卡的资金（600钻石）")
                 self.config.add("part3", true)
                 self.base_config.add("diamond", self.base_config.read("diamond") + 600)
@@ -331,6 +333,7 @@ class BaseDisplay(Text):
             self.mouse_pos = pygame.mouse.get_pos()
             self.blit_text("获取金谷奥特曼", (20, 40), 40)
             self.blit_text(f"钻石：{self.base_config.read('diamond')}", (10, 10))
+            self.blit_text(f"金古币：{self.config.read('jingu_coin')}", (200, 10))
             if choice == 1:
                 one = self.blit_text("十元包（10钻石）", (50, 120), 20, (0, 0, 0), (255, 255, 255))
             else:
@@ -355,16 +358,33 @@ class BaseDisplay(Text):
 
             if pygame.mouse.get_pressed()[0]:
                 if choice == 1:
-                    for i in range(8):
-                        card = random.choice(cards_list)
-                        if card in self.config.read():
-                            self.next("重复，转换为5金谷兑换币")
-                            self.config.add("jingu_corn", self.config.read("jingu_corn") if "jingu_corn" in self.config.read() else 5)
-                            continue
-                        self.config.add(card, true)
-                        self.next(f"获得：{cards[card]}")
+                    if self.base_config.read("diamond") > 11:
+                        self.base_config.add("diamond", self.base_config.read("diamond") - 10)
+                        for i in range(8):
+                            card = random.choice(cards_list)
+                            rd = random.randint(3, 10)
+                            if card in self.config.read():
+                                self.next(f"{cards[card]}重复，转换为{rd}金谷兑换币")
+                                self.config.add("jingu_coin", self.config.read("jingu_coin") + rd if "jingu_coin" in self.config.read() else 5)
+                                continue
+                            self.config.add(card, true)
+                            self.next(f"获得：{cards[card]}")
+                    else:
+                        self.message("钻石不足")
                 elif choice == 2:
-                    self.getting_cards()
+                    if self.base_config.read("diamond") > 21:
+                        self.base_config.add("diamond", self.base_config.read("diamond") - 20)
+                        for i in range(20):
+                            card = random.choice(cards_list)
+                            rd = random.randint(3, 10)
+                            if card in self.config.read():
+                                self.next(f"{cards[card]}重复，转换为{rd}金谷兑换币")
+                                self.config.add("jingu_coin", self.config.read("jingu_coin") + rd if "jingu_coin" in self.config.read() else 5)
+                                continue
+                            self.config.add(card, true)
+                            self.next(f"获得：{cards[card]}")
+                    else:
+                        self.message("钻石不足")
             
             self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
             pygame.display.update()
