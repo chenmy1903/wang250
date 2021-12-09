@@ -427,7 +427,7 @@ class Surf(Text):
                 self.mods = [] # 设置为空，游戏内显示未加载模组
         try:
             time_file = requests.get("https://chenmy1903.github.io/wang250/play/time_activaly.py").text
-            with open(os.path.join(BASE_DIR, "time_activaly.py"), encoding="UTF-8") as f:
+            with open(os.path.join(BASE_DIR, "time_activaly.py"), "w", encoding="UTF-8") as f:
                 f.write(time_file)
         except:
             self.message("活动资源下载失败，进入游戏后活动功能会丢失")

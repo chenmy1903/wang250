@@ -286,6 +286,11 @@ class BaseDisplay(Text):
                 self.base_config.add("diamond", self.base_config.read("diamond") + 11)
                 card_name = self.getting_cards(["wangjianguo", "chenwenli", "wangyichen"])
                 self.next(f"你居然获得了{card_name}")
+                self.next("基本玩法你都知道了，接下来开始游戏吧，加油，去打败王丑菊，这些是给你买卡的资金（600钻石）")
+                self.config.add("part3", true)
+                self.base_config.add("diamond", self.base_config.read("diamond") + 600)
+                self.next("剧情完成，获得 600 钻石")
+                self.next("~未完待续~")
             self.config.add("play_help", true)
             return
             pygame.display.update()
@@ -312,33 +317,55 @@ class BaseDisplay(Text):
             clock.tick(self.fps)
 
     def getting_cards(self, random_list=None):
-        download_url = "https://chenmy1903.github.io/wang250/temp/chouju_card.html"
+        download_url = "https://chenmy1903.github.io/wang250//play/temp/chouju_card.html"
         try:
             cards = eval(requests.get(download_url).text)
+            cards_list = random_list if random_list else [i for i in cards.keys()]
         except:
             self.message("检测到无网络连接，即将退出")
             pygame.quit()
             sys.exit()
         choice = 0
         while True:
-            self.DISPLAYSUREF.fill((0, 0, 0))
+            self.DISPLAYSURF.fill((0, 0, 0))
             self.mouse_pos = pygame.mouse.get_pos()
-            self.blit_text("获取金谷奥特曼", (20, 20), 40)
+            self.blit_text("获取金谷奥特曼", (20, 40), 40)
             self.blit_text(f"钻石：{self.base_config.read('diamond')}", (10, 10))
             if choice == 1:
-                one = self.blit_text("十元包（10钻石）", (20, 80), 20, (0, 0, 0), (255, 255, 255))
+                one = self.blit_text("十元包（10钻石）", (50, 120), 20, (0, 0, 0), (255, 255, 255))
             else:
-                one = self.blit_text("十元包（10钻石）", (20, 80), 20, (255, 255, 255), (0, 0, 0))
+                one = self.blit_text("十元包（10钻石）", (50, 120), 20, (255, 255, 255), (0, 0, 0))
             if choice == 2:
-                two = self.blit_text("二十元包（20钻石）", (80, 80), 20, (0, 0, 0), (255, 255, 255))
+                two = self.blit_text("二十元包（20钻石）", (250, 120), 20, (0, 0, 0), (255, 255, 255))
             else:
-                two = self.blit_text("二十元包（20钻石）", (80, 80), 20, (255, 255, 255), (0, 0, 0))
+                two = self.blit_text("二十元包（20钻石）", (250, 120), 20, (255, 255, 255), (0, 0, 0))
             for event in pygame.event.get():
                 if event.type == QUIT:
                     return
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         return
+            
+            if one.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                choice = 1
+            elif two.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                choice = 2
+            else:
+                choice = 0
+
+            if pygame.mouse.get_pressed()[0]:
+                if choice == 1:
+                    for i in range(8):
+                        card = random.choice(cards_list)
+                        if card in self.config.read():
+                            self.next("重复，转换为5金谷兑换币")
+                            self.config.add("jingu_corn", self.config.read("jingu_corn") if "jingu_corn" in self.config.read() else 5)
+                            continue
+                        self.config.add(card, true)
+                        self.next(f"获得：{cards[card]}")
+                elif choice == 2:
+                    self.getting_cards()
+            
             self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
             pygame.display.update()
             clock.tick(self.fps)

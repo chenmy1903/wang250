@@ -244,7 +244,7 @@ def cmd_argument():
     else:
         parser.add_argument("--admin", help="登录管理员账号")
     return parser.parse_args()
-
+    
 class Wang250DevConsole(code.InteractiveConsole):
     pass
 
