@@ -1,17 +1,20 @@
 <title>逃离王建国·官网（鸭皇·游戏）</title>
 <link rel="shortcut icon" href="/wang250/favicon.jpg" type="image">
 <script>
-    function download_jianguo()
+    function download_zip()
     {
         
-        // window.open("https://www.jianguoyun.com/p/DaitGCsQ8sj-CRiWl5gE");
-        window.alert("功能维护中");
+        window.open("https://wwd.lanzouo.com/iX5ASwo6zre");
+        // window.alert("功能维护中");
     }
     function download_duckgame(){
         window.open("/wang250/play/setup.exe");
     }
     function update_duckgame(){
-        window.open("/wang250/play/update.exe");
+        if (window.confirm("本文件限于游戏内更新失败修复，不是游戏安装程序，确认下载？"))
+        {
+            window.open("/wang250/play/update.exe");
+        }
     }
 </script>
 <link rel="icon" href="temp/duck.ico">
@@ -21,9 +24,11 @@
 <h1>游戏新闻</h1>
 <iframe src="/wang250/README.md" style="border: none; width: 40%; height: 300px"></iframe>
 <h1>游戏下载</h1>
-<button onclick="download_jianguo()" type="button">点击下载（坚果云）</button><br>
+<button onclick="download_zip()" type="button">点击下载（game_runner.zip）</button><br>
 <button onclick="download_duckgame()" type="button">点击下载（鸭皇游戏安装器）</button><br>
 <button onclick="update_duckgame()" type="button">点击下载更新工具（鸭皇游戏安装器）</button><br>
 <h1>游戏模组</h1>
 <a href="/wang250/mods">点击前往</a>
+<h1>整活系列</h1>
+<a href="/wang250/game_help/">点击前往</a>
 
