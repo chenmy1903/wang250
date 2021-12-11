@@ -57,6 +57,9 @@ version_text = """
 2. 旧版本请重新从官网下载安装包，进行安装
 3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况
 可以前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
+12/11 更新
+1. 暴击王丑菊开始公测（游戏内点击活动进入）
+2. 修复因鼠标捕捉错误而启动失败的bug
 12/10 更新
 1. 纠正金老头的名字为陈国企
 12/9 更新
@@ -664,7 +667,7 @@ class Surf(Text):
                 choice = 7
             elif admin and admin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 8
-            elif time and admin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+            elif time.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 9
             else:
                 choice = 0
