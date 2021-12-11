@@ -62,6 +62,7 @@ version_text = """
 2. 修复因鼠标捕捉错误而启动失败的bug
 3. 修复退出活动会执行退出游戏的bug
 4. 修复暴击王丑菊进入剧情提示出现错误的bug
+5. 修复进入模组闪退的问题
 12/10 更新
 1. 纠正金老头的名字为陈国企
 12/9 更新
@@ -640,10 +641,10 @@ class Surf(Text):
                 mods = self.blit_text("模组", (140, 10), 20,(255, 255, 255), (0, 0, 0))
             
             if choice == 9:
-                time = self.blit_text("活动", (250, 10), 20,
+                time_play = self.blit_text("活动", (250, 10), 20,
                                (0, 0, 0), (255, 255, 255))
             else:
-                time = self.blit_text("活动", (250, 10), 20,(255, 255, 255), (0, 0, 0))
+                time_play = self.blit_text("活动", (250, 10), 20,(255, 255, 255), (0, 0, 0))
             
             if choice == 8 and not self.admin_mode:
                 admin = self.blit_text("登录管理员", (0, 5), 20,
@@ -671,7 +672,7 @@ class Surf(Text):
                 choice = 7
             elif admin and admin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 8
-            elif time.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+            elif time_play.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 9
             else:
                 choice = 0
@@ -683,7 +684,7 @@ class Surf(Text):
                     self.run_game()
                 elif choice == 2:
                     self.get_gift()
-                    time.sleep(0.2)
+                    pygame.time.wait(200)
                 elif choice == 3:
                     self.shop()
                 elif choice == 4:
@@ -691,14 +692,13 @@ class Surf(Text):
                     self.message("维护中")
                 elif choice == 5:
                     self.message("功能维护中")
-                    time.sleep(0.2)
                 elif choice == 6:
                     self.kill_precess()
                 elif choice == 7:
-                    time.sleep(0.3)
+                    pygame.time.wait(200)
                     self.run_mods()
                 elif choice == 8:
-                    time.sleep(0.3)
+                    pygame.time.wait(200)
                     self.lognin_admin()
                 elif choice == 9:
                     if self.time_display:
