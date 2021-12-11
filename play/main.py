@@ -55,7 +55,10 @@ version_text = """
 重要通知
 1. 因为游戏维护，兑换、祈愿等GUI功能暂时关闭，恢复时间另行通知
 2. 旧版本请重新从官网下载安装包，进行安装
-谨防盗版逃离王建国，最近有个叫老八游戏的给盗走了，而且大量修改游戏玩法
+3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况
+可以前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
+12/10 更新
+1. 纠正金老头的名字为陈国企
 12/9 更新
 1. 大战王丑菊开始测试（需安装Python及库，不建议普通玩家尝试）
 2. 今天作者生日（阴历），全服发放648000钻石
@@ -436,9 +439,9 @@ class Surf(Text):
         except:
             self.message("活动资源下载失败，进入游戏后活动功能会丢失")
         try:
-            time_display = importlib.import_module("time_activaly")
+            self.time_display = importlib.import_module("time_activaly").BaseDisplay
         except:
-            time_display = None
+            self.time_display = None
         self.mouse_pos = (0, 0)
         self.shop_gui = Shop(self.DISPLAYSURF)
         pygame.mixer.music.load(paths["bgm"])
@@ -629,6 +632,12 @@ class Surf(Text):
             else:
                 mods = self.blit_text("模组", (140, 10), 20,(255, 255, 255), (0, 0, 0))
             
+            if choice == 9:
+                time = self.blit_text("活动", (250, 10), 20,
+                               (0, 0, 0), (255, 255, 255))
+            else:
+                time = self.blit_text("活动", (250, 10), 20,(255, 255, 255), (0, 0, 0))
+            
             if choice == 8 and not self.admin_mode:
                 admin = self.blit_text("登录管理员", (0, 5), 20,
                                (0, 0, 0), (255, 255, 255))
@@ -655,6 +664,8 @@ class Surf(Text):
                 choice = 7
             elif admin and admin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 8
+            elif time and admin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                choice = 9
             else:
                 choice = 0
             for event in pygame.event.get():
@@ -682,6 +693,14 @@ class Surf(Text):
                 elif choice == 8:
                     time.sleep(0.3)
                     self.lognin_admin()
+                elif choice == 9:
+                    if self.time_display:
+                        try:
+                            self.time_display(self.DISPLAYSURF).start()
+                        except:
+                            self.message("代码执行中出现了错误")
+                    else:
+                        self.message("启动失败，文件丢失")
             self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
