@@ -176,6 +176,7 @@ class BaseDisplay(Text):
                 choice = 0
             if pygame.mouse.get_pressed()[0]:
                 if choice == -1:
+                    pygame.time.wait(500)
                     return
                 elif choice == 1:
                     self.play()
