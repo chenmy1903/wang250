@@ -45,7 +45,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          'lp': os.path.join(IMAGE_PATH, "lp.png"),
          'white_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
-         'icon': os.path.join(BASE_DIR, "icon.png"),
+         'icon': os.path.join(BASE_DIR, "icon.ico"),
          }
 
 paths.update(game_paths)
@@ -464,7 +464,7 @@ class Surf(Text):
             self.setting.add("level", 1) # 初始化"level"防止调用时出KeyError (10/24更新)
         self.add_settings()
         self.get_gift() # 10/29更新：礼包领取
-        pygame.display.set_caption("鸭皇游戏·逃离王建国")
+        pygame.display.set_icon(pygame.image.load(paths['icon']))
 
     def add_settings(self):
         if not "fengxiaoyi" in self.setting.read():
@@ -595,6 +595,7 @@ class Surf(Text):
         self.duck_game()
         window_info = pygame.display.Info()
         while True:
+            pygame.display.set_caption("鸭皇游戏·逃离王建国")
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text(f"等级:{self.setting.read('level')}", (30, 30), 24)
             self.blit_text("逃离王建国", (580, 100), 75)
