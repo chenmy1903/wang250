@@ -61,6 +61,7 @@ version_text = """
 1. 暴击王丑菊开始公测（游戏内点击活动进入）
 2. 修复因鼠标捕捉错误而启动失败的bug
 3. 修复退出活动会执行退出游戏的bug
+4. 修复暴击王丑菊进入剧情提示出现错误的bug
 12/10 更新
 1. 纠正金老头的名字为陈国企
 12/9 更新
@@ -443,7 +444,9 @@ class Surf(Text):
         except:
             self.message("活动资源下载失败，进入游戏后活动功能会丢失")
         try:
-            self.time_display = importlib.import_module("time_activaly").BaseDisplay
+            self.time_py = importlib.import_module("time_activaly")
+            self.time_py.download_files()
+            self.time_display = self.time_py.BaseDisplay
         except:
             self.time_display = None
         self.mouse_pos = (0, 0)
@@ -702,6 +705,7 @@ class Surf(Text):
                         try:
                             self.time_display(self.DISPLAYSURF).start()
                         except:
+                            pygame.mouse.set_visible(False)
                             self.message("代码执行中出现了错误")
                     else:
                         self.message("启动失败，文件丢失")

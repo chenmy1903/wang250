@@ -536,6 +536,7 @@ class BaseDisplay(Text):
 def run_mod():
     # 测试
     pygame.init()
+    download_files()
     display = BaseDisplay()
     display.start()
 
