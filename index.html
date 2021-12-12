@@ -12,6 +12,12 @@
     function download_duckgame(){
         window.open("/wang250/play/setup.exe");
     }
+    function renpy_gift_install(){
+        if (window.confirm("请确保游戏已经安装，否则组件会安装失败（已安装游戏按是）"))
+        {
+            window.open("https://wwd.lanzouo.com/iWrhLxjatne");
+        }
+    }
     function update_duckgame(){
         if (window.confirm("本文件限于游戏内更新失败修复，不是游戏安装程序，确认下载？"))
         {
@@ -26,8 +32,9 @@
 <h1>游戏新闻</h1>
 <iframe src="/wang250/README.md" style="border: none; width: 40%; height: 300px"></iframe>
 <h1>游戏下载</h1>
-<button onclick="download_zip()" type="button">点击下载（game_runner.zip）</button><br>
+<button onclick="download_zip()" type="button">点击下载game_runner.zip（针对于安装工具下载启动器失败）</button><br>
 <button onclick="renpy_download()" type="button">Ren'Py GUI傻瓜式安装版</button><br>
+<button onclick="renpy_gift_install()" type="button">Ren'Py GUI兑换码组件安装器</button><br>
 <button onclick="download_duckgame()" type="button">点击下载（鸭皇游戏安装器）</button><br>
 <button onclick="update_duckgame()" type="button">点击下载更新工具（鸭皇游戏安装器）</button><br>
 <h1>游戏模组</h1>
