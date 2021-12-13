@@ -64,6 +64,7 @@ version_text = """
 12/13更新
 1. bilibili投币充钱测试版
 2. 修复因语法错误无法启动游戏的问题
+3. 修复充值页面闪退的问题
 12/12更新
 1. 兑换码功能回归（需官网下载兑换码组件包）
 12/11 更新
@@ -195,6 +196,7 @@ class KeJin(Text):
 
     def __init__(self, surface):
         self.surface = surface
+        self.init_val()
         self.set_surface(surface)
         self.config = Setting()
         self.ir_code = pygame.image.load(paths['bili_ir_code'])
@@ -203,7 +205,7 @@ class KeJin(Text):
     def start(self):
         while True:
             self.surface.fill((0, 0, 0))
-            self.blit_text("扫描下面二维码充钱，投币完成后按回车键确认（100钻石/币）", (20, 20), 52)
+            self.blit_text("扫描下面二维码充钱，投币完成后按回车键确认，ESC退出页面（100钻石/币）", (20, 20), 52)
             self.surface.blit(self.ir_code, (20, 100))
             for event in pygame.event.get():
                 if event.type == QUIT:
