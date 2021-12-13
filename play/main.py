@@ -190,7 +190,7 @@ class Text:
         rect.pos = pos
         return rect
 
-def get_coin():
+async def get_coin():
 
     v = video.Video(bvid="BV18L41177JR")
     info = v.get_info()
@@ -204,7 +204,7 @@ class KeJin(Text):
         self.set_surface(surface)
         self.config = Setting()
         self.ir_code = pygame.image.load(paths['bili_ir_code'])
-        self.coins = get_coin()
+        self.coins =  asyncio.get_event_loop().run_until_complete(get_coin())
 
     def start(self):
         while True:
@@ -220,7 +220,7 @@ class KeJin(Text):
                         if self.exit_ask():
                             return
                     elif event.key == K_RETURN:
-                        add_coin = get_coin() - self.coins
+                        add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
                         if add_coin:
                             self.config.add("diamond", self.config.read("diamond") + add_coin * 100)
                             self.message(f"投币成功，获得{add_coin * 100}钻石")
