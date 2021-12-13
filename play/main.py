@@ -67,6 +67,7 @@ version_text = """
 3. 修复充值页面闪退的问题
 4. 修复字体显示异常的问题
 5. 修复充值失败的问题
+6. 修复由异步同行引发的bug
 12/12更新
 1. 兑换码功能回归（需官网下载兑换码组件包）
 12/11 更新
@@ -189,10 +190,10 @@ class Text:
         rect.pos = pos
         return rect
 
-async def get_coin():
+def get_coin():
 
     v = video.Video(bvid="BV18L41177JR")
-    info = await v.get_info()
+    info = v.get_info()
     return info["stat"]["coin"]
 
 class KeJin(Text):
@@ -219,7 +220,7 @@ class KeJin(Text):
                         if self.exit_ask():
                             return
                     elif event.key == K_RETURN:
-                        add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
+                        add_coin = get_coin() - self.coins
                         if add_coin:
                             self.config.add("diamond", self.config.read("diamond") + add_coin * 100)
                             self.message(f"投币成功，获得{add_coin * 100}钻石")
