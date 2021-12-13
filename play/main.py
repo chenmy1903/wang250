@@ -18,7 +18,9 @@ import asyncio
 import requests
 import time
 import argparse
+import asyncio
 
+from bilibili_api import video
 from pygame.locals import *
 from pickleshare import PickleShareDB
 from game import play as play_game, paths as game_paths
@@ -46,6 +48,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          'white_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
          'icon': os.path.join(BASE_DIR, "icon.ico"),
+         "bili_ir_code": os.path.join(IMAGE_PATH, "bili_ir_code.jpg"),
          }
 
 paths.update(game_paths)
@@ -58,6 +61,8 @@ version_text = """
 2. 旧版本请重新从官网下载安装包，进行安装
 3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况
 可以前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
+12/13更新
+1. bilibili投币充钱测试版
 12/12更新
 1. 兑换码功能回归（需官网下载兑换码组件包）
 12/11 更新
@@ -135,6 +140,8 @@ def cmd_text(text: str, end_function=None):
     if end_function:
         end_function()
 
+
+
 def download_files():
     if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
         os.mkdir(os.path.join(BASE_DIR, 'mods'))
@@ -166,10 +173,129 @@ class Text:
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
 
-    def blit_text(self, text_w: str, pos: tuple, size: int = 18, color: tuple = (255, 255, 255), bg: tuple = None):
+    def blit_text(self, text_w: str, pos: tuple, size: int = 18, color: tuple = (255, 255, 255), bg: tuple = None, display=None):
         font = pygame.font.SysFont('SimHei', size)
         text = font.render(u"{}".format(text_w), True, color, bg)
-        self.DISPLAYSURF.blit(text, pos)
+        if not display:
+            display = self.DISPLAYSURF
+        display.blit(text, pos)
+        rect = GameRect(pos[0], pos[1], size * len(text_w), size)
+        rect.title = text_w
+        rect.pos = pos
+        return rect
+
+async def get_coin():
+
+    v = video.Video(bvid="BV18L41177JR")
+    info = await v.get_info()
+    return info["stat"]["coin"]
+
+class KeJin(Text):
+
+    def __init__(self, surface):
+        self.surface = surface
+        self.set_surface(surface)
+        self.config = Setting()
+        self.ir_code = pygame.image.load(paths['bili_ir_code'])
+        self.coins = asyncio.get_event_loop().run_until_complete(get_coin())
+
+    def start(self):
+        while True:
+            self.surface.fill((0, 0, 0))
+            self.blit_text("扫描下面二维码充钱，投币完成后按回车键确认（100钻石/币）", (20, 20), 52)
+            self.surface.blit(self.ir_code, (20, 100))
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    if self.exit_ask():
+                        return
+                if event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        if self.exit_ask():
+                            return
+                    elif event.key == K_RETURN:
+                        add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
+                        if add_coin:
+                            self.config.add("diamond", self.config.read("diamond") + add_coin * 100)
+                            self.message(f"投币成功，获得{add_coin * 100}钻石")
+                        else:
+                            self.message("你还没有投币，白嫖是不可能的")
+            pygame.display.update()
+            
+
+
+    def kill_precess(self, *, no_title=False):
+        if not no_title:
+            if not self.ask_yes_no("确认退出充钱系统？退出后支付会出现钻石不到账的问题"):
+                return False
+            return True
+        return True
+
+    def message(self, text: str):
+            win_info = self.win_info
+            cio = 0
+            while True:
+                mouse_pos = pygame.mouse.get_pos()
+                self.surface.fill((0, 0, 0))
+                self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 50)
+                if cio == 0:
+                    yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+                else:
+                    yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+                pygame.draw.rect(self.DISPLAYSURF, (255, 255, 255),
+                            (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 50 + 30, 200), 5)
+                for event in pygame.event.get():
+                    if event.type == QUIT:
+                        return
+                    elif event.type == KEYUP:
+                        if event.key == K_ESCAPE:
+                            return
+                if yes.collidepoint(mouse_pos[0], mouse_pos[1]):
+                    cio = 1
+                else:
+                    cio = 0
+                if pygame.mouse.get_pressed()[0] and cio == 1:
+                    pygame.time.wait(500)
+                    return True
+                self.DISPLAYSURF.blit(self.lp, mouse_pos)
+                pygame.display.update()
+
+    def ask_yes_no(self, text: str):
+        win_info = pygame.display.Info()
+        cio = 0
+        while True:
+            mouse_pos = pygame.mouse.get_pos()
+            self.surface.fill((0, 0, 0))
+            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 72)
+            if cio != 1:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            elif cio == 1:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            if cio != 2:
+                no = self.blit_text("取消", (win_info.current_w / 6 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            elif cio == 2:
+                no = self.blit_text("取消", (win_info.current_w / 6 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            pygame.draw.rect(self.surface, (255, 255, 255),
+                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    return
+                elif event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        return
+            if yes.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 1
+            elif no.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 2
+            else:
+                cio = 0
+            if pygame.mouse.get_pressed()[0]:
+                if cio == 1:
+                    return True
+                elif cio == 2:
+                    return False
+            self.surface.blit(self.lp, mouse_pos)
+            pygame.display.update()
+
 
 def load_mod():
     mod_path = os.path.join(BASE_DIR, "mods")
@@ -653,7 +779,13 @@ class Surf(Text):
             if choice == 8 and not self.admin_mode:
                 admin = self.blit_text("登录管理员", (0, 5), 20,
                                (0, 0, 0), (255, 255, 255))
-            elif not self.admin_mode:
+            if choice == 10:
+                bilicoin = self.blit_text("充（白）值（嫖）", (20, 300), 20,
+                               (0, 0, 0), (255, 255, 255))
+            else:
+                bilicoin = self.blit_text("充（白）值（嫖）", (20, 300), 20, (255, 255, 255)
+                               (0, 0, 0))
+            if not self.admin_mode:
                 admin = self.blit_text("登录管理员", (0, 5), 20,(255, 255, 255), (0, 0, 0))
             else:
                 admin = None
@@ -678,6 +810,8 @@ class Surf(Text):
                 choice = 8
             elif time_play.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 9
+            elif bilicoin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                choice = 10
             else:
                 choice = 0
             for event in pygame.event.get():
@@ -716,6 +850,8 @@ class Surf(Text):
                             self.message("代码执行中出现了错误")
                     else:
                         self.message("启动失败，文件丢失")
+                elif choice == 10:
+                    KeJin(self.DISPLAYSURF).start()
             self.DISPLAYSURF.blit(self.lp, self.mouse_pos)
             pygame.display.update()
             self.clock.tick(FPS)
