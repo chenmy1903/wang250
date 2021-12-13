@@ -65,6 +65,7 @@ version_text = """
 1. bilibili投币充钱测试版
 2. 修复因语法错误无法启动游戏的问题
 3. 修复充值页面闪退的问题
+4. 修复字体显示异常的问题
 12/12更新
 1. 兑换码功能回归（需官网下载兑换码组件包）
 12/11 更新
@@ -268,7 +269,7 @@ class KeJin(Text):
         while True:
             mouse_pos = pygame.mouse.get_pos()
             self.surface.fill((0, 0, 0))
-            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 72)
+            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 40)
             if cio != 1:
                 yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
             elif cio == 1:
@@ -278,7 +279,7 @@ class KeJin(Text):
             elif cio == 2:
                 no = self.blit_text("取消", (win_info.current_w / 6 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
             pygame.draw.rect(self.surface, (255, 255, 255),
-                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
+                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 40 + 30, 200), 5)
             for event in pygame.event.get():
                 if event.type == QUIT:
                     return
