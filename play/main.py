@@ -224,7 +224,7 @@ class KeJin(Text):
             
 
 
-    def kill_precess(self, *, no_title=False):
+    def exit_ask(self, *, no_title=False):
         if not no_title:
             if not self.ask_yes_no("确认退出充钱系统？退出后支付会出现钻石不到账的问题"):
                 return False
