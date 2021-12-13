@@ -66,6 +66,7 @@ version_text = """
 2. 修复因语法错误无法启动游戏的问题
 3. 修复充值页面闪退的问题
 4. 修复字体显示异常的问题
+5. 修复充值失败的问题
 12/12更新
 1. 兑换码功能回归（需官网下载兑换码组件包）
 12/11 更新
@@ -172,6 +173,7 @@ class Text:
         self.lp = pygame.image.load(paths['lp'])
         self.white_exit = pygame.image.load(paths['white_exit_button'])
         self.black_exit = pygame.image.load(paths['black_exit_button'])
+        self.win_info = pygame.display.Info()
     
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
@@ -206,7 +208,7 @@ class KeJin(Text):
     def start(self):
         while True:
             self.surface.fill((0, 0, 0))
-            self.blit_text("扫描下面二维码充钱，投币完成后按回车键确认，ESC退出页面（100钻石/币）", (20, 20), 52)
+            self.blit_text("扫描下面二维码给作者的第一个视频投币，投币完成后按回车键确认，ESC退出页面（100钻石/币）", (20, 20), 30)
             self.surface.blit(self.ir_code, (20, 100))
             for event in pygame.event.get():
                 if event.type == QUIT:
