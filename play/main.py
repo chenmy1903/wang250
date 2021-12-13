@@ -784,7 +784,7 @@ class Surf(Text):
                 bilicoin = self.blit_text("充值", (300, 20), 20,
                                (0, 0, 0), (255, 255, 255))
             else:
-                bilicoin = self.blit_text("充值", (300， 20), 20, (255, 255, 255), 
+                bilicoin = self.blit_text("充值", (300, 20), 20, (255, 255, 255), 
                                (0, 0, 0))
             if not self.admin_mode:
                 admin = self.blit_text("登录管理员", (0, 5), 20,(255, 255, 255), (0, 0, 0))
