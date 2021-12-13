@@ -193,8 +193,8 @@ class Text:
 async def get_coin():
 
     v = video.Video(bvid="BV18L41177JR")
-    info = v.get_info()
-    return await info["stat"]["coin"]
+    info = await v.get_info()
+    return info["stat"]["coin"]
 
 class KeJin(Text):
 
