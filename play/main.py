@@ -194,7 +194,7 @@ def get_coin():
 
     v = video.Video(bvid="BV18L41177JR")
     info = v.get_info()
-    return info["stat"]["coin"]
+    return await info["stat"]["coin"]
 
 class KeJin(Text):
 
