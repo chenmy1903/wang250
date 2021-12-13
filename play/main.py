@@ -204,7 +204,7 @@ class KeJin(Text):
         self.set_surface(surface)
         self.config = Setting()
         self.ir_code = pygame.image.load(paths['bili_ir_code'])
-        self.coins = asyncio.get_event_loop().run_until_complete(get_coin())
+        self.coins = get_coin()
 
     def start(self):
         while True:
