@@ -63,6 +63,7 @@ version_text = """
 可以前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
 12/13更新
 1. bilibili投币充钱测试版
+2. 修复因语法错误无法启动游戏的问题
 12/12更新
 1. 兑换码功能回归（需官网下载兑换码组件包）
 12/11 更新
@@ -783,7 +784,7 @@ class Surf(Text):
                 bilicoin = self.blit_text("充（白）值（嫖）", (20, 300), 20,
                                (0, 0, 0), (255, 255, 255))
             else:
-                bilicoin = self.blit_text("充（白）值（嫖）", (20, 300), 20, (255, 255, 255)
+                bilicoin = self.blit_text("充（白）值（嫖）", (20, 300), 20, (255, 255, 255), 
                                (0, 0, 0))
             if not self.admin_mode:
                 admin = self.blit_text("登录管理员", (0, 5), 20,(255, 255, 255), (0, 0, 0))
