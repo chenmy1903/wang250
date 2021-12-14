@@ -207,9 +207,20 @@ class KeJin(Text):
         self.coins =  asyncio.get_event_loop().run_until_complete(get_coin())
 
     def start(self):
+        choice = 0
         while True:
+            self.mouse_pos = pygame.mouse.get_pos()
             self.surface.fill((0, 0, 0))
             self.blit_text("扫描下面二维码给作者的第一个视频投币，投币完成后按回车键确认，ESC退出页面（100钻石/币）", (20, 20), 30)
+            chack_coin = self.blit_text("检测投币状态", (100, 140), 20)
+            if chack_coin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
+                choice = 1
+            else:
+                choice = 0
+            
+            if pygame.mouse.get_pressed()[0]:
+                if choice == 1:
+                    self.add()
             self.surface.blit(self.ir_code, (20, 100))
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -220,13 +231,17 @@ class KeJin(Text):
                         if self.exit_ask():
                             return
                     elif event.key == K_RETURN:
-                        add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
-                        if add_coin:
-                            self.config.add("diamond", self.config.read("diamond") + add_coin * 100)
-                            self.message(f"投币成功，获得{add_coin * 100}钻石")
-                        else:
-                            self.message("你还没有投币，白嫖是不可能的")
+                        self.add()
+            self.surface.blit(self.lp, self.mouse_pos)
             pygame.display.update()
+
+    def add(self):
+        add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
+        if add_coin:
+            self.config.add("diamond", self.config.read("diamond") + add_coin * 100)
+            self.message(f"投币成功，获得{add_coin * 100}钻石")
+        else:
+            self.message("你还没有投币，白嫖是不可能的")
             
 
 
