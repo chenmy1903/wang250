@@ -61,6 +61,9 @@ version_text = """
 2. 旧版本请重新从官网下载安装包，进行安装
 3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况
 可以前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
+12/14更新
+1. 今天幻塔开放预下载（干翻原神，幻塔永存！为了自选五星！）
+2. 支付页面增加确认按钮，防止支付不到账的问题
 12/13更新
 1. bilibili投币充钱测试版
 2. 修复因语法错误无法启动游戏的问题
@@ -212,7 +215,7 @@ class KeJin(Text):
             self.mouse_pos = pygame.mouse.get_pos()
             self.surface.fill((0, 0, 0))
             self.blit_text("扫描下面二维码给作者的第一个视频投币，投币完成后按回车键确认，ESC退出页面（100钻石/币）", (20, 20), 30)
-            chack_coin = self.blit_text("检测投币状态", (100, 140), 20)
+            chack_coin = self.blit_text("检测投币状态", (100, 780), 20)
             if chack_coin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 1
             else:
