@@ -64,6 +64,9 @@ version_text = """
 12/14更新
 1. 今天幻塔开放预下载（干翻原神，幻塔永存！为了自选五星！）
 2. 支付页面增加确认按钮，防止支付不到账的问题
+3. 修复支付闪退的bug，让你的硬币不浪费
+4. 修复支付系统刷钻石的bug
+5. tip: 每人最多购买200钻石（每个视频2个币，后面会优化）
 12/13更新
 1. bilibili投币充钱测试版
 2. 修复因语法错误无法启动游戏的问题
@@ -216,9 +219,9 @@ class KeJin(Text):
             self.surface.fill((0, 0, 0))
             self.blit_text("扫描下面二维码给作者的第一个视频投币，投币完成后按回车键确认，ESC退出页面（100钻石/币）", (20, 20), 30)
             if choice == 1:
-                chack_coin = self.blit_text("检测投币状态", (100, 580), 20, (0, 0, 0), (255, 255, 255))
+                chack_coin = self.blit_text("检测投币状态（概率闪退，请不要连续操作，否则奖励不会到账）", (100, 580), 20, (0, 0, 0), (255, 255, 255))
             else:
-                chack_coin = self.blit_text("检测投币状态", (100, 580), 20, (255, 255, 255), (0, 0, 0))
+                chack_coin = self.blit_text("检测投币状态（概率闪退，请不要连续操作，否则奖励不会到账）", (100, 580), 20, (255, 255, 255), (0, 0, 0))
 
             if chack_coin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 1
@@ -243,7 +246,14 @@ class KeJin(Text):
             pygame.display.update()
 
     def add(self):
-        add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
+        while True:
+            try:
+                add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
+                self.coins =  asyncio.get_event_loop().run_until_complete(get_coin())
+            except:
+                pass
+            else:
+                break
         if add_coin:
             self.config.add("diamond", self.config.read("diamond") + add_coin * 100)
             self.message(f"投币成功，获得{add_coin * 100}钻石")
