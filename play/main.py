@@ -215,12 +215,16 @@ class KeJin(Text):
             self.mouse_pos = pygame.mouse.get_pos()
             self.surface.fill((0, 0, 0))
             self.blit_text("扫描下面二维码给作者的第一个视频投币，投币完成后按回车键确认，ESC退出页面（100钻石/币）", (20, 20), 30)
-            chack_coin = self.blit_text("检测投币状态", (100, 780), 20)
+            if choice == 1:
+                chack_coin = self.blit_text("检测投币状态", (100, 580), 20, (0, 0, 0), (255, 255, 255))
+            else:
+                chack_coin = self.blit_text("检测投币状态", (100, 580), 20, (255, 255, 255), (0, 0, 0))
+
             if chack_coin.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
                 choice = 1
             else:
                 choice = 0
-            
+
             if pygame.mouse.get_pressed()[0]:
                 if choice == 1:
                     self.add()
