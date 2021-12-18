@@ -1,0 +1,28 @@
+﻿@charset "utf-8";
+/*CSS reset*/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, button { margin: 0; padding: 0; }
+table { border-collapse: collapse; border-spacing: 0; }
+fieldset, img, button, a { border: 0; }
+adress, caption, cite, code, dfn, em, th, var { font-style: normal; font-weight: normal; }
+ol, ul { list-style: none; }
+caption, th { text-align: left; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal; }
+q:before, q:after { content: ''; }
+abbr, acronym { border: 0; }
+html{_text-overflow:ellipsis;} 
+
+/*text*/
+body { font-family: "微软雅黑","宋体", Arial, Lucida, Verdana, Helvetica, sans-serif; font-size: 14px; color: #333; line-height: 150%; background: #fff; }
+/*link*/
+a{outline:none;blr:expression(this.onFocus=this.blur());}
+a:link, a:visited { text-decoration: none; }
+a:hover {  text-decoration: none; }
+
+/*clear float*/
+
+.cf:before,.cf:after {content:"";display:table;}
+.cf:after { clear:both; }
+.cf { zoom:1; }
+.clear{ clear:both; }
+.fl{float:left;}
+.fr{float:right;}

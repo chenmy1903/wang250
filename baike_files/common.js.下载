@@ -1,0 +1,145 @@
+﻿var open = false;
+$(function () {	
+	$(".nav-menu > li").hover(function() {   
+		 var $container = $(this),
+		 $list = $container.find(".sub-nav");
+		$list.slideDown(500);
+		
+	}, function() {    
+		var $el = $(this);       
+		$el.find(".sub-nav")
+			.hide()
+			.end();
+	
+	});  
+	
+	if($(".smallbanner-nav li").length >0)
+	{
+		$(".smallbanner-nav").show();
+	}
+	
+	$(".header-logo .header-arrow").on("click",function(){
+		$(".header-nav").slideToggle(250);
+	});
+	
+	
+	$("body,html").click(function(){
+		$(".searchbox").animate({"width":"45px"});
+		$(".searchbtn").stop(true,true).fadeIn();
+	});
+	
+	$(".searchbtn").click(function(){
+		$(this).stop(true,true).fadeOut();
+		$(".searchbox").stop(true,true).animate({"width":"200px"});
+		return false;
+	});	
+	
+	$(".search-input").click(function(){
+		return false;
+	});
+	
+	$(".search-submit").click(function(event) {
+		//$(this).removeAttr("name");
+		//event.preventDefault();
+		var val = $.trim($(".search-title").val());
+		if(val!==""){
+			return  true;
+		}else{
+			alert("请输入关键词");
+			return false;
+		}		
+	});
+	
+	var dropselect = new WP_DropSelect();
+    dropselect.init();
+	
+	$('.cn-button').click(function(e){
+		e.stopPropagation();
+		if(!open){
+	    	openNav();
+	  	}
+	 	else{
+	    	closeNav();
+	  	}		
+	});
+	$('.cn-btn-close').click(function(e){
+		e.stopPropagation();
+		closeNav();		
+	});
+	$('.cn-wrapper').click(function(e){
+		e.stopPropagation();		
+	});
+	$(document).click(function(){closeNav();})
+});
+
+function setTabs($div)
+{
+	var $div_info = $("."+$div+" .index-subtitle .tab-title li");
+	$div_info.on("click",function(){
+		$(this).addClass("cur").siblings().removeClass("cur"); 
+		var index =  $div_info.index(this);  
+		$("."+$div+" ."+$div+"-cons ."+$div+"-con").eq(index).show().siblings().hide();
+	});	
+}
+
+function setTabs1($div)
+{
+	var $div_info = $("."+$div+" .index-title-tab li");
+	$div_info.on("click",function(){
+		$(this).addClass("cur").siblings().removeClass("cur"); 
+		var index =  $div_info.index(this);  
+		$("."+$div+" .cons .con").eq(index).show().siblings().hide();
+	});	
+}
+
+function openNav(){
+	open = true;
+	$('.cn-button').hide();
+	$('.cn-wrapper').addClass('opened-nav');
+}
+function closeNav(){
+	open = false;
+	$('.cn-button').show();
+	$('.cn-wrapper').removeClass('opened-nav');
+}
+
+$(function () {
+         $('.page-news-con #vsb_newscontent').parent().find('p,span').each(function(item){
+               this.removeAttribute('style');
+         });
+
+         $('.page-news-con iimg').each(function(){
+               let html = $(this).parent().html();
+               html = html.replace(/<iimg/ig, '<img')
+               $(this).parent().html(html)
+         });
+
+         $table = $('.wp_articlecontent table');
+         $table.attr('width', '100%');
+         $table.attr('border', 1);
+         $table.find('td, tr').each(function(){
+               this.removeAttribute('width');
+               this.removeAttribute('height');
+               this.removeAttribute('style');
+         });
+         $table.find('td p').css({'margin': '3px', 'text-indent': '0'});
+         $table.find('td p span').css('font-size', 'inherit');
+
+         $table.prev('p').remove();
+
+         $('.page-news-con img[src^="/__local/"]').each(function(){
+                  const src = $(this).attr('src');
+                  $(this).attr('src', 'https://ssrm.nankai.edu.cn' + src);
+         });
+
+         $('a[href^="/__local/"]').each(function(){
+                  const href = $(this).attr('href');
+                  $(this).attr('href', 'https://ssrm.nankai.edu.cn' + href );
+         });
+        
+         $('span[class^=timestyle]').parents('tr').remove();
+         $('td[class^=titlestyle]').parents('tr').remove();
+         $('table[class^=winstyle]').attr('border', 0);
+         $('p[align=right]:contains(下一条), p[align=right]:contains(上一条)').remove();
+
+});
