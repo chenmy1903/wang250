@@ -65,6 +65,7 @@ version_text = """
 1. 明天作者生日，上线会有剧情 + 10000钻石
 2. 修复支付功能断网bug
 3. 修复手滑在支付页面按退出按钮而导致钻石不到账的问题
+4. 修复生日活动bug导致游戏闪退的bug （其实是db的特性导致的）
 12/14更新
 1. 今天幻塔开放预下载（干翻原神，幻塔永存！为了自选五星！）
 2. 支付页面增加确认按钮，防止支付不到账的问题
@@ -785,7 +786,7 @@ class Surf(Text):
             self.clock.tick(FPS)
 
     def run_special_activities(self):
-        special_version = self.setting.read("special_version")
+        special_version = self.setting.read("special_version") if "special_version" in self.setting.read() else None
         if special_version == "0.1":
             return # 已经参加完了
         self.setting.add("special_version", "0.1")
