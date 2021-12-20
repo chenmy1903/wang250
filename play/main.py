@@ -59,8 +59,12 @@ version_text = """
 重要通知
 1. 因为游戏维护，兑换、祈愿等GUI功能暂时关闭，恢复时间另行通知
 2. 旧版本请重新从官网下载安装包，进行安装
-3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况
+3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况，想玩的人可以带U盘进入机房进行游玩
 可以前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
+12/20更新 (0.6.3更新)
+1. 明天作者生日，上线会有剧情 + 10000钻石
+2. 修复支付功能断网bug
+3. 修复手滑在支付页面按退出按钮而导致钻石不到账的问题
 12/14更新
 1. 今天幻塔开放预下载（干翻原神，幻塔永存！为了自选五星！）
 2. 支付页面增加确认按钮，防止支付不到账的问题
@@ -196,6 +200,24 @@ class Text:
         rect.pos = pos
         return rect
 
+    def next(self, text: str):
+        self.blit_text(text, (600, 800))
+        pygame.display.update()
+        pygame.time.wait(1000)
+        self.click_to_continue()
+
+    def click_to_continue(self):
+        self.blit_text("按键盘上的任何键继续", (600, self.win_height - 20))
+        while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    self.DISPLAYSURF.fill((0, 0, 0))
+                    return
+                elif event.type == KEYUP:
+                    self.DISPLAYSURF.fill((0, 0, 0))
+                    return
+            pygame.display.update()
+
 async def get_coin():
 
     v = video.Video(bvid="BV18L41177JR")
@@ -214,6 +236,9 @@ class KeJin(Text):
 
     def start(self):
         choice = 0
+        if os.system("ping www.bilibili.com"):
+            self.message("氪金平台数据获取失败")
+            return
         while True:
             self.mouse_pos = pygame.mouse.get_pos()
             self.surface.fill((0, 0, 0))
@@ -239,13 +264,14 @@ class KeJin(Text):
                 if event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         if self.exit_ask():
+                            self.add()
                             return
                     elif event.key == K_RETURN:
                         self.add()
             self.surface.blit(self.lp, self.mouse_pos)
             pygame.display.update()
 
-    def add(self):
+    def add(self, no_message=False):
         while True:
             try:
                 add_coin = asyncio.get_event_loop().run_until_complete(get_coin()) - self.coins
@@ -258,7 +284,8 @@ class KeJin(Text):
             self.config.add("diamond", self.config.read("diamond") + add_coin * 100)
             self.message(f"投币成功，获得{add_coin * 100}钻石")
         else:
-            self.message("你还没有投币，白嫖是不可能的")
+            if not no_message:
+                self.message("你还没有投币，白嫖是不可能的")
             
 
 
@@ -757,10 +784,27 @@ class Surf(Text):
             pygame.display.update()
             self.clock.tick(FPS)
 
+    def run_special_activities(self):
+        special_version = self.setting.read("special_version")
+        if special_version == "0.1":
+            return # 已经参加完了
+        self.setting.add("special_version", "0.1")
+        self.next("大家好，我是鸭皇")
+        self.next("今天是一个特别的日子")
+        self.next("又过了一年")
+        self.next("又到了今天（12/21）")
+        self.next("今天，又是生辰了")
+        self.next("依旧，还是只有我一个人")
+        self.next("好了，毕竟是生日，所以我给大家发放10000（一万）钻石")
+        self.next("祝您在游戏里玩的愉快")
+        self.setting.add("diamond", self.setting.read("diamond") + 10000)
+
+
 
     def start(self):
         choice = 1    
         self.duck_game()
+        self.run_special_activities()
         window_info = pygame.display.Info()
         while True:
             pygame.display.set_caption("鸭皇游戏·逃离王建国")
