@@ -61,6 +61,12 @@ version_text = """
 2. 旧版本请重新从官网下载安装包，进行安装
 3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况，想玩的人可以带U盘进入机房进行游玩
 可以前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
+12/26更新
+1. 之前的更新忘更新了
+2. 补发王轶臣生日的200钻石
+12/24更新
+1. 王轶臣的生日
+2. 玩法改进：3
 12/20更新 (0.6.3更新)
 1. 明天作者生日，上线会有剧情 + 10000钻石
 2. 修复支付功能断网bug
@@ -786,19 +792,17 @@ class Surf(Text):
             self.clock.tick(FPS)
 
     def run_special_activities(self):
-        special_version = self.setting.read("special_version") if "special_version" in self.setting.read() else None
-        if special_version == "0.1":
+        special_version = '0.2'
+        rd_special_version = self.setting.read("special_version") if "special_version" in self.setting.read() else None
+        if rd_special_version == special_version:
             return # 已经参加完了
-        self.setting.add("special_version", "0.1")
+        self.setting.add("special_version", special_version)
         self.next("大家好，我是鸭皇")
-        self.next("今天是一个特别的日子")
-        self.next("又过了一年")
-        self.next("又到了今天（12/21）")
-        self.next("今天，又是生辰了")
-        self.next("依旧，还是只有我一个人")
-        self.next("好了，毕竟是生日，所以我给大家发放10000（一万）钻石")
+        self.next("今天是坚果三雄的生日（12/24）")
+        self.setting.add("diamond", self.setting.read("diamond") + 200)
+        self.next("我们在此献上200钻石")
+        self.next("tip: 因为作者当天写完代码忘更新了，所以补发了这个")
         self.next("祝您在游戏里玩的愉快")
-        self.setting.add("diamond", self.setting.read("diamond") + 10000)
 
 
 

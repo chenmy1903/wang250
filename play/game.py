@@ -1,5 +1,4 @@
 # 逃离王建国 （鸭皇游戏）
-# 此部分代码为外国大佬创作
 
 import random
 import sys
@@ -10,63 +9,24 @@ import os
 from pickleshare import PickleShareDB
 from pygame.locals import *
 
-FPS = 30  # frames per second to update the screen
+FPS = 60
 pygame.init()
 window_info = pygame.display.Info()
-WINWIDTH = window_info.current_w  # width of the program's window, in pixels
-WINHEIGHT = window_info.current_h  # height in pixels
+WINWIDTH = window_info.current_w
+WINHEIGHT = window_info.current_h
 HALF_WINWIDTH = int(WINWIDTH / 2)
 HALF_WINHEIGHT = int(WINHEIGHT / 2)
 
-GRASSCOLOR = (24, 255, 0) # (255, 255, 255)
+GREEN = (24, 255, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 
-CAMERASLACK = 90     # how far from the center the squirrel moves before moving the camera
-MOVERATE = 9         # how fast the player moves
-BOUNCERATE = 6       # how fast the player bounces (large is slower)
-BOUNCEHEIGHT = 30    # how high the player bounces
-WINSIZE = 100        # how big the player needs to be to win
-INVULNTIME = 2       # how long the player is invulnerable after being hit in seconds
-GAMEOVERTIME = 4     # how long the "game over" text stays on the screen in seconds
-
-NUMGRASS = 80        # number of grass objects in the active area
-NUMSQUIRRELS = 30    # number of squirrels in the active area
-SQUIRRELMINSPEED = 3  # slowest squirrel speed
-SQUIRRELMAXSPEED = 7  # fastest squirrel speed
-DIRCHANGEFREQ = 2    # % chance of direction change per frame
 LEFT = 'left'
 RIGHT = 'right'
 
-"""
-This program has three data structures to represent the player, enemy squirrels, and grass background objects. The data structures are dictionaries with the following keys:
-
-Keys used by all three data structures:
-    'x' - the left edge coordinate of the object in the game world (not a pixel coordinate on the screen)
-    'y' - the top edge coordinate of the object in the game world (not a pixel coordinate on the screen)
-    'rect' - the pygame.Rect object representing where on the screen the object is located.
-Player data structure keys:
-    'surface' - the pygame.Surface object that stores the image of the squirrel which will be drawn to the screen.
-    'facing' - either set to LEFT or RIGHT, stores which direction the player is facing.
-    'size' - the width and height of the player in pixels. (The width & height are always the same.)
-    'bounce' - represents at what point in a bounce the player is in. 0 means standing (no bounce), up to BOUNCERATE (the completion of the bounce)
-    'health' - an integer showing how many more times the player can be hit by a larger squirrel before dying.
-Enemy Squirrel data structure keys:
-    'surface' - the pygame.Surface object that stores the image of the squirrel which will be drawn to the screen.
-    'movex' - how many pixels per frame the squirrel moves horizontally. A negative integer is moving to the left, a positive to the right.
-    'movey' - how many pixels per frame the squirrel moves vertically. A negative integer is moving up, a positive moving down.
-    'width' - the width of the squirrel's image, in pixels
-    'height' - the height of the squirrel's image, in pixels
-    'bounce' - represents at what point in a bounce the player is in. 0 means standing (no bounce), up to BOUNCERATE (the completion of the bounce)
-    'bouncerate' - how quickly the squirrel bounces. A lower number means a quicker bounce.
-    'bounceheight' - how high (in pixels) the squirrel bounces
-Grass data structure keys:
-    'grassImage' - an integer that refers to the index of the pygame.Surface object in GRASSIMAGES used for this grass object
-"""
-
 BASE_DIR = os.path.dirname(__file__)
-IMAGE_PATH = os.path.join(BASE_DIR, "images")
+IMAGE_PATH = os.path.join(BASE_DIR, "files")
 
 paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
@@ -86,6 +46,11 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          }
 CONFIG_PATH = "~/.duck_game/wang250"
 
+
+class GameRect(pygame.Rect):
+    title = ""
+    pos = ()
+    size = 0
 
 class Setting:
     def __init__(self, file_name='config', config={}):
@@ -114,370 +79,126 @@ setting = Setting()
 if "level" not in setting.read():
     setting.add("level", 1)
 
-MAXHEALTH = 1 if setting.read("level") < 10 else setting.read("level") / 10
-STARTSIZE = 25 if setting.read("level") < 20 else int(
-    setting.read("level") // 5) + 25
 
+class Text():
+    def init_val(self):
+        self.lp = pygame.image.load(paths['lp'])
+        self.white_exit = pygame.image.load(paths['white_exit_button'])
+        self.black_exit = pygame.image.load(paths['black_exit_button'])
+    
+    def set_surface(self, surface):
+        self.DISPLAYSURF = surface
 
-def blit_text(display, text_w: str, pos: tuple, size: int = 18, color: tuple = (0, 0, 0), bg: tuple = None):
-    font = pygame.font.SysFont('SimHei', size)
-    text = font.render(u"{}".format(text_w), True, color, bg)
-    display.blit(text, pos)
+    def blit_text(self, text_w: str, pos: tuple, size: int = 18, color: tuple = (0, 0, 0), bg: tuple = None, display=None):
+        font = pygame.font.SysFont('SimHei', size)
+        text = font.render(u"{}".format(text_w), True, color, bg)
+        if not display:
+            display = self.DISPLAYSURF
+        display.blit(text, pos)
+        rect = GameRect(pos[0], pos[1], size * len(text_w), size)
+        rect.title = text_w
+        rect.pos = pos
+        return rect
 
-def message(text: str, surface):
-    win_info = pygame.display.Info()
-    pygame.mouse.set_visible(True)
-    while True:
-        blit_text(surface, text, (win_info.current_w / 4, win_info.current_h / 2), 72)
-        blit_text(surface, "ESC返回", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40)
-        pygame.draw.rect(surface, (255, 255, 255),
-                    (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
-        for event in pygame.event.get():
-             if event.type == QUIT:
-                  pygame.mouse.set_visible(False)
-                  return
-             elif event.type == KEYUP:
-                  if event.key == K_ESCAPE:
-                    pygame.mouse.set_visible(False)
+    def message(self, text: str):
+        win_info = pygame.display.Info()
+        cio = 0
+        while True:
+            mouse_pos = pygame.mouse.get_pos()
+            self.DISPLAYSURF.fill((0, 0, 0))
+            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 50)
+            if cio == 0:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            else:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            pygame.draw.rect(self.DISPLAYSURF, (255, 255, 255),
+                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 50 + 30, 200), 5)
+            for event in pygame.event.get():
+                if event.type == QUIT:
                     return
-        pygame.display.update()
+                elif event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        return
+            if yes.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 1
+            else:
+                cio = 0
+            if pygame.mouse.get_pressed()[0] and cio == 1:
+                time.sleep(0.5)
+                return True
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+            pygame.display.update()
+    
+    def ask_yes_no(self, text: str):
+        win_info = pygame.display.Info()
+        cio = 0
+        while True:
+            mouse_pos = pygame.mouse.get_pos()
+            self.DISPLAYSURF.fill((0, 0, 0))
+            self.blit_text(text, (win_info.current_w / 4, win_info.current_h / 2), 72)
+            if cio != 1:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            elif cio == 1:
+                yes = self.blit_text("确认", (win_info.current_w / 4 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            if cio != 2:
+                no = self.blit_text("取消", (win_info.current_w / 6 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (255, 255, 255), (0, 0, 0))
+            elif cio == 2:
+                no = self.blit_text("取消", (win_info.current_w / 6 + len(text) // 2 * 72, win_info.current_h / 2 + 100), 40, (0, 0, 0), (255, 255, 255))
+            pygame.draw.rect(self.DISPLAYSURF, (255, 255, 255),
+                        (win_info.current_w / 4 - 30, win_info.current_h / 2 - 20, len(text) * 72 + 30, 200), 5)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    return
+                elif event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        return
+            if yes.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 1
+            elif no.collidepoint(mouse_pos[0], mouse_pos[1]):
+                cio = 2
+            else:
+                cio = 0
+            if pygame.mouse.get_pressed()[0]:
+                if cio == 1:
+                    return True
+                elif cio == 2:
+                    return False
+            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+            pygame.display.update()
+
+class RunGame(Text):
+    
+    def __init__(self, display: pygame.Surface):
+        self.DISPLAYSURF = display
+        self.set_surface(self.DISPLAYSURF)
+        self.player_img = pygame.image.load(paths[setting.read("player")])
+
+    def begin_timmer(self):
+        for i in range(4, 0, -1):
+            self.DISPLAYSURF.fill(GREEN)
+            self.blit_text(f"准备开始：{i}", (HALF_WINWIDTH, HALF_WINHEIGHT), 75)
+            pygame.display.update()
+            pygame.time.wait(1000)
+                
+
+    def start(self):
+        self.begin_timmer()
+        x, y = 70, 70
+        while True:
+            self.DISPLAYSURF.fill(GREEN)
+            self.DISPLAYSURF.blit(self.player_img, (x, y))
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    return
+                elif event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        return
+                
+            pygame.display.update()
 
 
 def play(surface):
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, L_SQUIR_IMG, R_SQUIR_IMG, GRASSIMAGES, L_JIANGUO, R_JIANGUO
-
-    pygame.init()
-    lp = pygame.image.load(paths["lp"])
-    FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = surface
-    pygame.display.set_caption('逃离王建国')
-    BASICFONT = pygame.font.SysFont('SimHei', 30)
-
-    # load the image files
-    L_SQUIR_IMG = pygame.image.load(paths[setting.read("player")])
-    R_SQUIR_IMG = pygame.transform.flip(L_SQUIR_IMG, True, False)
-    L_JIANGUO = pygame.image.load(paths["wangjianguo"])
-    R_JIANGUO = pygame.transform.flip(L_JIANGUO, True, False)
-    GRASSIMAGES = []
-    for i in range(1, 5):
-        GRASSIMAGES.append(pygame.image.load(paths['grass%s' % i]))
-
-    while True:
-        if runGame(lp):
-            break
-
-
-def runGame(lp):
-    invulnerableMode = False
-    invulnerableStartTime = 0
-    gameOverMode = False
-    gameOverStartTime = 0
-    winMode = False
-
-    gameOverSurf = BASICFONT.render('王建国把你杀死了，复活中...', True, BLACK)
-    gameOverRect = gameOverSurf.get_rect()
-    gameOverRect.center = (HALF_WINWIDTH, HALF_WINHEIGHT)
-
-    winSurf = BASICFONT.render('你成功的逃离了王建国！', True, BLACK)
-    winRect = winSurf.get_rect()
-    winRect.center = (HALF_WINWIDTH, HALF_WINHEIGHT)
-
-    winSurf2 = BASICFONT.render('按ESC退出关卡', True, BLACK)
-    winRect2 = winSurf2.get_rect()
-    winRect2.center = (HALF_WINWIDTH, HALF_WINHEIGHT + 30)
-
-    # camerax and cameray are the top left of where the camera view is
-    camerax = 0
-    cameray = 0
-
-    grassObjs = []    # stores all the grass objects in the game
-    squirrelObjs = []
-    # stores the player object:
-    playerObj = {'surface': pygame.transform.scale(L_SQUIR_IMG, (STARTSIZE, STARTSIZE)),
-                 'facing': LEFT,
-                 'size': STARTSIZE,
-                 'x': HALF_WINWIDTH,
-                 'y': HALF_WINHEIGHT,
-                 'bounce':0,
-                 'health': MAXHEALTH}
-
-    moveLeft  = False
-    moveRight = False
-    moveUp    = False
-    moveDown  = False
-
-    # start off with some random grass images on the screen
-    for i in range(10):
-        grassObjs.append(makeNewGrass(camerax, cameray))
-        grassObjs[i]['x'] = random.randint(0, WINWIDTH)
-        grassObjs[i]['y'] = random.randint(0, WINHEIGHT)
-
-    while True: # main game loop
-        # Check if we should turn off invulnerability
-        mouse_pos = pygame.mouse.get_pos()
-        if invulnerableMode and time.time() - invulnerableStartTime > INVULNTIME:
-            invulnerableMode = False
-
-        # move all the squirrels
-        for sObj in squirrelObjs:
-            # move the squirrel, and adjust for their bounce
-            sObj['x'] += sObj['movex']
-            sObj['y'] += sObj['movey']
-            sObj['bounce'] += 1
-            if sObj['bounce'] > sObj['bouncerate']:
-                sObj['bounce'] = 0 # reset bounce amount
-
-            # random chance they change direction
-            if random.randint(0, 99) < DIRCHANGEFREQ:
-                sObj['movex'] = getRandomVelocity()
-                sObj['movey'] = getRandomVelocity()
-                if sObj['movex'] > 0: # faces right
-                    sObj['surface'] = pygame.transform.scale(R_JIANGUO, (sObj['width'], sObj['height']))
-                else: # faces left
-                    sObj['surface'] = pygame.transform.scale(L_JIANGUO, (sObj['width'], sObj['height']))
-
-
-        # go through all the objects and see if any need to be deleted.
-        for i in range(len(grassObjs) - 1, -1, -1):
-            if isOutsideActiveArea(camerax, cameray, grassObjs[i]):
-                del grassObjs[i]
-        for i in range(len(squirrelObjs) - 1, -1, -1):
-            if isOutsideActiveArea(camerax, cameray, squirrelObjs[i]):
-                del squirrelObjs[i]
-
-        # add more grass & squirrels if we don't have enough.
-        while len(grassObjs) < NUMGRASS:
-            grassObjs.append(makeNewGrass(camerax, cameray))
-        while len(squirrelObjs) < NUMSQUIRRELS:
-            squirrelObjs.append(makeNewSquirrel(camerax, cameray))
-
-        # adjust camerax and cameray if beyond the "camera slack"
-        playerCenterx = playerObj['x'] + int(playerObj['size'] / 2)
-        playerCentery = playerObj['y'] + int(playerObj['size'] / 2)
-        if (camerax + HALF_WINWIDTH) - playerCenterx > CAMERASLACK:
-            camerax = playerCenterx + CAMERASLACK - HALF_WINWIDTH
-        elif playerCenterx - (camerax + HALF_WINWIDTH) > CAMERASLACK:
-            camerax = playerCenterx - CAMERASLACK - HALF_WINWIDTH
-        if (cameray + HALF_WINHEIGHT) - playerCentery > CAMERASLACK:
-            cameray = playerCentery + CAMERASLACK - HALF_WINHEIGHT
-        elif playerCentery - (cameray + HALF_WINHEIGHT) > CAMERASLACK:
-            cameray = playerCentery - CAMERASLACK - HALF_WINHEIGHT
-
-        # draw the green background
-        DISPLAYSURF.fill(GRASSCOLOR)
-
-        # draw all the grass objects on the screen
-        for gObj in grassObjs:
-            gRect = pygame.Rect( (gObj['x'] - camerax,
-                                  gObj['y'] - cameray,
-                                  gObj['width'],
-                                  gObj['height']) )
-            DISPLAYSURF.blit(GRASSIMAGES[gObj['grassImage']], gRect)
-
-
-        # draw the other squirrels
-        for sObj in squirrelObjs:
-            sObj['rect'] = pygame.Rect( (sObj['x'] - camerax,
-                                         sObj['y'] - cameray - getBounceAmount(sObj['bounce'], sObj['bouncerate'], sObj['bounceheight']),
-                                         sObj['width'],
-                                         sObj['height']) )
-            DISPLAYSURF.blit(sObj['surface'], sObj['rect'])
-
-
-        # draw the player squirrel
-        flashIsOn = round(time.time(), 1) * 10 % 2 == 1
-        if not gameOverMode and not (invulnerableMode and flashIsOn):
-            playerObj['rect'] = pygame.Rect( (playerObj['x'] - camerax,
-                                              playerObj['y'] - cameray - getBounceAmount(playerObj['bounce'], BOUNCERATE, BOUNCEHEIGHT),
-                                              playerObj['size'],
-                                              playerObj['size']) )
-            DISPLAYSURF.blit(playerObj['surface'], playerObj['rect'])
-
-
-        # draw the health meter
-        blit_text(DISPLAYSURF, "生命：" + str(int(playerObj['health'])), (20, 20), 30)
-
-        for event in pygame.event.get(): # event handling loop
-            if event.type == QUIT:
-                return True
-
-            elif event.type == KEYDOWN:
-                if event.key in (K_UP, K_w):
-                    moveDown = False
-                    moveUp = True
-                elif event.key in (K_DOWN, K_s):
-                    moveUp = False
-                    moveDown = True
-                elif event.key in (K_LEFT, K_a):
-                    moveRight = False
-                    moveLeft = True
-                    if playerObj['facing'] != LEFT: # change player image
-                        playerObj['surface'] = pygame.transform.scale(L_SQUIR_IMG, (playerObj['size'], playerObj['size']))
-                    playerObj['facing'] = LEFT
-                elif event.key in (K_RIGHT, K_d):
-                    moveLeft = False
-                    moveRight = True
-                    if playerObj['facing'] != RIGHT: # change player image
-                        playerObj['surface'] = pygame.transform.scale(R_SQUIR_IMG, (playerObj['size'], playerObj['size']))
-                    playerObj['facing'] = RIGHT
-                elif winMode and event.key == K_r:
-                    return
-
-            elif event.type == KEYUP:
-                # stop moving the player's squirrel
-                if event.key in (K_LEFT, K_a):
-                    moveLeft = False
-                elif event.key in (K_RIGHT, K_d):
-                    moveRight = False
-                elif event.key in (K_UP, K_w):
-                    moveUp = False
-                elif event.key in (K_DOWN, K_s):
-                    moveDown = False
-
-                elif event.key == K_ESCAPE:
-                    return True
-
-        if not gameOverMode:
-            # actually move the player
-            if moveLeft:
-                playerObj['x'] -= MOVERATE
-            if moveRight:
-                playerObj['x'] += MOVERATE
-            if moveUp:
-                playerObj['y'] -= MOVERATE
-            if moveDown:
-                playerObj['y'] += MOVERATE
-
-            if (moveLeft or moveRight or moveUp or moveDown) or playerObj['bounce'] != 0:
-                playerObj['bounce'] += 1
-
-            if playerObj['bounce'] > BOUNCERATE:
-                playerObj['bounce'] = 0 # reset bounce amount
-
-            # check if the player has collided with any squirrels
-            for i in range(len(squirrelObjs)-1, -1, -1):
-                sqObj = squirrelObjs[i]
-                if 'rect' in sqObj and playerObj['rect'].colliderect(sqObj['rect']):
-                    # a player/squirrel collision has occurred
-
-                    if sqObj['width'] * sqObj['height'] <= playerObj['size']**2:
-                        # player is larger and eats the squirrel
-                        playerObj['size'] += int( (sqObj['width'] * sqObj['height'])**0.2 ) + 1
-                        del squirrelObjs[i]
-
-                        if playerObj['facing'] == LEFT:
-                            playerObj['surface'] = pygame.transform.scale(L_SQUIR_IMG, (playerObj['size'], playerObj['size']))
-                        if playerObj['facing'] == RIGHT:
-                            playerObj['surface'] = pygame.transform.scale(R_SQUIR_IMG, (playerObj['size'], playerObj['size']))
-
-                        setting.add("coins", setting.read("coins") + random.randint(2000, 3000))
-
-                        if playerObj['size'] > WINSIZE:
-                            winMode = True
-
-                    elif not invulnerableMode:
-                        # player is smaller and takes damage
-                        invulnerableMode = True
-                        invulnerableStartTime = time.time()
-                        playerObj['health'] -= 1
-                        if playerObj['health'] <= 1:
-                            gameOverMode = True # turn on "game over mode"
-                            gameOverStartTime = time.time()
-        else:
-            # game is over, show "game over" text
-            DISPLAYSURF.blit(gameOverSurf, gameOverRect)
-            if time.time() - gameOverStartTime > GAMEOVERTIME:
-                return # end the current game
-
-        # check if the player has won.
-        if winMode:
-            message("你成功的逃离了王建国", DISPLAYSURF)
-            return True
-        DISPLAYSURF.blit(lp, mouse_pos)
-        pygame.display.update()
-        FPSCLOCK.tick(FPS)
-
-
-
-
-def drawHealthMeter(currentHealth):
-    for i in range(currentHealth): # draw red health bars
-        pygame.draw.rect(DISPLAYSURF, RED,   (15, 5 + (10 * MAXHEALTH) - i * 10, 20, 10))
-    for i in range(MAXHEALTH): # draw the white outlines
-        pygame.draw.rect(DISPLAYSURF, WHITE, (15, 5 + (10 * MAXHEALTH) - i * 10, 20, 10), 1)
-
-
-def terminate():
-    pygame.quit()
-    sys.exit()
-
-
-def getBounceAmount(currentBounce, bounceRate, bounceHeight):
-    # Returns the number of pixels to offset based on the bounce.
-    # Larger bounceRate means a slower bounce.
-    # Larger bounceHeight means a higher bounce.
-    # currentBounce will always be less than bounceRate
-    return int(math.sin( (math.pi / float(bounceRate)) * currentBounce ) * bounceHeight)
-
-def getRandomVelocity():
-    speed = random.randint(SQUIRRELMINSPEED, SQUIRRELMAXSPEED)
-    if random.randint(0, 1) == 0:
-        return speed
-    else:
-        return -speed
-
-
-def getRandomOffCameraPos(camerax, cameray, objWidth, objHeight):
-    # create a Rect of the camera view
-    cameraRect = pygame.Rect(camerax, cameray, WINWIDTH, WINHEIGHT)
-    while True:
-        x = random.randint(camerax - WINWIDTH, camerax + (2 * WINWIDTH))
-        y = random.randint(cameray - WINHEIGHT, cameray + (2 * WINHEIGHT))
-        # create a Rect object with the random coordinates and use colliderect()
-        # to make sure the right edge isn't in the camera view.
-        objRect = pygame.Rect(x, y, objWidth, objHeight)
-        if not objRect.colliderect(cameraRect):
-            return x, y
-
-
-def makeNewSquirrel(camerax, cameray):
-    sq = {}
-    generalSize = random.randint(5, 25)
-    multiplier = random.randint(1, 3)
-    sq['width']  = (generalSize + random.randint(0, 10)) * multiplier
-    sq['height'] = (generalSize + random.randint(0, 10)) * multiplier
-    sq['x'], sq['y'] = getRandomOffCameraPos(camerax, cameray, sq['width'], sq['height'])
-    sq['movex'] = getRandomVelocity()
-    sq['movey'] = getRandomVelocity()
-    if sq['movex'] < 0: # squirrel is facing left
-        sq['surface'] = pygame.transform.scale(L_JIANGUO, (sq['width'], sq['height']))
-    else: # squirrel is facing right
-        sq['surface'] = pygame.transform.scale(R_JIANGUO, (sq['width'], sq['height']))
-    sq['bounce'] = 0
-    sq['bouncerate'] = random.randint(10, 18)
-    sq['bounceheight'] = random.randint(10, 50)
-    return sq
-
-
-def makeNewGrass(camerax, cameray):
-    gr = {}
-    gr['grassImage'] = random.randint(0, len(GRASSIMAGES) - 1)
-    gr['width']  = GRASSIMAGES[0].get_width()
-    gr['height'] = GRASSIMAGES[0].get_height()
-    gr['x'], gr['y'] = getRandomOffCameraPos(camerax, cameray, gr['width'], gr['height'])
-    gr['rect'] = pygame.Rect( (gr['x'], gr['y'], gr['width'], gr['height']) )
-    return gr
-
-
-def isOutsideActiveArea(camerax, cameray, obj):
-    # Return False if camerax and cameray are more than
-    # a half-window length beyond the edge of the window.
-    boundsLeftEdge = camerax - WINWIDTH
-    boundsTopEdge = cameray - WINHEIGHT
-    boundsRect = pygame.Rect(boundsLeftEdge, boundsTopEdge, WINWIDTH * 3, WINHEIGHT * 3)
-    objRect = pygame.Rect(obj['x'], obj['y'], obj['width'], obj['height'])
-    return not boundsRect.colliderect(objRect)
-
+    RunGame(surface).start()
 
 if __name__ == '__main__':
     DISPLAYSURF = pygame.display.set_mode((WINWIDTH, WINHEIGHT))

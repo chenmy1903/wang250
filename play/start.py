@@ -1,7 +1,6 @@
 import os
 import zipfile
 import sys
-import pythoncom
 import win32com.client as client
 from pickleshare import PickleShareDB
 import requests
