@@ -64,6 +64,7 @@ version_text = """
 12/26更新
 1. 之前的更新忘更新了
 2. 补发王轶臣生日的200钻石
+3. 修改了鼠标箭头的样式（要不使用多显示器会出现bug）
 12/24更新
 1. 王轶臣的生日
 2. 玩法改进：3
@@ -188,10 +189,12 @@ def download_files():
 
 class Text:
     def init_val(self):
-        self.lp = pygame.image.load(paths['lp'])
+        # self.lp = pygame.image.load(paths['lp'])
         self.white_exit = pygame.image.load(paths['white_exit_button'])
         self.black_exit = pygame.image.load(paths['black_exit_button'])
         self.win_info = pygame.display.Info()
+        self.win_height = self.win_info.current_h
+        self.win_widht = self.win_info.current_w
     
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
