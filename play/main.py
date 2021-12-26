@@ -44,7 +44,7 @@ IMAGE_PATH = os.path.join(BASE_DIR, "images")
 paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
          "bgm": os.path.join(BASE_DIR, 'bgm.mp3'),
-         'lp': os.path.join(IMAGE_PATH, "lp.png"),
+        #  'lp': os.path.join(IMAGE_PATH, "lp.png"),
          'white_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
          'icon': os.path.join(BASE_DIR, "icon.ico"),
