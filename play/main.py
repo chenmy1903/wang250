@@ -18,7 +18,7 @@ import asyncio
 import requests
 import time
 import argparse
-import multiprocessing
+import multiprocessing as mp
 import asyncio
 
 from bilibili_api import video
@@ -796,7 +796,7 @@ class Surf(Text):
 
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
-        p = multiprocessing.Process(target=self.download_files)
+        p = mp.Process(target=self.download_files)
         p.start()
         while True:
             self.DISPLAYSURF.fill(0, 0, 0)
@@ -808,6 +808,7 @@ class Surf(Text):
                 return
             for event in pygame.event.get():
                 if event.type == QUIT:
+                    p.terminate()
                     self.kill_precess()
             pygame.display.update()
             self.clock.tick(60)
