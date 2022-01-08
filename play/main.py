@@ -772,7 +772,7 @@ class Surf(Text):
                         
                 except:
                     cmd_text("下载资源失败，强制退出游戏中...")
-                    sys.exit()
+                    raise SystemExit()
                 else:
                     self.download_file_count += 1
 
@@ -797,11 +797,12 @@ class Surf(Text):
 
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
+        load_dir_list = os.listdir(IMAGE_PATH)
         p = threading.Thread(target=self.download_files)
         p.start()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
-            process = int(self.download_file_count / len(paths) - len(os.listdir(IMAGE_PATH))) if len(paths) - len(os.listdir(IMAGE_PATH)) else 1
+            process = int(self.download_file_count / len(paths) - len(load_dir_list)) if len(paths) - len(load_dir_list) else 1
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{process * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
