@@ -801,10 +801,10 @@ class Surf(Text):
         p.start()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
-            precess = self.download_file_count / len(paths)
+            process = int(self.download_file_count / len(paths) - os.listdir(IMAGE_PATH))
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
-            self.blit_text(f"下载资源 进度：{precess * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
+            self.blit_text(f"下载资源 进度：{process * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
             if precess == 1:
                 return
             for event in pygame.event.get():
