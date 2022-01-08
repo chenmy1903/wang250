@@ -26,7 +26,7 @@ LEFT = 'left'
 RIGHT = 'right'
 
 BASE_DIR = os.path.dirname(__file__)
-IMAGE_PATH = os.path.join(BASE_DIR, "files")
+IMAGE_PATH = os.path.join(BASE_DIR, "images")
 
 paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          "wangjianguo": os.path.join(IMAGE_PATH, 'wangjianguo.png'),
