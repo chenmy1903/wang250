@@ -18,6 +18,7 @@ import asyncio
 import requests
 import time
 import argparse
+import multiprocessing
 import asyncio
 
 from bilibili_api import video
@@ -450,6 +451,7 @@ class Blame(Text):
         return self.x, self.y
 
 
+
 class WangJianGuo(Blame):
     name = "王建国"
     __set_mod = False
@@ -753,11 +755,32 @@ class Surf(Text):
                 cmd_text("下载资源失败，强制退出游戏中...")
                 sys.exit()
 
+    def download_files(self):
+        for key, value in paths.items():
+            if not os.path.isfile(value):
+                try:
+                    file_name = value.replace('\\', '/').split('/')[-1]
+                    r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
+                    if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                        download_path = os.path.join(IMAGE_PATH, file_name)
+                    else:
+                        download_path = os.path.join(BASE_DIR, file_name)
+                    if not os.path.isdir(IMAGE_PATH):
+                        os.mkdir(IMAGE_PATH)
+                    with open(download_path, 'wb') as f:
+                        f.write(r.content)
+                        
+                except:
+                    cmd_text("下载资源失败，强制退出游戏中...")
+                    sys.exit()
+                else:
+                    self.download_file_count += 1
+
     def duck_game(self):
         self.download_logo()
         window_info = pygame.display.Info()
         pygame.mouse.set_visible(True)
-        download_file_count = 0
+        self.download_file_count = 0
         self.DISPLAYSURF.fill((0, 0, 0))
         logo = pygame.image.load(paths["logo"])
         for i in range(255):
@@ -772,32 +795,16 @@ class Surf(Text):
 
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
-
+        p = multiprocessing.Process(target=self.download_files)
+        p.start()
         while True:
-            precess = download_file_count / len(paths)
+            self.DISPLAYSURF.fill(0, 0, 0)
+            precess = self.download_file_count / len(paths)
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 3 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{precess * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
-            for key, value in paths.items():
-                if not os.path.isfile(value):
-                    try:
-                        file_name = value.replace('\\', '/').split('/')[-1]
-                        r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
-                        if file_name.endswith('.png') or file_name.endswith('.jpg'):
-                            download_path = os.path.join(IMAGE_PATH, file_name)
-                        else:
-                            download_path = os.path.join(BASE_DIR, file_name)
-                        if not os.path.isdir(IMAGE_PATH):
-                            os.mkdir(IMAGE_PATH)
-                        with open(download_path, 'wb') as f:
-                            f.write(r.content)
-                        
-                    except:
-                        cmd_text("下载资源失败，强制退出游戏中...")
-                        sys.exit()
-                    else:
-                        download_file_count += 1
-            # 
+            if precess == 1:
+                return
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.kill_precess()
