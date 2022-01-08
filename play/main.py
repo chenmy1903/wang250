@@ -48,6 +48,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
          'icon': os.path.join(BASE_DIR, "icon.ico"),
          "bili_ir_code": os.path.join(IMAGE_PATH, "bili_ir_code.jpg"),
+         "logo": os.path.join(IMAGE_PATH, "duck_game.png"),
          }
 
 paths.update(game_paths)
@@ -177,7 +178,7 @@ def download_files():
         if not os.path.isfile(value):
             try:
                 file_name = value.replace('\\', '/').split('/')[-1]
-                r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}") # 可恶的王丑菊把我的网站dns禁了，在网站名称为nkdxfsxx的网络下无法正常加载，可恢复到正常网络环境下下载
+                r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
                 if file_name.endswith('.png') or file_name.endswith('.jpg'):
                     download_path = os.path.join(IMAGE_PATH, file_name)
                 else:
@@ -737,9 +738,46 @@ class Surf(Text):
     def duck_game(self):
         window_info = pygame.display.Info()
         pygame.mouse.set_visible(True)
+        download_file_count = 0
         self.DISPLAYSURF.fill((0, 0, 0))
         for i in range(255):
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
+            self.DISPLAYSURF.blit(paths["logo"], (window_info.current_w / 3 - 72 * 5, window_info.current_h / 2 - 100))
+            self.blit_text("准备启动", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    self.kill_precess()
+            pygame.display.update()
+            self.clock.tick(60)
+            
+        if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
+            os.mkdir(os.path.join(BASE_DIR, 'mods'))
+
+        while True:
+            precess = download_file_count / len(paths)
+            self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
+            self.DISPLAYSURF.blit(paths["logo"], (window_info.current_w / 3 - 72 * 5, window_info.current_h / 2 - 100))
+            self.blit_text(f"下载资源 进度：{precess * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
+            for key, value in paths.items():
+                if not os.path.isfile(value):
+                    try:
+                        file_name = value.replace('\\', '/').split('/')[-1]
+                        r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
+                        if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                            download_path = os.path.join(IMAGE_PATH, file_name)
+                        else:
+                            download_path = os.path.join(BASE_DIR, file_name)
+                        if not os.path.isdir(IMAGE_PATH):
+                            os.mkdir(IMAGE_PATH)
+                        with open(download_path, 'wb') as f:
+                            f.write(r.content)
+                        
+                    except:
+                        cmd_text("下载资源失败，强制退出游戏中...")
+                        sys.exit()
+                    else:
+                        download_file_count += 1
+            # 
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.kill_precess()
@@ -1113,7 +1151,6 @@ def main():
         cmd_text(version_text)
     if config.read("admin_mode") == true and not argv.no_update:
         update_runner() # 更新启动器
-    download_files()
     window_info = pygame.display.Info()
     DISPLAYSURF = pygame.display.set_mode(
         (window_info.current_w, window_info.current_h))
