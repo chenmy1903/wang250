@@ -734,7 +734,27 @@ class Surf(Text):
     def shop(self):
         self.shop_gui.start()
 
+    def download_logo(self):
+        value = paths["logo"]
+        if not os.path.isfile(value):
+            try:
+                file_name = value.replace('\\', '/').split('/')[-1]
+                r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
+                if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                    download_path = os.path.join(IMAGE_PATH, file_name)
+                else:
+                    download_path = os.path.join(BASE_DIR, file_name)
+                if not os.path.isdir(IMAGE_PATH):
+                    os.mkdir(IMAGE_PATH)
+                with open(download_path, 'wb') as f:
+                    f.write(r.content)
+                        
+            except:
+                cmd_text("下载资源失败，强制退出游戏中...")
+                sys.exit()
+
     def duck_game(self):
+        self.download_logo()
         window_info = pygame.display.Info()
         pygame.mouse.set_visible(True)
         download_file_count = 0
