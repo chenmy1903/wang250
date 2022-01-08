@@ -631,7 +631,6 @@ class Surf(Text):
     def __init__(self, surface):
         super().__init__()
         self.DISPLAYSURF = surface
-        self.init_val() # 修复无法启动的问题
         pygame.mouse.set_visible(False)
         try:
             mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
@@ -749,7 +748,7 @@ class Surf(Text):
                     self.kill_precess()
             pygame.display.update()
             self.clock.tick(60)
-            
+
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
 
@@ -784,6 +783,7 @@ class Surf(Text):
             pygame.display.update()
             self.clock.tick(60)
         pygame.mouse.set_visible(False)
+        self.init_val() # 修复无法启动的问题
 
     def run_mods(self):
         count = 1
