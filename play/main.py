@@ -760,6 +760,7 @@ class Surf(Text):
             if not os.path.isfile(value):
                 try:
                     file_name = value.replace('\\', '/').split('/')[-1]
+                    self.blit_text(file_name, (window_info.current_w / 2 - 72 * 5, window_info.current_h - 230), 72, pygame.Color(255, 255, 255))
                     r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
                     if file_name.endswith('.png') or file_name.endswith('.jpg'):
                         download_path = os.path.join(IMAGE_PATH, file_name)
