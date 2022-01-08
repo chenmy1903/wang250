@@ -783,6 +783,7 @@ class Surf(Text):
         self.download_file_count = 0
         self.DISPLAYSURF.fill((0, 0, 0))
         logo = pygame.image.load(paths["logo"])
+        pygame.display.set_caption("逃离王建国")
         for i in range(255):
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
