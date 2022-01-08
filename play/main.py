@@ -760,7 +760,6 @@ class Surf(Text):
             if not os.path.isfile(value):
                 try:
                     file_name = value.replace('\\', '/').split('/')[-1]
-                    self.blit_text(file_name, (window_info.current_w / 2 - 72 * 5, window_info.current_h - 230), 72, pygame.Color(255, 255, 255))
                     r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
                     if file_name.endswith('.png') or file_name.endswith('.jpg'):
                         download_path = os.path.join(IMAGE_PATH, file_name)
@@ -806,11 +805,10 @@ class Surf(Text):
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{process * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
-            if process == 1:
+            if process >= 1:
                 return
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    p.terminate()
                     self.kill_precess()
             pygame.display.update()
             self.clock.tick(60)
