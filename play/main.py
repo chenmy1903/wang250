@@ -827,6 +827,7 @@ class Surf(Text):
             pygame.display.update()
             self.clock.tick(60)
         pygame.mouse.set_visible(False)
+        p.join()
         self.init_val()
 
     def run_mods(self):
