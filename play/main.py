@@ -53,6 +53,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          }
 
 paths.update(game_paths)
+lock = threading.Lock()
 
 version_text = """
 游戏公告
@@ -766,7 +767,9 @@ class Surf(Text):
                         download_path = os.path.join(IMAGE_PATH, file_name)
                     else:
                         download_path = os.path.join(BASE_DIR, file_name)
+                        lock.acquire()
                         self.no_img += 1
+                        lock.release()
                     if not os.path.isdir(IMAGE_PATH):
                         os.mkdir(IMAGE_PATH)
                     with open(download_path, 'wb') as f:
@@ -776,10 +779,14 @@ class Surf(Text):
                     cmd_text("下载资源失败，强制退出游戏中...")
                     raise SystemExit()
                 else:
+                    lock.acquire()
                     self.download_file_count += 1
+                    lock.release()
             else:
                 if not file_name.endswith('.png') or file_name.endswith('.jpg'):
+                    lock.acquire()
                     self.no_img += 1
+                    lock.release()
 
     def duck_game(self):
         self.download_logo()
