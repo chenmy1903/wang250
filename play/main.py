@@ -196,6 +196,7 @@ def download_files():
 
 class Text:
     def init_val(self):
+        print("init")
         self.lp = pygame.image.load(paths['lp'])
         self.white_exit = pygame.image.load(paths['white_exit_button'])
         self.black_exit = pygame.image.load(paths['black_exit_button'])
