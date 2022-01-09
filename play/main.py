@@ -491,7 +491,7 @@ class Setting:
 if "fps" not in Setting().read():
     Setting().add("fps", 60)
 
-FPS = setting.read("fps")
+FPS = Setting().read("fps")
 
 def update_runner():
     config = Setting("repair")
