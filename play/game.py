@@ -204,7 +204,6 @@ class RunGame(Text):
         w = self.win_info.current_w
         h = self.win_info.current_h
         self.y -= 30 if self.y > 50 else 0
-        self.jump = False
 
     def start(self):
         self.begin_timmer()
@@ -226,6 +225,8 @@ class RunGame(Text):
                     if event.key == K_SPACE:
                         self.jump_command()
                         self.jump = True
+                    else:
+                        self.jump = False
                 elif event.type == KEYDOWN:
                     if event.key == K_a:
                         self.left = True
