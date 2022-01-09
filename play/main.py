@@ -796,6 +796,8 @@ class Surf(Text):
         self.DISPLAYSURF.fill((0, 0, 0))
         logo = pygame.image.load(paths["logo"])
         pygame.display.set_caption("逃离王建国")
+        p = threading.Thread(target=self.download_files)
+        p.start()
         for i in range(255):
             self.DISPLAYSURF.fill((0, 0, 0))
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
@@ -810,8 +812,6 @@ class Surf(Text):
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
         load_dir_list = os.listdir(IMAGE_PATH)
-        p = threading.Thread(target=self.download_files)
-        p.start()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             process = len(os.listdir(IMAGE_PATH)) + self.no_img / len(paths) # 下载进度计算
