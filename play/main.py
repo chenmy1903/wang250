@@ -766,6 +766,7 @@ class Surf(Text):
                         download_path = os.path.join(IMAGE_PATH, file_name)
                     else:
                         download_path = os.path.join(BASE_DIR, file_name)
+                        self.no_img += 1
                     if not os.path.isdir(IMAGE_PATH):
                         os.mkdir(IMAGE_PATH)
                     with open(download_path, 'wb') as f:
@@ -782,6 +783,7 @@ class Surf(Text):
         window_info = pygame.display.Info()
         pygame.mouse.set_visible(True)
         self.download_file_count = 0
+        self.no_img = 0
         self.DISPLAYSURF.fill((0, 0, 0))
         logo = pygame.image.load(paths["logo"])
         pygame.display.set_caption("逃离王建国")
@@ -799,13 +801,13 @@ class Surf(Text):
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
         load_dir_list = os.listdir(IMAGE_PATH)
-        if len(paths) - len(load_dir_list) == 0:
+        if len(paths) - len(load_dir_list) - self.no_img == 0:
             return
         p = threading.Thread(target=self.download_files)
         p.start()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
-            process = len(os.listdir(IMAGE_PATH)) / len(paths) # 下载进度计算
+            process = len(os.listdir(IMAGE_PATH)) - self.no_img / len(paths) # 下载进度计算
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{round(process * 100, 3)}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
