@@ -193,7 +193,8 @@ class RunGame(Text):
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         return
-                
+            self.message("游戏维护中，去别的地方看看吧")
+            return
             pygame.display.update()
 
 

@@ -818,7 +818,7 @@ class Surf(Text):
             print(process)
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
-            self.blit_text(f"下载资源 进度：{round(process, 3) * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
+            self.blit_text(f"下载资源 进度：{round(round(process, 3) * 100, 1)}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
             if process == 1 or not p.is_alive():
                 break
             for event in pygame.event.get():
