@@ -238,6 +238,8 @@ class RunGame(Text):
                 self.x -= random.randint(2, 5)
             if self.right:
                 self.x += random.randint(2, 5)
+            if self.x <= 0 or self.x >= self.win_info.current_w:
+                self.x += 20
                         
             pygame.display.update()
             self.clock.tick(FPS)
