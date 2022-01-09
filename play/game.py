@@ -211,10 +211,6 @@ class RunGame(Text):
         while True:
             self.DISPLAYSURF.fill(GREEN)
             self.DISPLAYSURF.blit(self.player_img, (self.x, self.y))
-            if self.jump:
-                self.jump_command()
-            else:
-                self.gravity()
             for event in pygame.event.get():
                 if event.type == QUIT:
                     return
@@ -232,6 +228,8 @@ class RunGame(Text):
                         self.left = True
                     if event.key == K_d:
                         self.right = True
+                else:
+                    self.gravity()
             if self.left:
                 self.x -= random.randint(2, 5)
             if self.right:
