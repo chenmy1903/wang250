@@ -804,7 +804,7 @@ class Surf(Text):
         p.start()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
-            process = self.download_file_count / len(paths) - len(load_dir_list)
+            process = len(os.listdir(IMAGE_PATH)) / len(paths) # 下载进度计算
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{round(process * 100, 3)}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
