@@ -760,6 +760,7 @@ class Surf(Text):
             if not os.path.isfile(value):
                 try:
                     file_name = value.replace('\\', '/').split('/')[-1]
+                    print("download: " + file_name)
                     r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
                     if file_name.endswith('.png') or file_name.endswith('.jpg'):
                         download_path = os.path.join(IMAGE_PATH, file_name)
@@ -791,7 +792,7 @@ class Surf(Text):
             self.blit_text("准备启动", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    self.kill_precess()
+                    self.kill_precess(no_title=True)
             pygame.display.update()
             self.clock.tick(60)
 
@@ -800,7 +801,6 @@ class Surf(Text):
         load_dir_list = os.listdir(IMAGE_PATH)
         if len(paths) - len(load_dir_list) == 0:
             return
-        print(len(paths))
         p = threading.Thread(target=self.download_files)
         p.start()
         while True:
@@ -813,7 +813,7 @@ class Surf(Text):
                 return
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    self.kill_precess()
+                    self.kill_precess(no_title=True)
             pygame.display.update()
             self.clock.tick(60)
         pygame.mouse.set_visible(False)
