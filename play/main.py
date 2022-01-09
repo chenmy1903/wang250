@@ -757,10 +757,9 @@ class Surf(Text):
 
     def download_files(self):
         for key, value in paths.items():
+            file_name = value.replace('\\', '/').split('/')[-1]
             if not os.path.isfile(value):
                 try:
-                    file_name = value.replace('\\', '/').split('/')[-1]
-                    print("download: " + file_name)
                     r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
                     if file_name.endswith('.png') or file_name.endswith('.jpg'):
                         download_path = os.path.join(IMAGE_PATH, file_name)
