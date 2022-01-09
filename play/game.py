@@ -217,16 +217,16 @@ class RunGame(Text):
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         return
-                    if event.key == K_A:
+                    if event.key == K_a:
                         self.left = False
-                    if event.key == K_D:
+                    if event.key == K_d:
                         self.right = False
                     if event.key == K_SPACE:
                         self.jump = False
                 elif event.type == KEYDOWN:
-                    if event.key == K_A:
+                    if event.key == K_a:
                         self.left = True
-                    if event.key == K_D:
+                    if event.key == K_d:
                         self.right = True
                     if event.key == K_SPACE:
                         self.jump = True
