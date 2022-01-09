@@ -194,16 +194,14 @@ class RunGame(Text):
         w = self.win_info.current_w
         h = self.win_info.current_h
         down = h / 2
-        if self.y > down:
+        if self.y < down:
             self.y -= 1
-        elif self.y > down:
-            self.y += 1
 
     def jump_command(self):
         
         w = self.win_info.current_w
         h = self.win_info.current_h
-        if self.y > h / 2 + 20:
+        if self.y < h / 2 - 20:
             self.y += random.randint(1, 5)
 
     def start(self):
