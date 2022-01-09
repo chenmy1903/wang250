@@ -804,8 +804,6 @@ class Surf(Text):
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
         load_dir_list = os.listdir(IMAGE_PATH)
-        if len(paths) - len(load_dir_list) - self.no_img == 0:
-            return
         p = threading.Thread(target=self.download_files)
         p.start()
         while True:
@@ -815,14 +813,14 @@ class Surf(Text):
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{round(process * 100, 3)}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
             if process >= 1:
-                return
+                break
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.kill_precess(no_title=True)
             pygame.display.update()
             self.clock.tick(60)
         pygame.mouse.set_visible(False)
-        self.init_val() # 修复无法启动的问题
+        self.init_val()
 
     def run_mods(self):
         count = 1
