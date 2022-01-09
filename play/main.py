@@ -777,6 +777,9 @@ class Surf(Text):
                     raise SystemExit()
                 else:
                     self.download_file_count += 1
+            else:
+                if not file_name.endswith('.png') or file_name.endswith('.jpg'):
+                    self.no_img += 1
 
     def duck_game(self):
         self.download_logo()
