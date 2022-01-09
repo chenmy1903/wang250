@@ -201,8 +201,8 @@ class RunGame(Text):
         
         w = self.win_info.current_w
         h = self.win_info.current_h
-        if self.y < h / 2 - 20:
-            self.y -= random.randint(1, 5)
+        if self.y < h / 2 - 80:
+            self.y += 5
 
     def start(self):
         self.begin_timmer()
