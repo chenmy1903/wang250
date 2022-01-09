@@ -488,8 +488,8 @@ class Setting:
             return self.db[self.file_name][config]
         return self.db[self.file_name]
 
-if "fps" not in setting.read():
-    setting.add("fps", 60)
+if "fps" not in Setting().read():
+    Setting().add("fps", 60)
 
 FPS = setting.read("fps")
 
