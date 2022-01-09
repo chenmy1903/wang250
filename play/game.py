@@ -223,7 +223,7 @@ class RunGame(Text):
                         self.right = False
                     if event.key == K_SPACE:
                         self.jump = False
-                elif event.key == KEYDOWN:
+                elif event.type == KEYDOWN:
                     if event.key == K_A:
                         self.left = True
                     if event.key == K_D:
