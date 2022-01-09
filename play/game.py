@@ -239,7 +239,7 @@ class RunGame(Text):
             if self.left:
                 self.x -= random.randint(2, 5)
             if self.right:
-                self.x == random.randint(2, 5)
+                self.x += random.randint(2, 5)
                         
             pygame.display.update()
             self.clock.tick(FPS)
