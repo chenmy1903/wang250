@@ -800,6 +800,7 @@ class Surf(Text):
         load_dir_list = os.listdir(IMAGE_PATH)
         if len(paths) - len(load_dir_list) == 0:
             return
+        print(len(paths))
         p = threading.Thread(target=self.download_files)
         p.start()
         while True:
