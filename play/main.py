@@ -798,11 +798,13 @@ class Surf(Text):
         if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
             os.mkdir(os.path.join(BASE_DIR, 'mods'))
         load_dir_list = os.listdir(IMAGE_PATH)
+        if len(paths) - len(load_dir_list) == 0:
+            return
         p = threading.Thread(target=self.download_files)
         p.start()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
-            process = self.download_file_count / len(paths) - len(load_dir_list) if len(paths) - len(load_dir_list) < 1 else 1
+            process = self.download_file_count / len(paths) - len(load_dir_list)
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{process * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
@@ -868,6 +870,12 @@ class Surf(Text):
             pygame.display.update()
             self.clock.tick(FPS)
 
+    def give(self, key, value):
+        if isinstance(value, int) or isinstance(value, float):
+            self.setting.add(key, self.setting.read(key) + value)
+        else:
+            self.setting.add(key, value)
+
     def run_special_activities(self):
         special_version = '0.2'
         rd_special_version = self.setting.read("special_version") if "special_version" in self.setting.read() else None
@@ -875,9 +883,9 @@ class Surf(Text):
             return # 已经参加完了
         self.setting.add("special_version", special_version)
         self.next("大家好，我是鸭皇")
-        self.next("今天是坚果三雄的生日（12/24）")
-        self.setting.add("diamond", self.setting.read("diamond") + 200)
-        self.next("我们在此献上200钻石")
+        self.next("在这里我祝大家新年快乐，事业有成")
+        self.give("diamond", 10000)
+        self.next("我们在此献上10000钻石")
         self.next("tip: 因为作者当天写完代码忘更新了，所以补发了这个")
         self.next("祝您在游戏里玩的愉快")
 
@@ -994,8 +1002,8 @@ class Surf(Text):
                 elif choice == 3:
                     self.shop()
                 elif choice == 4:
-                    # self.choice_player()
-                    self.message("维护中")
+                    self.choice_player()
+                    # self.message("维护中")
                 elif choice == 5:
                     self.message("功能维护中")
                 elif choice == 6:
