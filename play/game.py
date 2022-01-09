@@ -191,6 +191,8 @@ class RunGame(Text):
             pygame.time.wait(1000)
 
     def gravity(self):
+        if self.jump:
+            return
         w = self.win_info.current_w
         h = self.win_info.current_h
         down = h / 2
@@ -203,11 +205,12 @@ class RunGame(Text):
         h = self.win_info.current_h
         if self.y < h / 2 - 80:
             self.y -= 16
+        self.jump = False
 
     def start(self):
         self.begin_timmer()
         self.x, self.y = 70, 70
-        self.left = self.right = False
+        self.left = self.right = self.jump = False
         while True:
             self.DISPLAYSURF.fill(GREEN)
             self.DISPLAYSURF.blit(self.player_img, (self.x, self.y))
@@ -223,13 +226,14 @@ class RunGame(Text):
                         self.right = False
                     if event.key == K_SPACE:
                         self.jump_command()
+                        self.jump = True
                 elif event.type == KEYDOWN:
                     if event.key == K_a:
                         self.left = True
                     if event.key == K_d:
                         self.right = True
-                else:
-                    self.gravity()
+                
+            self.gravity()
             if self.left:
                 self.x -= random.randint(2, 5)
             if self.right:
