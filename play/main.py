@@ -197,7 +197,6 @@ def download_files():
 
 class Text:
     def init_val(self):
-        print("init")
         self.lp = pygame.image.load(paths['lp'])
         self.white_exit = pygame.image.load(paths['white_exit_button'])
         self.black_exit = pygame.image.load(paths['black_exit_button'])
@@ -816,16 +815,17 @@ class Surf(Text):
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
             process = len(os.listdir(IMAGE_PATH)) + self.no_img / len(paths) # 下载进度计算
+            print("loading")
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{round(process * 100, 3)}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
-            if process >= 1:
+            if process == 1:
                 break
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.kill_precess(no_title=True)
             pygame.display.update()
-            self.clock.tick(60)
+            self.clock.tick(FPS)
         pygame.mouse.set_visible(False)
         p.join()
         self.init_val()
