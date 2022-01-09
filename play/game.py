@@ -191,6 +191,8 @@ class RunGame(Text):
             pygame.time.wait(1000)
 
     def gravity(self):
+        if self.jump:
+            return
         w = self.win_info.current_w
         h = self.win_info.current_h
         down = h / 2
