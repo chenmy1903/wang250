@@ -138,6 +138,7 @@ class BaseDisplay(Text):
 
     def start(self):
         self.duck_game()
+        return
         choice = 0
         if "jingu_coin" not in self.config.read():
             self.config.add('jingu_coin', 1)
