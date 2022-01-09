@@ -79,6 +79,11 @@ class Setting:
 
 setting = Setting()
 
+if "fps" not in setting.read():
+    setting.add("fps", 60)
+
+FPS = setting.read("fps")
+
 if "level" not in setting.read():
     setting.add("level", 1)
 
@@ -170,6 +175,7 @@ class Text():
             pygame.display.update()
 
 class RunGame(Text):
+    clock = pygame.time.Clock()
     
     def __init__(self, display: pygame.Surface):
         self.DISPLAYSURF = display
@@ -230,8 +236,13 @@ class RunGame(Text):
                         self.right = True
                     if event.key == K_SPACE:
                         self.jump = True
+            if self.left:
+                self.x -= random.randint(2, 5)
+            if self.right:
+                self.x == random.randint(2, 5)
                         
             pygame.display.update()
+            self.clock.tick(FPS)
 
 
 def play(surface):

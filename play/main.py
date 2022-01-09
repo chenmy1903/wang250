@@ -37,7 +37,6 @@ RIGHT = "right"
 true = "True"
 false = "False"
 
-FPS = 180
 speed = 1000
 CONFIG_PATH = "~/.duck_game/wang250"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -488,6 +487,11 @@ class Setting:
         if config:
             return self.db[self.file_name][config]
         return self.db[self.file_name]
+
+if "fps" not in setting.read():
+    setting.add("fps", 60)
+
+FPS = setting.read("fps")
 
 def update_runner():
     config = Setting("repair")
