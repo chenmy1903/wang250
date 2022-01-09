@@ -223,16 +223,13 @@ class RunGame(Text):
                     if event.key == K_d:
                         self.right = False
                     if event.key == K_SPACE:
-                        self.jump_command()
                         self.jump = True
-                    else:
-                        self.jump = False
+                        self.jump_command()
                 elif event.type == KEYDOWN:
                     if event.key == K_a:
                         self.left = True
                     if event.key == K_d:
                         self.right = True
-                
             self.gravity()
             if self.left:
                 self.x -= random.randint(2, 5)
