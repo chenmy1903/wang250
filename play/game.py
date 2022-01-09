@@ -203,8 +203,7 @@ class RunGame(Text):
         
         w = self.win_info.current_w
         h = self.win_info.current_h
-        if self.y < h / 2 - 80:
-            self.y -= 16
+        self.y -= 16 if self.y > 50
         self.jump = False
 
     def start(self):
