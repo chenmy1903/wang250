@@ -1,4 +1,7 @@
 # 逃离王建国 （鸭皇游戏）
+# ©chenmy1903
+# 宁同禁止盗用
+# https://chenmy1903.github.io/wang250
 
 import random
 import sys
@@ -172,6 +175,7 @@ class RunGame(Text):
         self.DISPLAYSURF = display
         self.set_surface(self.DISPLAYSURF)
         self.player_img = pygame.image.load(paths[setting.read("player")])
+        self.win_info = pygame.display.Info()
 
     def begin_timmer(self):
         for i in range(4, 0, -1):
@@ -179,22 +183,54 @@ class RunGame(Text):
             self.blit_text(f"准备开始：{i}", (HALF_WINWIDTH, HALF_WINHEIGHT), 75)
             pygame.display.update()
             pygame.time.wait(1000)
-                
+
+    def gravity(self):
+        w = self.win_info.current_w
+        h = self.win_info.current_h
+        down = h / 2
+        if self.y > down:
+            self.y -= 1
+        elif self.y > down:
+            self.y += 1
+
+    def jump_command(self):
+        
+        w = self.win_info.current_w
+        h = self.win_info.current_h
+        if self.y > h / 2 + 20:
+            self.y += random.randint(1, 5)
 
     def start(self):
         self.begin_timmer()
-        x, y = 70, 70
+        self.x, self.y = 70, 70
+        self.left = self.right = self.jump = False
         while True:
             self.DISPLAYSURF.fill(GREEN)
-            self.DISPLAYSURF.blit(self.player_img, (x, y))
+            self.DISPLAYSURF.blit(self.player_img, (self.x, self.y))
+            if self.jump:
+                self.jump_command()
+            else:
+                self.gravity()
             for event in pygame.event.get():
                 if event.type == QUIT:
                     return
                 elif event.type == KEYUP:
                     if event.key == K_ESCAPE:
                         return
-            self.message("游戏维护中，去别的地方看看吧")
-            return
+                    if event.key == K_A:
+                        self.left = False
+                    if event.key == K_D:
+                        self.right = False
+                    if event.key == K_SPACE:
+                        self.jump = False
+                elif event.key == KEYDOWN:
+                    if event.key == K_A:
+                        self.left = True
+                    if event.key == K_D:
+                        self.right = True
+                    if event.key == K_SPACE:
+                        self.jump = True
+                        
             pygame.display.update()
 
 
