@@ -42,7 +42,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi.png"),
          "grass2": os.path.join(IMAGE_PATH, "grass2.png"),
          "grass3": os.path.join(IMAGE_PATH, "grass3.png"),
          "grass4": os.path.join(IMAGE_PATH, "grass4.png"),
-         'lp': os.path.join(IMAGE_PATH, "lp.png"),
+         'lp': os.path.join(IMAGE_PATH, "cur.png"),
          }
 CONFIG_PATH = "~/.duck_game/wang250"
 

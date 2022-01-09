@@ -29,7 +29,7 @@ false = 'false'
 paths = {
     'white_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_w.png'),
     'black_exit_button': os.path.join(IMAGE_PATH, 'exitbutton_b.png'),
-    'lp': os.path.join(IMAGE_PATH, 'lp.png'),
+    'lp': os.path.join(IMAGE_PATH, 'cur.png'),
     "download_git": os.path.join(IMAGE_PATH, "download_git.png"),
     "command_board_gui": os.path.join(IMAGE_PATH, "command_board_gui.png"),
     "command_board": os.path.join(IMAGE_PATH, "command_board.png"),
