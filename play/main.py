@@ -658,7 +658,7 @@ class Surf(Text):
             self.message("活动资源下载失败，进入游戏后活动功能会丢失")
         try:
             self.time_py = importlib.import_module("time_activaly")
-            self.time_py.download_files()
+            paths.update(self.time_py.paths)
             self.time_display = self.time_py.BaseDisplay
         except:
             self.time_display = None
@@ -802,7 +802,7 @@ class Surf(Text):
         p.start()
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
-            process = self.download_file_count / len(paths) - len(load_dir_list) if len(paths) - len(load_dir_list) else 1
+            process = self.download_file_count / len(paths) - len(load_dir_list) if len(paths) - len(load_dir_list) < 1 else 1
             self.blit_text("鸭皇游戏 | 逃离王建国", (window_info.current_w / 2 - 72 * 5, window_info.current_h / 2 - 100), 72, pygame.Color(255, 255, 255))
             self.DISPLAYSURF.blit(logo, (window_info.current_w / 4 - 72 * 5, window_info.current_h / 2 - 100))
             self.blit_text(f"下载资源 进度：{process * 100}%", (window_info.current_w / 2 - 72 * 5, window_info.current_h - 100), 72, pygame.Color(255, 255, 255))
