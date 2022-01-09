@@ -195,19 +195,19 @@ class RunGame(Text):
         h = self.win_info.current_h
         down = h / 2
         if self.y < down:
-            self.y += 1
+            self.y += 15
 
     def jump_command(self):
         
         w = self.win_info.current_w
         h = self.win_info.current_h
         if self.y < h / 2 - 80:
-            self.y -= 5
+            self.y -= 16
 
     def start(self):
         self.begin_timmer()
         self.x, self.y = 70, 70
-        self.left = self.right = self.jump = False
+        self.left = self.right = False
         while True:
             self.DISPLAYSURF.fill(GREEN)
             self.DISPLAYSURF.blit(self.player_img, (self.x, self.y))
@@ -226,14 +226,12 @@ class RunGame(Text):
                     if event.key == K_d:
                         self.right = False
                     if event.key == K_SPACE:
-                        self.jump = False
+                        self.jump_command()
                 elif event.type == KEYDOWN:
                     if event.key == K_a:
                         self.left = True
                     if event.key == K_d:
                         self.right = True
-                    if event.key == K_SPACE:
-                        self.jump = True
             if self.left:
                 self.x -= random.randint(2, 5)
             if self.right:
