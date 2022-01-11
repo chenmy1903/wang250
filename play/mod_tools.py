@@ -39,6 +39,11 @@ class Setting:
             return self.db[self.file_name][config]
         return self.db[self.file_name]
 
+class GameRect(pygame.Rect):
+    title = ""
+    pos = ()
+    size = 0
+
 class Text:
     clock = pygame.time.Clock()
     FPS = Setting("config", config_path="~/.duck_game/wang250/").read("fps")
