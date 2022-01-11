@@ -876,7 +876,7 @@ class Surf(Text):
                     try:
                         if not self.mods[coi].run_on_load:
                             self.DISPLAYSURF.fill((0, 0, 0))
-                            pygame.mouse.set_visible(False)
+                            pygame.mouse.set_visible(True)
                             self.mods[coi].run_mod(surface=self.DISPLAYSURF)
                         else:
                             self.message("本模组不支持游戏内启动，因为为加载项")
