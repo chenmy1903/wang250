@@ -881,6 +881,9 @@ class Surf(Text):
                             self.message("本模组不支持游戏内启动，因为为加载项")
                     except:
                         self.message("模组出现问题，请尝试卸载该模组")
+                    finally:
+                        pygame.mouse.set_visible(False)
+                        break
                 elif coi == -2:
                     return
             self.DISPLAYSURF.blit(exit_game, (10, 60))
