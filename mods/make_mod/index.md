@@ -91,4 +91,95 @@ def cmd_text(text: str, end_function=None):
         end_function()
 ```
 
-运行会弹出一个cmd窗口，并显示 {text}，
+运行会弹出一个cmd窗口，并显示 {text}
+
+## 标准模组文件
+```python
+import pygame # 在这里导入包
+from pygame.locals import *
+
+from mod_tools import * # 导入模组工具
+
+TITLE = "模组名字"
+run_on_load = True # 是否为加载项True为是，False为假（加载项见下面词条）
+
+class Window(object):
+    """游戏主体"""
+    ...
+
+def run_mod(**kwargs): # 必须加**kwargs
+    """运行模组的脚本"""
+    pass
+```
+
+### 游戏主体的编写
+
+> tip: 这里不是教pygame的，只是教基本的东西
+
+```python
+
+import pygame
+from pygame.locals import *
+
+from mod_tools import * # 导入模组工具
+
+TITLE = "模组名字"
+run_on_load = True # 是否为加载项True为是，False为假（加载项见下面词条）
+
+class Window(Text): # 继承mod_tools.Text
+    def __init__(self, surface: pygame.Surface):
+        Text.__init__(self)
+        # 在这里设变量
+        self.config = Setting(TITLE) # 初始化设置类（设置类来自mod_tools包）
+        self.surface = surface # 设置屏幕
+        self.set_surface(self.surface) # 调用mod_tools.Text.set_surface进行初始化
+    
+    def start(self): # 运行游戏部分
+        while True:
+            self.surface.fill((0, 0, 0)) # 填充颜色
+            # 游戏主循环在这写
+            for event in pygame.event.get()：# 获取事件列表
+                if event.type == QUIT: # 检测退出事件
+                    pygame.quit()
+                    sys.exit()
+            pygame.display.update()
+            self.clock.tick(self.FPS) # 控制帧数 FPS是系统设置中的FPS，可以改为自己的
+
+def run_mod(**kwargs):
+    surface = kwargs["surface"] # 获取主窗口
+    Window(surface).start() # 开启玩法
+
+_test = run_mod
+
+if __name__ == "__main__":
+    _test()
+
+```
+
+## 提示框选择框gui
+
+```python
+# 我们在上一章中已经做好了主gui，接下来我们实现按l键弹出提示框，按k弹出选择框
+class MessageWindow(Window): # 继承上一章编写的Window类
+    # __init__ 我们不用再写了，我们已经写过了
+    def start(self): # 重写运行部分
+        while True:
+            self.surface.fill((0, 0, 0)) # 填充颜色
+            # 游戏主循环在这写
+            for event in pygame.event.get()：# 获取事件列表
+                if event.type == QUIT: # 检测退出事件
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == K_KEYUP: # 检测松开按键（pygame中没有hold逻辑，下一章中会讲）
+                    if event.key == K_l: # 判断按键是否为L
+                        self.message("我是金古") # 调用mod_tools.Text.message
+                    elif event.key == K_k: # 判断按键是否为K:
+                        if self.ask_yes_no("金古要趋势了，你开心吗"):
+                            self.message("你按下了是")
+                        else:
+                            self.message("你按下了否")
+
+            pygame.display.update()
+            self.clock.tick(self.FPS) # 控制帧数 FPS是系统设置中的FPS，可以改为自己的
+```
+

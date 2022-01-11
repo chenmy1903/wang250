@@ -155,8 +155,8 @@ TIPS:1. 破解王丑菊方法：可以修改代理DNS（未尝试过，玩家们
 1. 『万恶之源』王丑菊更新 （大概率白嫖）
 2. 春节礼包
 3. 剧情更新
-<!-- 4.联机更新 -->
-4. 孙斌大战王建国活动 
+4. 因为技术原因，本条无法完成
+5. 王建国死全家活动 
 
 tip: 所有更新内容以实际更新为准。
 """
@@ -851,7 +851,7 @@ class Surf(Text):
                 exit_game = self.white_exit
             else:
                 exit_game = self.black_exit
-            for i in range(len(self.mods)):
+            for i in range(len(self.mods) - 1):
                 mod = self.mods[i]
                 text = self.blit_text(mod.TITLE, (200, y)) if coi != i else self.blit_text(mod.TITLE, (200, y), 18, (0, 0, 0), (255, 255, 255))
                 if text.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
@@ -873,7 +873,8 @@ class Surf(Text):
                 if abs(coi) == coi:
                     try:
                         if not self.mods[coi].run_on_load:
-                            self.mods[coi].run_mod()
+                            self.DISPLAYSURF.fill((0, 0, 0))
+                            self.mods[coi].run_mod(surface=self.DISPLAYSURF)
                         else:
                             self.message("本模组不支持游戏内启动，因为为加载项")
                     except:
@@ -1204,7 +1205,7 @@ def main():
     config = Setting("repair")
     if not argv.no_start_text:
         cmd_text(version_text)
-    if config.read("admin_mode") == true and not argv.no_update:
+    if config.read("admin_mode") == true and argv.no_update:
         update_runner() # 更新启动器
     window_info = pygame.display.Info()
     DISPLAYSURF = pygame.display.set_mode(
