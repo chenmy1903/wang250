@@ -147,7 +147,7 @@ class Window(Text): # 继承mod_tools.Text
         while True:
             self.surface.fill((0, 0, 0)) # 填充颜色
             # 游戏主循环在这写
-            for event in pygame.event.get()：# 获取事件列表
+            for event in pygame.event.get(): # 获取事件列表
                 if event.type == QUIT: # 检测退出事件
                     pygame.quit()
                     sys.exit()
