@@ -79,7 +79,7 @@ print(setting.read()) # 返回{"wangjianguo", "chenwenli"}
 print(setting.read("wangjianguo")) # 返回 'chenwenli'
 ```
 
-## 终端文本输出（用于制作公告）
+## 4. 终端文本输出（用于制作公告）
 
 先来看源代码
 ```python
@@ -93,7 +93,7 @@ def cmd_text(text: str, end_function=None):
 
 运行会弹出一个cmd窗口，并显示 {text}
 
-## 标准模组文件
+## 5. 标准模组文件
 ```python
 import pygame # 在这里导入包
 from pygame.locals import *
@@ -112,13 +112,15 @@ def run_mod(**kwargs): # 必须加**kwargs
     pass
 ```
 
-### 游戏主体的编写
+### 6. 游戏主体的编写
 
 > tip: 这里不是教pygame的，只是教基本的东西
 
 ```python
 
 import pygame
+import os # 第8章中会用
+import sys
 from pygame.locals import *
 
 from mod_tools import * # 导入模组工具
@@ -145,18 +147,9 @@ class Window(Text): # 继承mod_tools.Text
             pygame.display.update()
             self.clock.tick(self.FPS) # 控制帧数 FPS是系统设置中的FPS，可以改为自己的
 
-def run_mod(**kwargs):
-    surface = kwargs["surface"] # 获取主窗口
-    Window(surface).start() # 开启玩法
-
-_test = run_mod
-
-if __name__ == "__main__":
-    _test()
-
 ```
 
-## 提示框选择框gui
+## 7. 提示框选择框gui
 
 ```python
 # 我们在上一章中已经做好了主gui，接下来我们实现按l键弹出提示框，按k弹出选择框
@@ -180,6 +173,57 @@ class MessageWindow(Window): # 继承上一章编写的Window类
                             self.message("你按下了否")
 
             pygame.display.update()
-            self.clock.tick(self.FPS) # 控制帧数 FPS是系统设置中的FPS，可以改为自己的
+            self.clock.tick(self.FPS) # 控制帧数 FPS是游戏设置中的FPS，可以改为自己的
+```
+
+## 8. HOLD逻辑
+
+```python
+# hold即为按住按键的时候触发的事件，这个事件Unity中有，但是pygame中没有
+# 我们继承第六章中编写的Window类
+class HoldWindow(Window):
+    def start(self):
+        forward = False # 前进状态为假
+        x, y = 20, 20 # 初始化x轴和y轴的值，为20, 20
+        player = pygame.image.load(os.path.join(BASE_DIR, "图片的名称")) # 图片自备，把图片放在本模组文件一样的目录即可
+        # BASE_DIR是mod文件夹，os.path.join是连接两个目录
+        while True:
+            self.surface.fill((0, 0, 0)) # 填充颜色（清空画布），在它前面显示的东西都会消失
+            self.surface.blit(player, (x, y)) # 显示图像
+            if forward: # 如果forward触发
+                x += 5 # 向前移动5像素
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == KEYUP: # 检测按键松开
+                    if event.key == K_w:
+                        forward = False # 将前进状态设为假
+                if event.type == KEYDOWN: # 检测按键按下
+                    if event.key == K_w:
+                        forward = True # 将前进状态设为真
+            pygame.display.update() # 更新画面
+            self.clock.tick(self.FPS) # 控制帧数
+
+```
+
+## 9.运行
+
+> 运行事例请修改里边使用的类名称（Window）
+
+```python
+def run_mod(**kwargs):
+    pygame.init()
+    surface = kwargs["surface"] # 获取主窗口
+    window = Window
+    # window = MessageWindow # 设为前面做过的类
+    # window = HoldWindow
+    window(surface)
+    .start() # 开启玩法
+
+_test = run_mod
+
+if __name__ == "__main__":
+    _test() # 测试
 ```
 

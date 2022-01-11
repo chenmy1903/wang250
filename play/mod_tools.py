@@ -8,6 +8,8 @@ from pickleshare import PickleShareDB
 TITLE = "mod_tools"
 run_on_load = True
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def cmd_text(text: str, end_function=None):
     text_r = text.replace('\n', '-')
     run_path = os.path.join(sys.exec_prefix, "python.exe")
