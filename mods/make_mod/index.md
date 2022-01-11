@@ -171,7 +171,7 @@ class MessageWindow(Window): # 继承上一章编写的Window类
                 if event.type == QUIT: # 检测退出事件
                     pygame.quit()
                     sys.exit()
-                elif event.type == K_KEYUP: # 检测松开按键（pygame中没有hold逻辑，下一章中会讲）
+                elif event.type == KEYUP: # 检测松开按键（pygame中没有hold逻辑，下一章中会讲）
                     if event.key == K_l: # 判断按键是否为L
                         self.message("我是金古") # 调用mod_tools.Text.message
                     elif event.key == K_k: # 判断按键是否为K:
