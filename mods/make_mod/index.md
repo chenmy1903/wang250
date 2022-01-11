@@ -226,7 +226,7 @@ def run_mod(**kwargs):
     window = Window
     # window = MessageWindow # 设为前面做过的类
     # window = HoldWindow
-    window(surface)
+    window = window(surface) # 实例化
     window.start() # 开启玩法
 
 _test = run_mod
