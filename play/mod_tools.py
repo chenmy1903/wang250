@@ -88,7 +88,7 @@ class Text:
             else:
                 cio = 0
             if pygame.mouse.get_pressed()[0] and cio == 1:
-                time.sleep(0.5)
+                pygame.time.wait(500)
                 return True
             if self.lp:
                 self.DISPLAYSURF.blit(self.lp, mouse_pos)
