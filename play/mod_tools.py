@@ -41,7 +41,7 @@ class Setting:
 
 class Text:
     clock = pygame.time.Clock()
-    FPS = Setting().read("fps")
+    FPS = Setting("config", config_path="~/.duck_game/wang250/").read("fps")
     
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
