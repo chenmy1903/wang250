@@ -47,6 +47,7 @@ class GameRect(pygame.Rect):
 class Text:
     clock = pygame.time.Clock()
     FPS = Setting("config", config_path="~/.duck_game/wang250/").read("fps")
+    lp = None
     
     def set_surface(self, surface):
         self.DISPLAYSURF = surface
@@ -88,7 +89,8 @@ class Text:
             if pygame.mouse.get_pressed()[0] and cio == 1:
                 time.sleep(0.5)
                 return True
-            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+            if self.lp:
+                self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
     
     def ask_yes_no(self, text: str):
@@ -125,7 +127,8 @@ class Text:
                     return True
                 elif cio == 2:
                     return False
-            self.DISPLAYSURF.blit(self.lp, mouse_pos)
+            if self.lp:
+                self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
 
 def run_mod(**kw):
