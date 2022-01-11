@@ -106,7 +106,7 @@ def cmd_text(text: str, end_function=None):
 import pygame # 在这里导入包
 from pygame.locals import *
 
-from mod_tools import * # 导入模组工具
+from mods.mod_tools import * # 导入模组工具
 
 TITLE = "模组名字"
 run_on_load = True # 是否为加载项True为是，False为假（加载项见下面词条）
@@ -131,7 +131,7 @@ import os # 第8章中会用
 import sys
 from pygame.locals import *
 
-from mod_tools import * # 导入模组工具
+from mods.mod_tools import * # 导入模组工具
 
 TITLE = "模组名字"
 run_on_load = False # 是否为加载项True为是，False为假（加载项见最下面词条）

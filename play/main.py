@@ -853,7 +853,7 @@ class Surf(Text):
                 exit_game = self.white_exit
             else:
                 exit_game = self.black_exit
-            for i in range(len(self.mods) - 1):
+            for i in range(len(self.mods)):
                 mod = self.mods[i]
                 text = self.blit_text(mod.TITLE, (200, y)) if coi != i else self.blit_text(mod.TITLE, (200, y), 18, (0, 0, 0), (255, 255, 255))
                 if text.collidepoint(self.mouse_pos[0], self.mouse_pos[1]):
