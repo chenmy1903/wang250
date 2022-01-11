@@ -166,7 +166,7 @@ class MessageWindow(Window): # 继承上一章编写的Window类
         while True:
             self.surface.fill((0, 0, 0)) # 填充颜色
             # 游戏主循环在这写
-            for event in pygame.event.get()：# 获取事件列表
+            for event in pygame.event.get(): # 获取事件列表
                 if event.type == QUIT: # 检测退出事件
                     pygame.quit()
                     sys.exit()
@@ -226,7 +226,7 @@ def run_mod(**kwargs):
     # window = MessageWindow # 设为前面做过的类
     # window = HoldWindow
     window(surface)
-    .start() # 开启玩法
+    window.start() # 开启玩法
 
 _test = run_mod
 
