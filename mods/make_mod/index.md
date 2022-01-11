@@ -1,6 +1,13 @@
 # 逃离王建国·mods
 
-## Setting类\钻石、金币修改教程
+## 更新日志
+
+## 2022/1/11
+
+1. 修复代码中的错误
+2. 增加更详细的教程
+
+## 0. Setting类\钻石、金币修改教程
 
 下面代码为Setting类的代码
 
@@ -126,7 +133,7 @@ from pygame.locals import *
 from mod_tools import * # 导入模组工具
 
 TITLE = "模组名字"
-run_on_load = True # 是否为加载项True为是，False为假（加载项见下面词条）
+run_on_load = False # 是否为加载项True为是，False为假（加载项见最下面词条）
 
 class Window(Text): # 继承mod_tools.Text
     def __init__(self, surface: pygame.Surface):
@@ -226,4 +233,8 @@ _test = run_mod
 if __name__ == "__main__":
     _test() # 测试
 ```
+
+## 10. 坚果百科 - 加载项
+
+1. 加载项为进入游戏（应用）自动加载的程序
 
