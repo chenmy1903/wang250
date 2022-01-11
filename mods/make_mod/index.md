@@ -230,6 +230,7 @@ def run_mod(**kwargs):
     window.start() # 开启玩法
 
 _test = run_mod
+pygame.init()
 
 window_info = pygame.display.Info()
 WINWIDTH = window_info.current_w
