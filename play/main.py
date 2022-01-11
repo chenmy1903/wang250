@@ -37,6 +37,8 @@ RIGHT = "right"
 true = "True"
 false = "False"
 
+launcher_version = "0.4"
+
 speed = 1000
 CONFIG_PATH = "~/.duck_game/wang250"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -502,7 +504,7 @@ def update_runner():
         cmd_text("请重新从官网下载游戏，检测到启动器版本为0.1旧版，请更新")
         webbrowser.open("https://chenmy1903.github.io/wang250/play/setup.exe")
         sys.exit()
-    if "runner_version" in read and read["runner_version"] != "0.3":
+    if "runner_version" in read and read["runner_version"] != launcher_version:
         cmd_text("检测到启动器版本更新，准备启动自动更新")
         try:
             setup_file = requests.get("https://chenmy1903.github.io/wang250/play/update.exe").content
