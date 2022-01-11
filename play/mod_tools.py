@@ -123,5 +123,5 @@ class Text:
             self.DISPLAYSURF.blit(self.lp, mouse_pos)
             pygame.display.update()
 
-def run_mod():
+def run_mod(**kw):
     pass
