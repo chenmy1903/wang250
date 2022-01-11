@@ -231,8 +231,13 @@ def run_mod(**kwargs):
 
 _test = run_mod
 
+window_info = pygame.display.Info()
+WINWIDTH = window_info.current_w
+WINHEIGHT = window_info.current_h
+
 if __name__ == "__main__":
-    _test() # 测试
+    _test(surface=pygame.display.set_mode((WINWIDTH, WINHEIGHT))) # 测试
+
 ```
 
 ## 10. 坚果百科 - 加载项
