@@ -164,13 +164,15 @@ class Window(Text): # 继承mod_tools.Text
 class MessageWindow(Window): # 继承上一章编写的Window类
     # __init__ 我们不用再写了，我们已经写过了
     def start(self): # 重写运行部分
-        while True:
+        game_mode = True
+        while game_mode:
             self.surface.fill((0, 0, 0)) # 填充颜色
             # 游戏主循环在这写
             for event in pygame.event.get(): # 获取事件列表
                 if event.type == QUIT: # 检测退出事件
-                    pygame.quit()
-                    sys.exit()
+                    # pygame.quit()
+                    # sys.exit() 这样做是错的，模组文件不支持这样写
+                    game_mode = False # 将游玩设为假
                 elif event.type == KEYUP: # 检测松开按键（pygame中没有hold逻辑，下一章中会讲）
                     if event.key == K_l: # 判断按键是否为L
                         self.message("我是金古") # 调用mod_tools.Text.message
@@ -179,6 +181,8 @@ class MessageWindow(Window): # 继承上一章编写的Window类
                             self.message("你按下了是")
                         else:
                             self.message("你按下了否")
+                    elif event.key == K_ESCAPE:
+                        game_mode = False
 
             pygame.display.update()
             self.clock.tick(self.FPS) # 控制帧数 FPS是游戏设置中的FPS，可以改为自己的
@@ -191,22 +195,24 @@ class MessageWindow(Window): # 继承上一章编写的Window类
 # 我们继承第六章中编写的Window类
 class HoldWindow(Window):
     def start(self):
+        game_mode = True
         forward = False # 前进状态为假
         x, y = 20, 20 # 初始化x轴和y轴的值，为20, 20
         player = pygame.image.load(os.path.join(BASE_DIR, "图片的名称")) # 图片自备，把图片放在本模组文件一样的目录即可
         # BASE_DIR是mod文件夹，os.path.join是连接两个目录
-        while True:
+        while game_mode:
             self.surface.fill((0, 0, 0)) # 填充颜色（清空画布），在它前面显示的东西都会消失
             self.surface.blit(player, (x, y)) # 显示图像
             if forward: # 如果forward触发
                 x += 5 # 向前移动5像素
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    game_mode = False
                 if event.type == KEYUP: # 检测按键松开
                     if event.key == K_w:
                         forward = False # 将前进状态设为假
+                    elif event.key == K_ESCAPE:
+                        game_mode = False
                 if event.type == KEYDOWN: # 检测按键按下
                     if event.key == K_w:
                         forward = True # 将前进状态设为真
