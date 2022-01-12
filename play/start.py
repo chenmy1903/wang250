@@ -11,7 +11,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 GAME_DIR = BASE_DIR
 shell = client.Dispatch("WScript.Shell")
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 
 pip = os.path.join(GAME_DIR, "game_runner", "Scripts", 'pip.exe')
@@ -226,7 +226,7 @@ def install():
     print("初始化环境变量中")
     sys.path.append(BASE_DIR)
     print("初始化模组依赖")
-    sys.path.append(os.path.join(BASE_DIR, "mods"))
+    sys.path.append(os.path.join(BASE_DIR, "ext"))
     print("准备进行安装检测")
     assert_game()
     print("准备运行游戏")
