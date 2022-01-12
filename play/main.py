@@ -1212,7 +1212,7 @@ def main():
     config = Setting("repair")
     if not argv.no_start_text:
         cmd_text(version_text)
-    if config.read("admin_mode") == true and argv.no_update:
+    if config.read("admin_mode") == true and not argv.no_update:
         update_runner() # 更新启动器
     window_info = pygame.display.Info()
     DISPLAYSURF = pygame.display.set_mode(
