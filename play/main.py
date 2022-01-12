@@ -645,9 +645,9 @@ class Surf(Text):
             mod_file = requests.get("https://chenmy1903.github.io/wang250/mods/make_mod/update_mod_tools.py").text # 下载依赖
             with open(os.path.join(BASE_DIR, "update_mod_tools.py"), 'w', encoding="UTF-8") as f:
                 f.write(mod_file)
-            os.system(f"{os.path.join(sys.exec_prefix, 'python.exe')} {os.path.join(BASE_DIR, 'update_mod_tools.py')} --install")
+            os.system(f"{os.path.join(sys.exec_prefix, 'pythonw.exe')} {os.path.join(BASE_DIR, 'update_mod_tools.py')} --install")
         except:
-            if not os.path.isfile(os.path.join(BASE_DIR, 'mods', 'mod_tools.py')): # 脱机模式检测依赖
+            if not os.path.isdir(os.path.join(BASE_DIR, "game_runner", "Lib", "site-packages", "mods")): # 脱机模式检测依赖
                 self.message("资源下载失败")
                 if not self.ask_yes_no("是否尝试继续进入游戏"):
                     self.kill_precess(no_title=True)
