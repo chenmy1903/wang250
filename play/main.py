@@ -642,9 +642,10 @@ class Surf(Text):
         self.DISPLAYSURF = surface
         pygame.mouse.set_visible(False)
         try:
-            mod_file = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text # 下载依赖
-            with open(os.path.join(BASE_DIR, 'mods', 'mod_tools.py'), 'w', encoding="UTF-8") as f:
+            mod_file = requests.get("https://chenmy1903.github.io/wang250/mods/make_mod/update_mod_tools.py").text # 下载依赖
+            with open(os.path.join(BASE_DIR, "update_mod_tools.py"), 'w', encoding="UTF-8") as f:
                 f.write(mod_file)
+            os.system(f"{os.path.join(sys.exec_prefix, 'python.exe')} {os.path.join(BASE_DIR, 'update_mod_tools.py')} --install")
         except:
             if not os.path.isfile(os.path.join(BASE_DIR, 'mods', 'mod_tools.py')): # 脱机模式检测依赖
                 self.message("资源下载失败")

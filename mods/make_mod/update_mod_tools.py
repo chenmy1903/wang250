@@ -18,6 +18,7 @@ init_py = """\"\"\"逃离王建国的模组依赖\"\"\"
 # Github: 王建国
 # 禁止盗用
 from . import mod_tools
+from .base_surface import Window
 """
 
 pygame_version = "2.1.2"
@@ -76,8 +77,9 @@ def is_admin():
 
 def cmd_argument():
     parser = argparse.ArgumentParser(__file__.replace('\\', '/').split("/")[-1])
-    parser.add_argument("--install", help="安装mod_tools", action='store_true')
+    parser.add_argument("--install", help="静默安装mod_tools", action='store_true')
     parser.add_argument("--uninstall", help="卸载mod_tools", action='store_true')
+
     return parser.parse_args()
 
 def title(text: str):
@@ -110,8 +112,14 @@ def uninstall():
         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__ + " --uninstall", None, 1)
 
 
-def install():
-    mod_tools = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text
+def install(q=False):
+    try:
+        mod_tools = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text
+        base_surface = requests.get("https://chenmy1903.github.io/wang250/play/base_surface.py").text
+    except:
+        print("资源下载失败")
+        if not q:
+            pause()
     title("鸭皇游戏 - Package Manger")
     print("本程序为您将mod_tools集成到现在运行的Python中")
     print("失败可以使用管理员权限试试")
@@ -145,6 +153,9 @@ def install():
         with open(os.path.join(install, "mod_tools.py"), "w", encoding="UTF-8") as f:
             print("写入mod_tools.py")
             f.write(mod_tools)
+        with open(os.path.join(install, "base_surface.py"), "w", encoding="UTF-8") as f:
+            print("写入base_surface.py")
+            f.write(base_surface)
         with open(os.path.join(install, "__init__.py"), "w", encoding="UTF-8") as f:
             print("写入__init__.py")
             f.write(init_py)
@@ -158,14 +169,15 @@ def install():
             if pip.install(f"pickleshare=={pickleshare_version}"):
                 raise PermissionError()
         print("安装完成，Enjoy")
-        pause()
+        if not q:
+            pause()
     except PermissionError:
         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
 
 def main():
     argv = cmd_argument()
     if argv.install:
-        install()
+        install(True)
     elif argv.uninstall:
         uninstall()
     else:

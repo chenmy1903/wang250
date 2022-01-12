@@ -40,6 +40,12 @@ class Setting:
             return self.db[self.file_name][config]
         return self.db[self.file_name]
 
+    def delete(self, value: str):
+        """删除某个值"""
+        config = self.db[self.file_name]
+        del config[value]
+        self.db[self.file_name] = config
+
 class GameRect(pygame.Rect):
     title = ""
     pos = ()
