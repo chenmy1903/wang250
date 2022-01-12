@@ -37,7 +37,7 @@ RIGHT = "right"
 true = "True"
 false = "False"
 
-launcher_version = "0.4"
+launcher_version = "0.4.1"
 
 speed = 1000
 CONFIG_PATH = "~/.duck_game/wang250"
