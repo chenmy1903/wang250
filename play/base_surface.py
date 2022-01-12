@@ -2,6 +2,8 @@ from .mod_tools import Text, Setting
 
 import pygame
 
+from pygame.locals import QUIT
+
 class Window(Text):
     """主窗口类"""
 
