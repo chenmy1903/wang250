@@ -15,17 +15,11 @@
 ## mod_tools安装工具
 
 
-[点击下载](update_mod_tools.py)
+[点击下载](update_mod_tools.py)  
 
 ```bash
 # 命令行操作
 # 安装直接双击即可
-# 如遇权限不足可以Windows + X打开管理员命令提示行
-# 然后cd到下载的目录
-# 示例：
-cd C:/User/jianguo/shadiao/download/ # 转到下载
-python update_mod_tools.py # 运行
-# 
 # 卸载
 python update_mod_tools.py --uninstall
 ```

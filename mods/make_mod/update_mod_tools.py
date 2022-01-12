@@ -1,6 +1,7 @@
 import requests
 import shutil
 import argparse
+import ctypes
 import sys
 import pip
 import os
@@ -67,6 +68,12 @@ class object_pip(object):
 
 pip = object_pip()
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
 def cmd_argument():
     parser = argparse.ArgumentParser(__file__.replace('\\', '/').split("/")[-1])
     parser.add_argument("--install", help="安装mod_tools", action='store_true')
@@ -80,11 +87,10 @@ def pause():
     os.system("pause")
 
 def uninstall():
-    title("鸭皇游戏 - Package Install Manger")
+    title("鸭皇游戏 - Package Manger")
     print("本程序将为您移除mod_tools")
     print(f"现在运行的Python: {sys.executable}")
     print("失败可以使用管理员权限试试")
-    pause()
     site_packages = os.path.join(sys.exec_prefix, "Lib", "site-packages")
     install = os.path.join(site_packages, 'mods')
     if not os.path.isdir(site_packages):
@@ -99,19 +105,17 @@ def uninstall():
     try:
         shutil.rmtree(install)
         print("移除完成")
-    except PermissionError:
-        print("权限不足，请提权")
         pause()
-        sys.exit()
+    except PermissionError:
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__ + " --uninstall", None, 1)
 
 
 def install():
     mod_tools = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text
-    title("鸭皇游戏 - Package Install Manger")
+    title("鸭皇游戏 - Package Manger")
     print("本程序为您将mod_tools集成到现在运行的Python中")
     print("失败可以使用管理员权限试试")
     print(f"现在运行的Python: {sys.executable}")
-    pause()
     site_packages = os.path.join(sys.exec_prefix, "Lib", "site-packages")
     pygame_install = False
     requests_install = False
@@ -156,9 +160,7 @@ def install():
         print("安装完成，Enjoy")
         pause()
     except PermissionError:
-        print("权限不足，请提升权限")
-        pause()
-        sys.exit()
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
 
 def main():
     argv = cmd_argument()
