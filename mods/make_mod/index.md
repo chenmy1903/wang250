@@ -8,6 +8,27 @@
 2. 增加更详细的教程
 3. 更新mod_tools，旧版本与新版本不兼容，请打开游戏进行更新
 
+## 2022/1/12
+
+1. 增加安装工具，可以将mod_tools集成到Python中（不是逃离王建国的Python，是系统中安装的Python）
+
+## mod_tools安装工具
+
+[点击下载](update_mod_tools.py)
+
+```bash
+# 命令行操作
+# 安装直接双击即可
+# 如遇权限不足可以Windows + X打开管理员命令提示行
+# 然后cd到下载的目录
+# 示例：
+cd C:/User/jianguo/shadiao/download/ # 转到下载
+python update_mod_tools.py # 运行
+# 
+# 卸载
+python update_mod_tools.py --uninstall
+```
+
 ## 0. Setting类\钻石、金币修改教程
 
 下面代码为Setting类的代码
