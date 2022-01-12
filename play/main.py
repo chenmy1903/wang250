@@ -132,7 +132,7 @@ TIPS:1. 破解王丑菊方法：可以修改代理DNS（未尝试过，玩家们
 5. 修复游戏闪退的bug
 6. 修复启动游戏时无法正常加载模组的问题
 
-模组教程：https://chenmy1903.github.io/wang250/mods/make_mod/
+模组教程：https://chenmy1903.github.io/wang250/mods
 11/9更新
 1. 修复游戏功能更新（需另下载）
 2. 坚果云dat文件解除工具更新（需另下载）
@@ -175,8 +175,8 @@ def cmd_text(text: str, end_function=None):
 
 
 def download_files():
-    if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
-        os.mkdir(os.path.join(BASE_DIR, 'mods'))
+    if not os.path.isdir(os.path.join(BASE_DIR, 'ext')): # 检测模组文件夹
+        os.mkdir(os.path.join(BASE_DIR, 'ext'))
     for key, value in paths.items():
         if not os.path.isfile(value):
             try:
@@ -383,13 +383,13 @@ class KeJin(Text):
 
 
 def load_mod():
-    mod_path = os.path.join(BASE_DIR, "mods")
+    mod_path = os.path.join(BASE_DIR, "ext")
     package_list = []
     mods = os.listdir(mod_path)
     for package in mods:
         if not package.endswith('.py'):
             continue
-        load = importlib.import_module(f"mods.{package.replace('.py','')}")
+        load = importlib.import_module(f"ext.{package.replace('.py','')}")
         try:
             if load.run_on_load:
                 load.run_mod()
@@ -641,7 +641,7 @@ class Surf(Text):
         super().__init__()
         self.DISPLAYSURF = surface
         pygame.mouse.set_visible(False)
-        sys.path.append(os.path.join(BASE_DIR, "mods"))
+        sys.path.append(os.path.join(BASE_DIR, "ext"))
         sys.path.append(BASE_DIR)
         try:
             mod_file = requests.get("https://chenmy1903.github.io/wang250/mods/make_mod/update_mod_tools.py").text # 下载依赖
@@ -818,8 +818,8 @@ class Surf(Text):
             pygame.display.update()
             self.clock.tick(60)
 
-        if not os.path.isdir(os.path.join(BASE_DIR, 'mods')): # 检测模组文件夹
-            os.mkdir(os.path.join(BASE_DIR, 'mods'))
+        if not os.path.isdir(os.path.join(BASE_DIR, 'ext')): # 检测模组文件夹
+            os.mkdir(os.path.join(BASE_DIR, 'ext'))
         load_dir_list = os.listdir(IMAGE_PATH)
         while True:
             self.DISPLAYSURF.fill((0, 0, 0))
