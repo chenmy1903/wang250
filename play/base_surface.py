@@ -17,11 +17,11 @@ class Window(Text):
         self.set_surface(self.surface)
 
     def start(self):
-        while True:
+        game_mode = True
+        while game_mode:
             self.surface.fill((0, 0, 0))
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    game_mode = False
             pygame.display.update()
             self.clock.tick(self.FPS)

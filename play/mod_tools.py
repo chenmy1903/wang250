@@ -3,7 +3,7 @@ import sys
 import requests
 import pygame
 
-from pygame.locals import *
+from pygame.locals import QUIT, KEYUP, K_ESCAPE
 from pickleshare import PickleShareDB
 
 TITLE = "mod_tools"
