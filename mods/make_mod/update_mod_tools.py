@@ -19,12 +19,16 @@ init_py = """\"\"\"逃离王建国的模组依赖\"\"\"
 # 禁止盗用
 from . import mod_tools
 from .base_surface import Window
+
+__version__ = \'{}\'
 """
 
 pygame_version = "2.1.2"
 requests_version = "2.26.0"
 pickleshare_version = "0.7.5"
-__version__ = "1.0"
+__version__ = "1.3"
+
+init_py = init_py.format(__version__)
 
 
 class PyPiError(Exception):
@@ -77,6 +81,7 @@ def is_admin():
 
 def cmd_argument():
     parser = argparse.ArgumentParser(__file__.replace('\\', '/').split("/")[-1])
+    parser.add_argument('--version', "-v", action='version', version='mod_tools {}'.format(__version__), help="查看版本")
     parser.add_argument("--install", help="静默安装mod_tools", action='store_true')
     parser.add_argument("--uninstall", help="卸载mod_tools", action='store_true')
 
