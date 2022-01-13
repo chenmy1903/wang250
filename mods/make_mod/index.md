@@ -12,17 +12,28 @@
 
 1. 增加安装工具，可以将mod_tools集成到Python中（不是逃离王建国的Python，是系统中安装的Python）
 2. 增加mods.base_surface类
+3. 增加完整版（现在看的是新手教程）
+
+[完整版](api.html)
 
 ## mod_tools安装工具
 
 
-[点击下载](update_mod_tools.py)  
+[点击下载](update_mod_tools.py)
+
+> 推荐从游戏安装目录运行mod_tools安装程序进行安装mod_tools，上面的安装程序可能不是最新版
+
+> 如果安装了游戏，所有人的安装命令都是`python C:/wang250/update_mod_tools.py --install`
+
+> 卸载命令是`python C:/wang250/update_mod_tools.py --uninstall`
 
 ```bash
 # 命令行操作
 # 安装直接双击即可
 # 卸载
 python update_mod_tools.py --uninstall
+# 静默安装
+python update_mod_tools.py --install
 ```
 
 ## 0. Setting类\钻石、金币修改教程

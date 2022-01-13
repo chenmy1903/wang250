@@ -116,6 +116,8 @@ def install(q=False):
     try:
         mod_tools = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text
         base_surface = requests.get("https://chenmy1903.github.io/wang250/play/base_surface.py").text
+        events = requests.get("https://chenmy1903.github.io/wang250/play/events.py").text
+        test = requests.get("https://chenmy1903.github.io/wang250/play/test.py").text
     except:
         print("资源下载失败")
         if not q:
@@ -156,6 +158,12 @@ def install(q=False):
         with open(os.path.join(install, "base_surface.py"), "w", encoding="UTF-8") as f:
             print("写入base_surface.py")
             f.write(base_surface)
+        with open(os.path.join(install, "events.py"), "w", encoding="UTF-8") as f:
+            print("写入events.py")
+            f.write(events)
+        with open(os.path.join(install, "test.py"), "w", encoding="UTF-8") as f:
+            print("写入test.py")
+            f.write(test)
         with open(os.path.join(install, "__init__.py"), "w", encoding="UTF-8") as f:
             print("写入__init__.py")
             f.write(init_py)
