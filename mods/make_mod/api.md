@@ -18,7 +18,7 @@ from mods.events import EventObject # 导入事件类
 from mods.base_surface import Window
 from mods.mod_tools import Setting # 导入设置类
 
-from pygame.locals import QUIT, KEYUP, K_w, ESCAPE
+from pygame.locals import QUIT, KEYUP, K_w, K_ESCAPE
 
 import pygame
 import sys
@@ -45,7 +45,7 @@ class HoldWindow(Window):
                 if event.type == QUIT:
                     game_mode = False
                 elif event.type == KEYUP:
-                    if event.key == ESCAPE:
+                    if event.key == K_ESCAPE:
                         game_mode = False
                 self.event.hold_event(event, K_w) # 检测按住按键事件
             if self.event.hold: # 如果被按下
