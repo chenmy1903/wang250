@@ -479,10 +479,9 @@ class Setting:
 
     def add(self, key, value):
         """添加新值"""
-        new = self.db[self.file_name]
-        if value:
-            new[key] = value
-            self.db[self.file_name] = new
+        new = self.db[self.file_name]        
+        new[key] = value
+        self.db[self.file_name] = new
 
     def read(self, config=None):
         """读文件"""

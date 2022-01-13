@@ -3,7 +3,7 @@
 # ©chenmy1903
 # GitHub: 王建国
 
-from base_surface import Window
+from .base_surface import Window
 
 import pygame
 import sys
