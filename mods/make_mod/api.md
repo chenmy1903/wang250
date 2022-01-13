@@ -60,7 +60,7 @@ def _test():
     pygame.init() # 初始化pygame
     surface = pygame.display.set_mode((600, 600))
     pygame.display.set_caption("hold事件") # 设置题目
-    run_mod(surface)
+    run_mod(surface=surface)
     sys.exit() # 防止未响应
 
 if __name__ == "__main__":
