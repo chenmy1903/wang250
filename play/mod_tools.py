@@ -45,6 +45,9 @@ class Setting:
         del config[value]
         self.db[self.file_name] = config
 
+    def try_get(self, value: str, defacult=None):
+        return self.read(value) if value in self.read() else defacult
+
 class GameRect(pygame.Rect):
     title = ""
     pos = ()
