@@ -47,7 +47,7 @@ class Setting:
 
     def try_get(self, key: str, defacult=None):
         """尝试获取某个值"""
-        return self.read(key) if value in self.read() else defacult
+        return self.read(key) if key in self.read() else defacult
     
     def null_add(self, key: str, value: str = None):
         """不存在则添加某个值"""
