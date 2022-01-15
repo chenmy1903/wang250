@@ -916,7 +916,7 @@ class Surf(Text):
 
     def start_bgm(self):
         pygame.mixer.music.load(paths["bgm"])
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
 
 
 
