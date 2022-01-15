@@ -52,8 +52,16 @@ class Setting:
         del config[value]
         self.db[self.file_name] = config
 
-    def try_get(self, value: str, defacult=None):
+    def try_get(self, key: str, defacult=None):
+        """尝试获取某个值"""
         return self.read(value) if value in self.read() else defacult
+    
+    def null_add(self, key: str, value: str = None):
+        """不存在则添加某个值"""
+        tryg = self.try_get(key)
+        if not tryg:
+            self.add(key, value)
+        return tryg if tryg else value
 
 class GameRect(pygame.Rect):
     title = ""
