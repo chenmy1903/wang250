@@ -18,13 +18,6 @@ def cmd_text(text: str, end_function=None):
     if end_function:
         end_function()
 
-def wait_res(command: bool):
-    """类似Scrtch的等待...模块
-    command: 当这个值变为True时会继续执行代码
-    """
-    while not command:
-        pass
-
 
 class Setting:
     def __init__(self, file_name, config={}, config_path="~/.duck_game/wang250/mods"):
