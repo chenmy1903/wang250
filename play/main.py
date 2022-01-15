@@ -771,6 +771,7 @@ class Surf(Text):
             if not os.path.isfile(value):
                 try:
                     r = requests.get(f"https://chenmy1903.github.io/wang250/play/files/{file_name}")
+                    print("Download {}".format(file_name))
                     if file_name.endswith('.png') or file_name.endswith('.jpg'):
                         download_path = os.path.join(IMAGE_PATH, file_name)
                     else:
