@@ -51,6 +51,7 @@ paths = {"fengxiaoyi": os.path.join(IMAGE_PATH, "fengxiaoyi_1.png"),
          'icon': os.path.join(BASE_DIR, "icon.ico"),
          "bili_ir_code": os.path.join(IMAGE_PATH, "bili_ir_code.jpg"),
          "logo": os.path.join(IMAGE_PATH, "duck_game.png"),
+         "bgm": os.path.join(BASE_DIR, "game_bg.mp3"),
          }
 
 paths.update(game_paths)
@@ -912,11 +913,16 @@ class Surf(Text):
         self.next("tip: 因为作者当天写完代码忘更新了，所以补发了这个")
         self.next("祝您在游戏里玩的愉快")
 
+    def start_bgm(self):
+        pygame.mixer.music.load(paths["bgm"])
+        pygame.mixer.music.play()
+
 
 
     def start(self):
         choice = 1    
         self.duck_game()
+        self.start_bgm()
         self.run_special_activities()
         window_info = pygame.display.Info()
         while True:
@@ -1015,6 +1021,7 @@ class Surf(Text):
                     self.kill_precess()
             if pygame.mouse.get_pressed()[0]:
                 if choice == 1:
+                    pygame.mixer.music.stop()
                     self.run_game()
                 elif choice == 2:
                     if os.path.isfile(os.path.join(BASE_DIR, 'gift.exe')):
