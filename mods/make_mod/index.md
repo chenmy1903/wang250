@@ -26,12 +26,17 @@
 
 <!-- > 这对我们来说是一个重大的突破 -->
 
-## mod_tools安装工具
+## 从PyPi安装mod_tools
 
+> 2022/1/16 将mods包上传到pypi了
 
-[点击下载](update_mod_tools.py)
+```batch
+pip install wang250-mods
+```
 
-> 推荐从游戏安装目录运行mod_tools安装程序进行安装mod_tools，上面的安装程序可能不是最新版
+[点击下载](https://pypi.org/project/wang250-mods/)
+
+<!-- > 推荐从游戏安装目录运行mod_tools安装程序进行安装mod_tools，上面的安装程序可能不是最新版
 
 > 如果安装了游戏，所有人的安装命令都是`python C:/wang250/update_mod_tools.py --install`
 
@@ -44,11 +49,12 @@
 python update_mod_tools.py --uninstall
 # 静默安装
 python update_mod_tools.py --install
-```
+```-->
 
 ## 0. Setting类\钻石、金币修改教程
 
 下面代码为Setting类的代码
+> 本章已停止维护，请移步[新文档](api.html)。
 
 ```python
 class Setting:

@@ -10,8 +10,58 @@
 
 > 运行本教程最低mods包版本: 1.3，可以通过`mods.__version__`查看
 
+## 1. 安装
 
-## 2. mods包的HOLD事件
+> 1.4以后的版本将会上传到PyPi，游戏内安装器将会失效
+
+```batch
+pip install wang250-mods
+```
+
+## 2. 新Setting类
+
+> 修复bug：值为假添加失败
+
+导入：
+
+```python
+from mods.mod_tools import Setting
+
+config = Setting("模组名字", {}) # __init__(设置项的名字, 默认设置={})
+```
+
+读取整个配置文件：
+
+```python
+config.read() # -> dict
+```
+
+读取一个值：
+
+```python
+config.read("项名") # 如果不存在抛出KeyError
+```
+
+尝试读取一个值：
+
+```python
+config.try_get("项名", 如果不存在返回的默认值) # 默认值默认为None
+```
+
+不存在则添加某个值：
+
+```python
+config.null_add("项名", "项值") # 项值默认为None
+```
+
+删除某个值：
+
+```python
+config.delete("项名")
+```
+
+
+## 3. mods包的HOLD事件
 
 > 之前我以为实现不了，但是实现了
 

@@ -11,17 +11,6 @@ from pip._internal.utils.misc import get_installed_distributions
 
 
 
-init_py = """\"\"\"逃离王建国的模组依赖\"\"\"
-# by鸭皇
-# https://chenmy1903.github.io/wang250/
-# ©chenmy1903
-# Github: 王建国
-# 禁止盗用
-from . import mod_tools
-from .base_surface import Window
-
-__version__ = \'{}\'
-"""
 
 pygame_version = "2.1.2"
 requests_version = "2.26.0"
@@ -118,15 +107,6 @@ def uninstall():
 
 
 def install(q=False):
-    try:
-        mod_tools = requests.get("https://chenmy1903.github.io/wang250/play/mod_tools.py").text
-        base_surface = requests.get("https://chenmy1903.github.io/wang250/play/base_surface.py").text
-        events = requests.get("https://chenmy1903.github.io/wang250/play/events.py").text
-        test = requests.get("https://chenmy1903.github.io/wang250/play/test.py").text
-    except:
-        print("资源下载失败")
-        if not q:
-            pause()
     title("鸭皇游戏 - Package Manger")
     print("本程序为您将mod_tools集成到现在运行的Python中")
     print("失败可以使用管理员权限试试")
@@ -135,6 +115,7 @@ def install(q=False):
     pygame_install = False
     requests_install = False
     pickleshare_install = False
+    tools_install = False
     for name, version, location in pip.get_all_packages():
         if name == "pygame":
             pygame_install = True
@@ -142,6 +123,9 @@ def install(q=False):
             requests_install = True
         if name == "pickleshare":
             pickleshare_install = True
+        if name == "mods":
+            tools_install = True
+            tinstall_version = pip.get_package_info("mods")
     install = os.path.join(site_packages, 'mods')
     if not os.path.isdir(site_packages):
         print("请不要尝试使用pyinstaller以及任何打包程序打包此文件")
@@ -157,21 +141,8 @@ def install(q=False):
     print("准备" + ("安装" if mode == "install" else "更新") + "mod_tools")
     print("开始写入")
     try:
-        with open(os.path.join(install, "mod_tools.py"), "w", encoding="UTF-8") as f:
-            print("写入mod_tools.py")
-            f.write(mod_tools)
-        with open(os.path.join(install, "base_surface.py"), "w", encoding="UTF-8") as f:
-            print("写入base_surface.py")
-            f.write(base_surface)
-        with open(os.path.join(install, "events.py"), "w", encoding="UTF-8") as f:
-            print("写入events.py")
-            f.write(events)
-        with open(os.path.join(install, "test.py"), "w", encoding="UTF-8") as f:
-            print("写入test.py")
-            f.write(test)
-        with open(os.path.join(install, "__init__.py"), "w", encoding="UTF-8") as f:
-            print("写入__init__.py")
-            f.write(init_py)
+        print("准备从PyPi获取包")
+        pip.upgrade("mods")
         if not pygame_install:
             if pip.install(f"pygame=={pygame_version}"):
                 raise PermissionError()
