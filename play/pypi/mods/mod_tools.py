@@ -59,7 +59,7 @@ class Setting:
     def null_add(self, key: str, value: str = None):
         """不存在则添加某个值"""
         tryg = self.try_get(key)
-        if not tryg == None:
+        if tryg == None:
             self.add(key, value)
         return tryg if tryg else value
 

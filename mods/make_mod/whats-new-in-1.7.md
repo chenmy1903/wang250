@@ -1,10 +1,10 @@
 # 1.7 版本增加了什么
 
-> 安装此版本：`pip install wang250-mods==1.7.1`
+> 安装此版本：`pip install wang250-mods==1.7.2`
 
 > 或更新到最新版：`pip install wang250-mods --upgrade`
 
-> 因为1.7.0版本中有致命性bug，所以必须安装1.7.1版本
+> 因为1.7.0版本中有致命性bug，所以必须安装1.7.2版本
 
 ## 1. 抽奖机制
 
