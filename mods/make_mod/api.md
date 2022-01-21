@@ -8,7 +8,9 @@
 
 > 这里的代码都可以直接复制进`ext`文件夹
 
-> 运行本教程最低mods包版本: 1.3，可以通过`mods.__version__`查看
+> 运行本教程最低mods包版本: 1.6，可以通过`mods.__version__`查看
+
+> 如果要挑战一下自己，你可以去[测试](tests.html)页面
 
 ## 1. 安装
 
@@ -119,7 +121,7 @@ if __name__ == "__main__":
     _test()
 ```
 
-## 使用mods包进行测试
+## 4. 使用mods包进行测试
 
 ```python
 from mods.base_surface import Window
@@ -130,5 +132,50 @@ run_on_load = False
 
 if __name__ == "__main__":
     test(Window) # Window类本身就是一个基本的窗口，放进入自动运行
+
+```
+
+## 5. GUI布局
+
+> 现在只支持按钮和文本框
+
+### 按钮
+
+```python
+from mods.base_surface import UI, Window # 导入UI类
+
+import pygame
+from pygame.locals import QUIT
+
+```
+
+> tip: 使用前请务必不要忘记实例化`UI`类
+
+ui是需要和Window类结合使用的
+
+> 先创建一个类(继承Window)
+
+```python
+class UIButton(Window):
+    ui = UI() # 实例化ui（存入self.ui）
+```
+
+> 我们在start函数中添加按钮
+
+```python
+class UIButton(Window):
+    ui = UI() # 实例化ui（存入self.ui）
+    
+    def start(self):
+        game_mode = True
+        while game_mode:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    game_mode = False
+            pushbutton = self.ui.button("点一下开挂", (100, 100), 72) # --> Button 返回一个Button对象
+            # 按钮定义
+            # def button(self, text: str, pos: tuple, size: int = 18) --> Button:
+            if pushbutton.is_hold(): # 判断是否被按下
+                self.message("外挂开启成功，奖励你10年大礼包") # 提示消息
 
 ```

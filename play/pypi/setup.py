@@ -1,4 +1,5 @@
 from setuptools import setup
+from mods import __version__
 import setuptools
 
 import os
@@ -11,7 +12,7 @@ def get_readme():
 
 setup(
     name="wang250_mods",
-    version="1.4",
+    version=__version__,
     python_requires='>=3.7.0', # python环境
     auther="chenmy1903",
     auther_email="duck_chenmy1903@163.com",

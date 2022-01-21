@@ -74,6 +74,15 @@ tip: 系统版本输入`winver`即可查看
 2. 旧版本请重新从官网下载安装包，进行安装
 3. 因为王丑菊使用交换机修改了鸭皇官网的DNS，所以导致在南大附小访问本游戏/网站，会提示资源下载失败的情况，想玩的人可以带U盘进入机房进行游玩
 TIPS:1. 破解王丑菊方法：可以修改代理DNS（未尝试过，玩家们可以尝试一下） 或 前往 https://github.com/chenmy1903/wang250/ 去手动下载资源
+2022/1/18更新
+1. 我们支持替换开始游戏啦
+
+支持列表：金古探险, ...（我们正在开发中，可以去github投稿）
+
+网址：https://github.com/chenmy1903/wang250/
+
+> 宁同开发的模组就非常优秀（胡编乱造）
+
 12/26更新
 1. 之前的更新忘更新了
 2. 补发王轶臣生日的200钻石
@@ -644,10 +653,8 @@ class Surf(Text):
         sys.path.append(os.path.join(BASE_DIR, "ext"))
         sys.path.append(BASE_DIR)
         try:
-            mod_file = requests.get("https://chenmy1903.github.io/wang250/mods/make_mod/update_mod_tools.py").text # 下载依赖
-            with open(os.path.join(BASE_DIR, "update_mod_tools.py"), 'w', encoding="UTF-8") as f:
-                f.write(mod_file)
-            os.system(f"{os.path.join(sys.exec_prefix, 'pythonw.exe')} {os.path.join(BASE_DIR, 'update_mod_tools.py')} --install")
+            if os.system(f"{os.path.join(sys.exec_prefix, 'pythonw.exe')} -m pip install wang250-mods --upgrade"):
+                raise Exception()
         except:
             if not os.path.isdir(os.path.join(BASE_DIR, "game_runner", "Lib", "site-packages", "mods")): # 脱机模式检测依赖
                 self.message("资源下载失败")

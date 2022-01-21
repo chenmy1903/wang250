@@ -1,8 +1,35 @@
-from .mod_tools import Text, Setting
+from .mod_tools import Text, Setting, GameRect
 
 import pygame
 
 from pygame.locals import QUIT
+
+class UI(Text):
+    """一些ui组件"""
+
+    def __init__(self):
+        Text.__init__(self)
+    
+    def button(self, text: str, pos: tuple, size: int = 18):
+        x, y = pygame.mouse.get_pos()
+        if pygame.Rect(pos[0], pos[1], size * len(text), size).collidepoint(x, y):
+            return Button(self.blit_text(text, pos, size, (0, 0, 0), (255, 255, 255)))
+        else:
+            return Button(self.blit_text(text, pos, size, (255, 255, 255), (0, 0, 0)))
+
+class Button(object):
+    """按钮事件类"""
+
+    def __init__(self, button: GameRect):
+        object.__init__(self)
+        self.button = button
+
+    def is_hold(self):
+        """获取按钮是否按下"""
+        x, y = pygame.mouse.get_pos()
+        if pygame.mouse.get_pressed()[0]:
+            return self.button.collidepoint(x, y)
+
 
 class Window(Text):
     """主窗口类

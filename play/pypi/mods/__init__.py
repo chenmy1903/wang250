@@ -6,7 +6,11 @@ Github: 王建国
 禁止盗用
 """
 
-from . import mod_tools
+from .mod_tools import *
 from .base_surface import Window
+from .events import EventObject
+from .test import test
 
-__version__ = '1.3'
+from . import mod_tools, base_surface, events, test
+
+__version__ = '1.7.1'

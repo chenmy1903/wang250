@@ -2,6 +2,7 @@ import os
 import sys
 import requests
 import pygame
+import random
 
 from pygame.locals import QUIT, KEYUP, K_ESCAPE
 from pickleshare import PickleShareDB
@@ -17,6 +18,12 @@ def cmd_text(text: str, end_function=None):
     os.system(f"start {run_path} -c \"text = '''{text_r}'''; print(text.replace('-', '\\n')); input('Enter关闭本窗口')\"")
     if end_function:
         end_function()
+
+def random_gift(probability=0):
+    """随机中奖
+    probability: 中奖概率"""
+    r_number = random.randint(0, 100)
+    return r_number < probability
 
 
 class Setting:
@@ -52,7 +59,7 @@ class Setting:
     def null_add(self, key: str, value: str = None):
         """不存在则添加某个值"""
         tryg = self.try_get(key)
-        if not tryg:
+        if not tryg == None:
             self.add(key, value)
         return tryg if tryg else value
 
