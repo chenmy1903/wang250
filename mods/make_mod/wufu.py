@@ -1,33 +1,3 @@
-# 1.7 版本增加了什么
-
-> 安装此版本：`pip install wang250-mods==1.7.2`
-
-> 或更新到最新版：`pip install wang250-mods --upgrade`
-
-> 因为1.7.0版本中有致命性bug，所以必须安装1.7.2版本
-
-## 1. 抽奖机制
-
-> 可以指定概率
-
-### 定义
-
-```python
-def random_gift(probability: int = 0) -> bool:
-    pass
-```
-
-probability 为中奖概率，如果中奖将返回`True`，未中奖返回`False`
-
-### 示例
-
-> 现在很多软件都有一个集五福活动，但为什么幸运卡最难获得呢，下面这个程序很好的解答了这个问题
-
-> 点击[此处](wufu.py)下载源代码。
-
-> 快手chenmy1903有演示
-
-```python
 import random
 import time
 import sys
@@ -141,9 +111,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-```
-
-
-## 2. 修复bug
-
-> 修复Setting类中null_add数值为0会再次添加的bug
