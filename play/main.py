@@ -229,21 +229,21 @@ class Text:
         rect.pos = pos
         return rect
 
-    def next(self, text: str):
-        self.blit_text(text, (600, 800))
+    def next(self, text: str, color: tuple = (255, 255, 255), bg: tuple = (0, 0, 0)):
+        self.blit_text(text, (600, 800), color=color)
         pygame.display.update()
         pygame.time.wait(1000)
-        self.click_to_continue()
+        self.click_to_continue(bg)
 
-    def click_to_continue(self):
+    def click_to_continue(self, bg: tuple = (0, 0, 0)):
         self.blit_text("按键盘上的任何键继续", (600, self.win_height - 20))
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    self.DISPLAYSURF.fill((0, 0, 0))
+                    self.DISPLAYSURF.fill(bg)
                     return
                 elif event.type == KEYUP:
-                    self.DISPLAYSURF.fill((0, 0, 0))
+                    self.DISPLAYSURF.fill(bg)
                     return
             pygame.display.update()
 
@@ -919,13 +919,12 @@ class Surf(Text):
             with open(os.path.join(IMAGE_PATH, "spring_festival2022.png"), "wb") as f:
                 f.write(file_bytes)
         download()
-        self.DISPLAYSURF.fill((100, 0, 0))
-        self.next("大家好，我是鸭皇")
+        self.next("大家好，我是鸭皇", (0, 0, 0), (100, 0, 0))
         self.DISPLAYSURF.blit(pygame.image.load(os.path.join(IMAGE_PATH, "spring_festival2022.png")), (50, 50))
-        self.next("金古三雄在这里给您拜年啦~")
+        self.next("金古三雄在这里给您拜年啦~", (0, 0, 0), (100, 0, 0))
         self.give("diamond", 10000)
-        self.next("我们在此献上10000钻石")
-        self.next("祝您在游戏里玩的愉快")
+        self.next("我们在此献上10000钻石", (0, 0, 0), (100, 0, 0))
+        self.next("祝您在游戏里玩的愉快", (0, 0, 0), (100, 0, 0))
         self.setting.add("special_version", special_version)
 
     def start_bgm(self):
