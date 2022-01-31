@@ -918,6 +918,7 @@ class Surf(Text):
             file_bytes = r.content
             with open(os.path.join(IMAGE_PATH, "spring_festival2022.png"), "wb") as f:
                 f.write(file_bytes)
+        download()
         self.DISPLAYSURF.fill((100, 0, 0))
         self.next("大家好，我是鸭皇")
         self.DISPLAYSURF.blit(pygame.image.load(os.path.join(IMAGE_PATH, "spring_festival2022.png")), (50, 50))
