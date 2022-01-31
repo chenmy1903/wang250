@@ -918,13 +918,14 @@ class Surf(Text):
             file_bytes = r.content
             with open(os.path.join(IMAGE_PATH, "spring_festival2022.png"), "wb") as f:
                 f.write(file_bytes)
-        self.setting.add("special_version", special_version)
+        self.DISPLAYSURF.fill((100, 0, 0))
         self.next("大家好，我是鸭皇")
-        self.DISPLAYSURF.blit(os.path.join(IMAGE_PATH, "spring_festival2022.png"), (50, 50))
+        self.DISPLAYSURF.blit(pygame.image.load(os.path.join(IMAGE_PATH, "spring_festival2022.png")), (50, 50))
         self.next("金古三雄在这里给您拜年啦~")
         self.give("diamond", 10000)
         self.next("我们在此献上10000钻石")
         self.next("祝您在游戏里玩的愉快")
+        self.setting.add("special_version", special_version)
 
     def start_bgm(self):
         pygame.mixer.music.load(paths["bgm"])
