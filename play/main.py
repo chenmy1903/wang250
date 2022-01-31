@@ -230,6 +230,7 @@ class Text:
         return rect
 
     def next(self, text: str, color: tuple = (255, 255, 255), bg: tuple = (0, 0, 0)):
+        self.DISPLAYSURF.fill(bg)
         self.blit_text(text, (600, 800), color=color)
         pygame.display.update()
         pygame.time.wait(1000)
