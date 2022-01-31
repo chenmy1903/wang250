@@ -47,11 +47,11 @@ def init_cards():
 
 def input_coin():
     print("正在氪金")
-    config.add("次数", config.read("次数") + 1000)
+    friends(100)
 
-def friends():
-    print("你失去了10个好友，但是获得了10次机会")
-    config.add("次数", config.read("次数") + 10)
+def friends(n: int = 1):
+    print(f"你失去了{n}个好友，但是获得了{n}次机会")
+    config.add("次数", config.read("次数") + n)
 
 
 def get_cards():

@@ -909,16 +909,21 @@ class Surf(Text):
             self.setting.add(key, value)
 
     def run_special_activities(self):
-        special_version = '0.2'
+        special_version = '0.3'
         rd_special_version = self.setting.read("special_version") if "special_version" in self.setting.read() else None
         if rd_special_version == special_version:
             return # 已经参加完了
+        def download():
+            r = requests.get("https://chenmy1903.github.io/wang250/play/files/spring_festival2022.png")
+            file_bytes = r.content
+            with open(os.path.join(IMAGE_PATH, "spring_festival2022.png"), "wb") as f:
+                f.write(file_bytes)
         self.setting.add("special_version", special_version)
         self.next("大家好，我是鸭皇")
-        self.next("在这里我祝大家新年快乐，事业有成")
+        self.DISPLAYSURF.blit(os.path.join(IMAGE_PATH, "spring_festival2022.png"), (50, 50))
+        self.next("金古三雄在这里给您拜年啦~")
         self.give("diamond", 10000)
         self.next("我们在此献上10000钻石")
-        self.next("tip: 因为作者当天写完代码忘更新了，所以补发了这个")
         self.next("祝您在游戏里玩的愉快")
 
     def start_bgm(self):

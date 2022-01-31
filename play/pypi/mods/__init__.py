@@ -1,10 +1,8 @@
 """逃离王建国的模组依赖
-by鸭皇
-https://chenmy1903.github.io/wang250/
-©chenmy1903
-Github: 王建国
-禁止盗用
+官网：https://chenmy1903.github.io/wang250/
+用法：https://chenmy1903.github.io/wang250/mods/make_mod/
 """
+# 此版本修复安装失败的问题
 
 from .mod_tools import *
 from .base_surface import Window
@@ -13,4 +11,4 @@ from .test import test
 
 from . import mod_tools, base_surface, events, test
 
-__version__ = '1.7.2'
+__version__ = '1.7.4'

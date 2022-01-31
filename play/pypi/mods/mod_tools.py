@@ -61,7 +61,7 @@ class Setting:
         tryg = self.try_get(key)
         if tryg == None:
             self.add(key, value)
-        return tryg if tryg else value
+        return value if tryg == None else tryg
 
 class GameRect(pygame.Rect):
     title = ""
@@ -70,7 +70,7 @@ class GameRect(pygame.Rect):
 
 class Text:
     clock = pygame.time.Clock()
-    FPS = Setting("config", config_path="~/.duck_game/wang250/").read("fps")
+    FPS = Setting("config", config_path="~/.duck_game/wang250/").try_get("fps", 60)
     lp = None
     
     def set_surface(self, surface):
